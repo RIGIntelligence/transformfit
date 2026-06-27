@@ -1,0 +1,29 @@
+{
+  "screen": "today_orange_overuse",
+  "tokens": {
+    "background": "#0A0A0A",
+    "text": "#F0EDE8",
+    "orange": "#F97316",
+    "coach_font": "Playfair",
+    "data_font": "Inter",
+    "radius_max": 4
+  },
+  "contrast_pairs": [
+    {"fg": "#F0EDE8", "bg": "#0A0A0A", "label": "coach voice on background"}
+  ],
+  "orange_uses": [
+    "accent_rule_under_headline",
+    "cta_button_background",
+    "focus_ring_border",
+    "chart_grid_line",
+    "progress_bar_fill"
+  ],
+  "fonts": [
+    {"element": "coach_message", "role": "coach_voice", "family": "Playfair"},
+    {"element": "readiness_score", "role": "data", "family": "Inter"}
+  ],
+  "radii": [
+    {"element": "card", "radius": 4},
+    {"element": "button", "radius": 4}
+  ]
+}

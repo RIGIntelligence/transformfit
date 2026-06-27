@@ -1,0 +1,31 @@
+{
+  "screen": "today_clean",
+  "tokens": {
+    "background": "#0A0A0A",
+    "text": "#F0EDE8",
+    "orange": "#F97316",
+    "coach_font": "Playfair",
+    "data_font": "Inter",
+    "radius_max": 4
+  },
+  "contrast_pairs": [
+    {"fg": "#F0EDE8", "bg": "#0A0A0A", "label": "coach voice on background"},
+    {"fg": "#F0EDE8", "bg": "#0A0A0A", "label": "readiness data on background"}
+  ],
+  "orange_uses": [
+    "accent_rule_under_headline",
+    "cta_button_background",
+    "focus_ring_border"
+  ],
+  "fonts": [
+    {"element": "coach_message", "role": "coach_voice", "family": "Playfair"},
+    {"element": "headline", "role": "coach_voice", "family": "Playfair"},
+    {"element": "readiness_score", "role": "data", "family": "Inter"},
+    {"element": "set_count", "role": "data", "family": "Inter"}
+  ],
+  "radii": [
+    {"element": "card", "radius": 4},
+    {"element": "button", "radius": 4},
+    {"element": "input", "radius": 4}
+  ]
+}
