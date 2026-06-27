@@ -6,7 +6,7 @@
 
 ## What it is
 
-Noom is a behavior-change weight-management app built on psychology (CBT-style cognitive behavioral techniques) rather than pure calorie counting. Its differentiation is the **onboarding quiz and the daily psychology lessons**, not the food logger. Noom is the canonical reference for the **onboarding / first-run** surface and for **paywall / upgrade** mechanics, because both are unusually well engineered (and, in places, controversial).
+Noom is a behavior-change weight-management app built on psychology (CBT-style cognitive behavioral techniques) rather than pure calorie counting. Its differentiation is the **onboarding quiz and the daily psychology lessons**, not the food logger. Noom is the canonical reference for the **onboarding / first-run** surface in this project. Its **paywall / upgrade** flow is still worth studying for conversion mechanics and anti-pattern risk, but canonical named-gold ownership for `paywall-upgrade` is Whoop.
 
 ## Core flows
 
@@ -23,7 +23,7 @@ Noom's pipeline is quiz → personalized plan + projection → paywall → daily
 ## Key surfaces
 
 - Conversational onboarding quiz + projected-results screen (gold for onboarding/first-run).
-- Personalized-plan paywall / upgrade screen (gold-adjacent for paywall, with explicit anti-pattern caveats).
+- Personalized-plan paywall / upgrade screen (a studied conversion and anti-pattern reference, while canonical named gold for `paywall-upgrade` is Whoop).
 - Daily psychology lesson (gamified, streak-tracked).
 - Color-categorized food log + coach/group chat.
 
@@ -33,4 +33,4 @@ The **activation driver is the onboarding quiz**: by investing 5-10 minutes answ
 
 ## Relevance to TransformFit
 
-Noom is the named gold for the **onboarding / first-run** surface (and a studied reference for paywall mechanics). Its lesson for TransformFit: a personalized, investment-building onboarding plus a daily micro-habit loop drives activation — but TransformFit must achieve the activation without Noom's dark-pattern cancel friction, honoring the "never gate the core loop, no dark patterns, paywall Day-15 only" laws.
+Noom is the named gold for the **onboarding / first-run** surface, and a studied reference for paywall mechanics. Canonical ownership remains explicit: **Whoop is the named gold for `paywall-upgrade`**. Noom's lesson for TransformFit is that a personalized, investment-building onboarding plus a daily micro-habit loop can drive activation, but TransformFit must achieve that activation without Noom's dark-pattern cancel friction, honoring the "never gate the core loop, no dark patterns, paywall Day-15 only" laws.

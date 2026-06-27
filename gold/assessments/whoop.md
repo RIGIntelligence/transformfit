@@ -6,7 +6,7 @@
 
 ## What it is
 
-Whoop is a screenless wearable strap plus a subscription app focused on recovery, strain, and sleep. There is no device price gate in the usual sense — the hardware comes with the membership, so the **recurring subscription is the business**, and daily app engagement is what justifies it. It is a canonical reference for the **post-session debrief** and recovery-driven daily readiness surfaces.
+Whoop is a screenless wearable strap plus a subscription app focused on recovery, strain, and sleep. There is no device price gate in the usual sense, the hardware comes with the membership, so the **recurring subscription is the business**, and daily app engagement is what justifies it. It is a strong real-world reference for recovery-driven readiness loops and for value-led subscription framing. In this project's canonical named-gold mapping, **Oura owns `daily-readiness-home`, Future owns `post-session-debrief`, and Whoop owns `paywall-upgrade`**.
 
 ## Core flows
 
@@ -22,7 +22,7 @@ Whoop's pipeline is continuous-sensor → baseline model → daily scores (Recov
 
 ## Key surfaces
 
-- Morning Recovery screen (the green/yellow/red readiness number — gold for daily readiness).
+- Morning Recovery screen (the green/yellow/red readiness number, a strong readiness benchmark even though canonical named gold for `daily-readiness-home` is Oura).
 - Strain dashboard + post-workout strain debrief.
 - Sleep performance / sleep coach.
 - Trends + Whoop Coach (AI Q&A).
@@ -33,4 +33,4 @@ The **retention driver is the daily Recovery score as a habit-forming return tri
 
 ## Relevance to TransformFit
 
-Whoop is the named gold for the **daily readiness / recovery** debrief mechanic: a deterministic physiological score that becomes a daily return trigger and adjusts the day's plan. This is structurally identical to TransformFit's readiness-adjusted session loop and its Week-2 activation goal — the lesson is that one trustworthy, personal, daily number can carry the entire habit.
+Whoop is the named gold for the **paywall / upgrade** surface in `gold/named-gold.json`. Canonical ownership for the other adjacent surfaces remains explicit: **Oura is named gold for `daily-readiness-home`, and Future is named gold for `post-session-debrief`**. Whoop still contributes an important product lesson for TransformFit, a deterministic physiological loop can produce the kind of trustworthy daily score that users repeatedly check, but the canonical ownership split above governs gold-surface calibration.
