@@ -1,7 +1,146 @@
 {
   "schema": "transformfit-gold.named-gold.v1",
-  "status": "PLACEHOLDER-PENDING-M3",
-  "note": "Placeholder created by the M2 harness seal/routing/shipgate feature so bridge.json Tier-2 (adversarial_teardown) has a resolvable grading target. The competitor-recon worker (M3) replaces this with the real calibrated named-gold entries (one per in-app core surface + design refs). Do NOT grade against this placeholder.",
+  "status": "CALIBRATED-M3",
+  "note": "Real calibrated named-gold library assembled by the competitor-recon (competitor-assessment-named-gold) worker in M3. One named gold per in-app core surface (the 6 surfaces the future app will build) + 3 design-ref benchmarks (Linear/Vercel/Apple). Each entry carries a calibrated anatomy: a screenshot_ref resolving to a real public-web/app-store capture under gold/screenshots/, >=2 scored dimensions (name + numeric 0-100 score + rationale), and prose. The future Tier-2 adversarial teardown grades artifacts against these entries. HONEST SCOPE: anatomies are calibrated from PUBLIC marketing + app-store + existing research only (see gold/LIMITATIONS.md); no authenticated in-app mobile screens were captured.",
   "north_star_metric": ">=30% Week-2 activated retention = >=3 readiness-adjusted sessions in 14 days",
-  "surfaces": []
+  "score_range": "0-100",
+  "design_ref_dimension_law_map": {
+    "token_discipline": "Doctrine L4-1/L4-2 (Digital Atelier tokens exact + orange restraint)",
+    "authored_experience": "Doctrine L4-3 (authored-experience gate >=86)",
+    "activation_clarity": "Doctrine L4-4 (activation gate >=82)",
+    "no_generic_templates": "Doctrine L4-5 (no generic SaaS templates)"
+  },
+  "surfaces": [
+    {
+      "surface": "daily-readiness-home",
+      "named_gold": "Oura",
+      "assessment_ref": "gold/assessments/oura.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/oura_home.png",
+        "dimensions": [
+          {"name": "reduction_to_one_number", "score": 92, "rationale": "Collapses a mass of overnight physiological data into a single 0-100 Readiness score plus one plain-language line, giving an instant low-effort morning verdict. This is the gold standard for the daily readiness/home glance."},
+          {"name": "activation_clarity", "score": 88, "rationale": "The first action of the day becomes 'check my Readiness'; the home screen makes the next-step guidance ('Pay attention' / 'Good to go') unambiguous, driving the daily return habit that maps to Week-2 activation."},
+          {"name": "personal_baseline_trust", "score": 86, "rationale": "Scores are relative to the user's own accumulated baseline, so the number feels personal and trustworthy rather than generic, which is what earns the daily open."}
+        ],
+        "prose": "Oura is the named gold for daily readiness/home because it proves a single authored, personal Readiness number plus one coaching sentence can anchor the entire daily wake-up loop. The reduction mechanic (many signals -> one verdict) and baseline personalization are exactly what TransformFit must match so opening the app feels like a coach who already checked your recovery and adjusted today."
+      }
+    },
+    {
+      "surface": "workout-logging-active-set",
+      "named_gold": "Hevy",
+      "assessment_ref": "gold/assessments/hevy.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/hevy_appstore.png",
+        "dimensions": [
+          {"name": "time_to_log", "score": 93, "rationale": "Minimal taps per set with an auto-advancing rest timer makes logging the path of least resistance during a workout; the active-set surface is the canonical frictionless logger."},
+          {"name": "inline_previous_performance", "score": 90, "rationale": "Last session's weight x reps are surfaced inline so the user applies progressive overload without leaving the screen, turning the logger into a decision aid and a 'beat your last numbers' return trigger."},
+          {"name": "authored_experience", "score": 84, "rationale": "Clean, purpose-built lifting UI rather than a generic form; the set/rest/next rhythm is authored for the active-set moment."}
+        ],
+        "prose": "Hevy is the named gold for workout logging/active-set: it shows that logging speed plus inline history is the whole game for the active-set surface. TransformFit must match this effortless loop or its readiness-adjusted coaching never gets a chance to land mid-workout."
+      }
+    },
+    {
+      "surface": "post-session-debrief",
+      "named_gold": "Future",
+      "assessment_ref": "gold/assessments/future.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/future_home.png",
+        "dimensions": [
+          {"name": "coach_presence", "score": 94, "rationale": "The debrief is a personalized coach message referencing specific logged performance ('you recovered quickly between sets; that Zone 2 work is paying off') -- a specific observation plus a forward hook, the exact coach-presence pattern."},
+          {"name": "activation_clarity", "score": 87, "rationale": "The post-session touch is a human accountability return trigger that drives the reported 'more consistent within 4 weeks' activation; the debrief makes the next session feel anticipated, not optional."},
+          {"name": "authored_experience", "score": 89, "rationale": "The debrief feels like a text from a real coach, not a templated summary -- the north-star feeling TransformFit is chasing."}
+        ],
+        "prose": "Future is the named gold for the post-session debrief / coach-presence surface and for the mission's north-star feeling ('a text from a coach who watched your last workout'). TransformFit's bet is to deliver Future's coach-presence retention driver at software margins via deterministic readiness adjustment plus authored narration."
+      }
+    },
+    {
+      "surface": "onboarding-first-run",
+      "named_gold": "Noom",
+      "assessment_ref": "gold/assessments/noom.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/noom_home.png",
+        "dimensions": [
+          {"name": "investment_building_funnel", "score": 91, "rationale": "The long conversational quiz builds commitment-and-consistency before the user sees the app, then presents a personalized projection and plan -- one of the most effective activation funnels in consumer health."},
+          {"name": "personalization_payoff", "score": 86, "rationale": "Onboarding answers are visibly converted into a tailored plan and goal projection, so the user feels seen and is activated before paying."},
+          {"name": "activation_clarity", "score": 83, "rationale": "The first-run produces a concrete personalized next step and projected outcome, which is the activation lever; (caveat: Noom's cancel-flow friction is a banned dark-pattern, not to be copied)."}
+        ],
+        "prose": "Noom is the named gold for onboarding/first-run: a personalized, investment-building intake plus a daily micro-habit loop drives activation. TransformFit must reproduce the activation craft while honoring 'never gate the core loop, no dark patterns, paywall Day-15 only.'"
+      }
+    },
+    {
+      "surface": "progress-trends",
+      "named_gold": "MacroFactor",
+      "assessment_ref": "gold/assessments/macrofactor.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/macrofactor_appstore.png",
+        "dimensions": [
+          {"name": "deterministic_engine_plus_narration", "score": 90, "rationale": "A weekly recalibration engine recomputes expenditure and macro targets from the user's own trend and narrates the change -- code owns the decision, copy explains it (the L6 invariant), producing a calibrated personal trend view."},
+          {"name": "data_compounding_return_trigger", "score": 88, "rationale": "Targets visibly adapt every week, so the user has a recurring reason to return and log; skipping degrades the algorithm working for them -- a strong stickiness mechanic."},
+          {"name": "trend_legibility", "score": 85, "rationale": "Weight-trend smoothing, expenditure-over-time, and adherence charts make progress legible and show the system reacting to the user."}
+        ],
+        "prose": "MacroFactor is the named gold for progress/trends: a deterministic engine plus honest narration produces a calibrated, personal trend that earns the return visit -- directly analogous to TransformFit's readiness-adjusted loop and the Week-2 activation metric."
+      }
+    },
+    {
+      "surface": "paywall-upgrade",
+      "named_gold": "Whoop",
+      "assessment_ref": "gold/assessments/whoop.md",
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/whoop_appstore.png",
+        "dimensions": [
+          {"name": "value_before_gate", "score": 86, "rationale": "Whoop bundles the hardware into the membership and ties the upgrade to ongoing daily value (recovery/strain/sleep), so the paywall is framed as continued access to a personalized loop rather than a feature lock -- a non-dark-pattern upgrade model."},
+          {"name": "honest_framing", "score": 84, "rationale": "The subscription is presented as the product (membership = device + app), an honest value exchange that avoids fake scarcity; a useful contrast to Noom's cancel-flow friction."},
+          {"name": "activation_clarity", "score": 82, "rationale": "The upgrade keeps the daily readiness loop -- the core habit -- intact, consistent with TransformFit's 'never gate the core loop / paywall Day-15 only' law."}
+        ],
+        "prose": "Whoop is the named gold for the paywall/upgrade surface as an honest, value-led model: the membership is the product and the upgrade preserves the core daily loop rather than holding it hostage. TransformFit's paywall must follow this ethical pattern (Day-15 only, never gate the readiness score, no dark patterns)."
+      }
+    }
+  ],
+  "design_refs": [
+    {
+      "surface": "design-ref-linear",
+      "named_gold": "Linear",
+      "assessment_ref": null,
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/linear_home.png",
+        "dimensions": [
+          {"name": "token_discipline", "score": 95, "rationale": "Ruthless, restrained palette and a tight type scale on a near-black canvas -- the L4-1/L4-2 token + accent-restraint discipline TransformFit's Digital Atelier targets."},
+          {"name": "authored_experience", "score": 93, "rationale": "Every surface feels intentionally authored with motion as meaning, clearing the L4-3 authored-experience >=86 bar; nothing reads as off-the-shelf."},
+          {"name": "no_generic_templates", "score": 94, "rationale": "Bespoke layout and components, not a generic SaaS template -- the L4-5 standard."},
+          {"name": "activation_clarity", "score": 88, "rationale": "Hierarchy drives the eye to the primary action without clutter, clearing the L4-4 activation-clarity >=82 bar."}
+        ],
+        "prose": "Linear is a design-ref calibration target for L4: token discipline, authored experience, no generic templates, and activation clarity. Its restraint and intentional motion are the visual-quality bar TransformFit screens are graded against by the future Tier-2 teardown."
+      }
+    },
+    {
+      "surface": "design-ref-vercel",
+      "named_gold": "Vercel",
+      "assessment_ref": null,
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/vercel_home.png",
+        "dimensions": [
+          {"name": "token_discipline", "score": 92, "rationale": "High-contrast monochrome system with disciplined accent use on a black background -- the L4-1/L4-2 token + restraint standard."},
+          {"name": "authored_experience", "score": 90, "rationale": "Crafted spacing, typography, and code-aesthetic detailing clear the L4-3 authored-experience >=86 bar."},
+          {"name": "no_generic_templates", "score": 91, "rationale": "Distinctive, owned visual language rather than a generic template -- the L4-5 standard."},
+          {"name": "activation_clarity", "score": 87, "rationale": "Clear primary CTA and uncluttered hierarchy clear the L4-4 activation-clarity >=82 bar."}
+        ],
+        "prose": "Vercel is a design-ref calibration target for L4: monochrome token discipline, authored detailing, no generic templates, and clear activation. It anchors the high-contrast, restrained aesthetic TransformFit's dark Digital Atelier system aspires to."
+      }
+    },
+    {
+      "surface": "design-ref-apple",
+      "named_gold": "Apple",
+      "assessment_ref": null,
+      "anatomy": {
+        "screenshot_ref": "gold/screenshots/apple_home.png",
+        "dimensions": [
+          {"name": "token_discipline", "score": 90, "rationale": "Tightly controlled type, spacing, and color system with restrained accent use -- the L4-1/L4-2 token discipline benchmark."},
+          {"name": "authored_experience", "score": 92, "rationale": "Product-photography-led, narrative scroll with motion as meaning clears the L4-3 authored-experience >=86 bar; the canonical authored marketing surface."},
+          {"name": "no_generic_templates", "score": 93, "rationale": "Wholly bespoke per-product layouts, never a generic template -- the L4-5 standard."},
+          {"name": "activation_clarity", "score": 86, "rationale": "Each section drives one clear action (learn more / buy) with unmistakable hierarchy, clearing the L4-4 activation-clarity >=82 bar."}
+        ],
+        "prose": "Apple is a design-ref calibration target for L4: token discipline, deeply authored experience, no generic templates, and clear activation. It is the benchmark for narrative, motion-led authorship that TransformFit's screens are calibrated against."
+      }
+    }
+  ]
 }
