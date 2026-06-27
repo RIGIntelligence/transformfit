@@ -1,0 +1,1 @@
+You broke your streak and you let yourself go. No pain no gain, beast mode! Guaranteed results in 30 days. You should feel guilty for missing yesterday. motivational-theatre at its finest. limited time offer — act now or lose out. Silent fallback to hardcoded template. Are you sure you want to cancel? Don't go!

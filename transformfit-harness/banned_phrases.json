@@ -1,0 +1,139 @@
+{
+  "_meta": {
+    "description": "TransformFit banned phrases keyed to Doctrine L1 (coaching/message) and L2 (behavioral anti-patterns). Any coach message or copy matching an entry is a hard RED. Loaded at runtime by doctrine_lint.py — JSON-driven, not hardcoded.",
+    "source": "TRANSFORMFIT-DOCTRINE.md L1/L2 + RIG mirror rig-instagram-studio/anti_slop/banned_phrases.json pattern",
+    "case_sensitive": false
+  },
+  "L1": {
+    "body_shame": [
+      "you look bad",
+      "you're out of shape",
+      "you let yourself go",
+      "lose that belly",
+      "get rid of that flab",
+      "you're too heavy",
+      "stop being lazy",
+      "you're unfit",
+      "tone up that body",
+      "fix your body"
+    ],
+    "generic_fitness_slop": [
+      "no pain no gain",
+      "grind mode",
+      "beast mode",
+      "savage mode",
+      "rise and grind",
+      "hustle hard",
+      "trust the process",
+      "put in the work",
+      "embrace the grind",
+      "sweat is weakness leaving the body",
+      "pain is weakness leaving the body",
+      "go hard or go home",
+      "leave it all at the gym"
+    ],
+    "false_promises": [
+      "guaranteed results",
+      "guaranteed to work",
+      "will definitely transform",
+      "transform your body in 30 days",
+      "lose 10 pounds in a week",
+      "proven to work for everyone",
+      "100% guaranteed",
+      "results guaranteed",
+      "you will see results fast",
+      "promise you results"
+    ],
+    "streak_shame": [
+      "you broke your streak",
+      "your streak is ruined",
+      "don't break the chain",
+      "you're losing your streak",
+      "streak broken",
+      "you failed your streak",
+      "say goodbye to your streak",
+      "your streak is gone"
+    ],
+    "generic_encouragement": [
+      "great job",
+      "you got this",
+      "keep it up",
+      "you're crushing it",
+      "way to go",
+      "nice work",
+      "awesome job",
+      "proud of you",
+      "you're doing great",
+      "fantastic work",
+      "good for you"
+    ],
+    "silent_fallback": [
+      "silent fallback",
+      "hardcoded template",
+      "hardcoded fallback",
+      "fallback template",
+      "default template response",
+      "template response",
+      "canned response"
+    ]
+  },
+  "L2": {
+    "body_shame": [
+      "you should be ashamed of your body",
+      "you're not attractive enough",
+      "your body is a problem",
+      "hide your body",
+      "embarrassing body"
+    ],
+    "generic_fitness_slop": [
+      "motivational theatre",
+      "hype without grounding",
+      "rah rah speech",
+      "empty motivation"
+    ],
+    "false_promises": [
+      "fake scarcity",
+      "limited time offer",
+      "only a few spots left",
+      "act now or lose out",
+      "offer expires soon",
+      "don't miss this chance"
+    ],
+    "streak_shame": [
+      "guilt",
+      "you should feel guilty",
+      "you have no discipline",
+      "you're failing yourself",
+      "you let yourself down",
+      "shame on you"
+    ],
+    "over_notification": [
+      "we'll keep reminding you",
+      "endless reminders",
+      "constant notifications",
+      "bombard you with alerts"
+    ],
+    "dark_pattern_cancel": [
+      "are you sure you want to cancel",
+      "don't go",
+      "we'd hate to see you leave",
+      "stay for a special offer",
+      "wait before you cancel"
+    ],
+    "motivational_theatre": [
+      "motivational-theatre",
+      "hype-only copy",
+      "rah rah",
+      "cheerleading without substance"
+    ],
+    "silent_fallback": [
+      "silent fallback",
+      "hardcoded template",
+      "hardcoded fallback",
+      "fallback template",
+      "default template response",
+      "template response",
+      "canned response"
+    ]
+  }
+}
