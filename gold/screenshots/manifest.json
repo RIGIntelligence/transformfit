@@ -1,0 +1,177 @@
+{
+  "manifest_version": "1.0",
+  "capture_tool": "agent-browser (headless Chrome via CDP)",
+  "capture_method": "agent-browser-headless-screenshot",
+  "headless_mode": true,
+  "scope_note": "All captures are of PUBLIC marketing websites and PUBLIC app-store listings only. No authenticated, logged-in, or in-app mobile screens were captured. No accounts or devices were used. Surface labels describe web/store/marketing sources, never in-app/authenticated provenance.",
+  "engine": "chrome-headless-launched-via-executable-path (FACTORY_DESKTOP_CDP_PORT unset to avoid non-headless desktop-CDP auto-connect; screenshots require headless mode)",
+  "captures": [
+    {
+      "file": "macrofactor_home.png",
+      "subject": "MacroFactor",
+      "category": "competitor",
+      "source_url": "https://macrofactor.com",
+      "timestamp": "2026-06-26T20:15:53-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "macrofactor_appstore.png",
+      "subject": "MacroFactor",
+      "category": "competitor",
+      "source_url": "https://apps.apple.com/us/app/macrofactor-macro-tracker/id1553503471",
+      "timestamp": "2026-06-27T06:25:35-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "app-store-listing",
+      "provenance": "public-app-store-listing"
+    },
+    {
+      "file": "whoop_home.png",
+      "subject": "Whoop",
+      "category": "competitor",
+      "source_url": "https://www.whoop.com",
+      "timestamp": "2026-06-26T20:16:25-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "whoop_appstore.png",
+      "subject": "Whoop",
+      "category": "competitor",
+      "source_url": "https://apps.apple.com/us/app/whoop/id933944389",
+      "timestamp": "2026-06-27T06:26:06-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "app-store-listing",
+      "provenance": "public-app-store-listing"
+    },
+    {
+      "file": "oura_home.png",
+      "subject": "Oura",
+      "category": "competitor",
+      "source_url": "https://ouraring.com",
+      "timestamp": "2026-06-26T20:16:56-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "oura_appstore.png",
+      "subject": "Oura",
+      "category": "competitor",
+      "source_url": "https://apps.apple.com/us/app/oura/id1043837948",
+      "timestamp": "2026-06-27T06:26:36-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "app-store-listing",
+      "provenance": "public-app-store-listing"
+    },
+    {
+      "file": "hevy_home.png",
+      "subject": "Hevy",
+      "category": "competitor",
+      "source_url": "https://hevy.com",
+      "timestamp": "2026-06-26T20:17:27-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-login-page",
+      "capture_note": "hevy.com root redirected to a public login screen (/login?postLoginPath=%2F). This is a public unauthenticated web surface, not an authenticated in-app screen."
+    },
+    {
+      "file": "hevy_appstore.png",
+      "subject": "Hevy",
+      "category": "competitor",
+      "source_url": "https://apps.apple.com/us/app/hevy-workout-tracker-planner/id1563470925",
+      "timestamp": "2026-06-26T20:21:54-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "app-store-listing",
+      "provenance": "public-app-store-listing"
+    },
+    {
+      "file": "caliber_home.png",
+      "subject": "Caliber",
+      "category": "competitor",
+      "source_url": "https://caliberstrong.com",
+      "timestamp": "2026-06-26T20:17:59-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site",
+      "capture_note": "Caliber fitness app marketing site at caliberstrong.com (note: caliber.co is an unrelated luxury home builder; the fitness app is caliberstrong.com)."
+    },
+    {
+      "file": "caliber_appstore.png",
+      "subject": "Caliber",
+      "category": "competitor",
+      "source_url": "https://apps.apple.com/us/app/caliber-strength-training/id1482405410",
+      "timestamp": "2026-06-27T06:27:06-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "app-store-listing",
+      "provenance": "public-app-store-listing"
+    },
+    {
+      "file": "future_home.png",
+      "subject": "Future",
+      "category": "competitor",
+      "source_url": "https://future.co",
+      "timestamp": "2026-06-26T20:18:30-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "noom_home.png",
+      "subject": "Noom",
+      "category": "competitor",
+      "source_url": "https://www.noom.com",
+      "timestamp": "2026-06-26T20:19:08-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "linear_home.png",
+      "subject": "Linear",
+      "category": "design-ref",
+      "source_url": "https://linear.app",
+      "timestamp": "2026-06-26T20:19:39-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "vercel_home.png",
+      "subject": "Vercel",
+      "category": "design-ref",
+      "source_url": "https://vercel.com",
+      "timestamp": "2026-06-26T20:20:09-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    },
+    {
+      "file": "apple_home.png",
+      "subject": "Apple",
+      "category": "design-ref",
+      "source_url": "https://www.apple.com",
+      "timestamp": "2026-06-26T20:21:23-06:00",
+      "headless": true,
+      "capture_method": "agent-browser-headless-screenshot",
+      "surface": "marketing-home",
+      "provenance": "public-web-marketing-site"
+    }
+  ]
+}
