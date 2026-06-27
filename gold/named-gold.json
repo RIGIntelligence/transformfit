@@ -1,0 +1,7 @@
+{
+  "schema": "transformfit-gold.named-gold.v1",
+  "status": "PLACEHOLDER-PENDING-M3",
+  "note": "Placeholder created by the M2 harness seal/routing/shipgate feature so bridge.json Tier-2 (adversarial_teardown) has a resolvable grading target. The competitor-recon worker (M3) replaces this with the real calibrated named-gold entries (one per in-app core surface + design refs). Do NOT grade against this placeholder.",
+  "north_star_metric": ">=30% Week-2 activated retention = >=3 readiness-adjusted sessions in 14 days",
+  "surfaces": []
+}

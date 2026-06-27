@@ -36,6 +36,37 @@ jobs:
           echo "$(dirname "$(which flutter)")" >> "$GITHUB_PATH"
           flutter --version
 
+      # ── Harness Tier-1 lint steps (M2) ────────────────────────────────────
+      # Each referenced script exists in the repo and runs locally.
+      - name: Doctrine lint (Tier-1)
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          python3 transformfit-harness/doctrine_lint.py transformfit-harness/samples/clean_message.md
+
+      - name: Message rule lint (Tier-1)
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          python3 transformfit-harness/message_rule_lint.py transformfit-harness/samples/clean_message.md
+
+      - name: Design lint (Tier-1)
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          bash transformfit-harness/design_lint.sh transformfit-harness/samples/design_clean.json
+
+      - name: Design token 3-way match (Tier-1)
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          bash transformfit-harness/design_lint.sh --verify-tokens
+
+      # ── Build + test gate (Tier-1) ────────────────────────────────────────
       - name: Flutter pub get
         shell: bash
         run: |
@@ -43,20 +74,22 @@ jobs:
           export PATH="$(dirname "$(which flutter)"):$PATH"
           flutter pub get
 
-      - name: Flutter analyze
+      - name: Build + test gate (Tier-1: flutter analyze + flutter test)
         shell: bash
         run: |
           source "$HOME/.nvm/nvm.sh"
           export PATH="$(dirname "$(which flutter)"):$PATH"
-          flutter analyze
+          bash transformfit-harness/build_test_gate.sh
 
-      - name: Flutter test
+      # ── Ship gate (HARD-AND over all Tier-1 gates + ProofPacket seal) ─────
+      - name: Ship gate (HARD-AND Tier-1 + seal ProofPacket)
         shell: bash
         run: |
           source "$HOME/.nvm/nvm.sh"
           export PATH="$(dirname "$(which flutter)"):$PATH"
-          flutter test
+          bash transformfit-harness/ship_gate.sh
 
+      # ── Web build (M0 skeleton target) ────────────────────────────────────
       - name: Flutter build web
         shell: bash
         run: |

@@ -1,0 +1,153 @@
+{
+  "schema": "transformfit-harness.bridge.v1",
+  "version": "1.0.0",
+  "scope": "transformfit-flutter",
+  "what_this_is": "THE ROUTING LAYER: for each TransformFit artifact type, maps the artifact to which gates run on it. Tier-1 gates are BUILT, mechanical, fail-closed (GREEN/RED only). Tier-2 (adversarial teardown vs named-gold) and Tier-3 (coach/buyer panel + metric trace) are DEFINED now as future HUMAN-GATE-ONLY RECORDED-PENDING gates — never auto-green, never blocking in this mission (built once gold is calibrated in M3+). Mirrors rig-design-studio/gtm/bridge.json + gate-shared.mjs (the anti-fake-green law: a human-gate-only gate may NEVER emit GREEN).",
+  "gate_definitions": {
+    "doctrine_lint": {
+      "source": "transformfit-harness/doctrine_lint.py",
+      "kind": "deterministic_scan",
+      "pass_condition": "0 banned patterns (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "message_rule_lint": {
+      "source": "transformfit-harness/message_rule_lint.py",
+      "kind": "deterministic_rule_check",
+      "pass_condition": "all 8 message rules pass (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "design_lint": {
+      "source": "transformfit-harness/design_lint.sh",
+      "kind": "deterministic_design_check",
+      "pass_condition": "orange<=3, WCAG AA, font-role, radius 0-4px (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "build_test_gate": {
+      "source": "transformfit-harness/build_test_gate.sh",
+      "kind": "deterministic_build_test",
+      "pass_condition": "flutter analyze AND flutter test green (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "adversarial_teardown": {
+      "source": "gold/named-gold.json",
+      "kind": "calibrated_score_vs_named_gold",
+      "pass_condition": "authored-exp >= 86 AND activation >= 82 (maker != grader)",
+      "standard": "CRAFT",
+      "mechanical": false,
+      "human_gate_only": true,
+      "built": false,
+      "status": "FUTURE-HUMAN-GATE-ONLY",
+      "recorded": "PENDING",
+      "grading_target": "gold/named-gold.json",
+      "must_not_auto_pass": true,
+      "note": "DEFINED now, BUILT in a later mission once gold is calibrated (M3). Independent agent panel scores the artifact vs the named GOLD per surface. Never auto-green; RECORDED-PENDING until a human signs the verdict under the DUAL GATE."
+    },
+    "coach_buyer_panel": {
+      "source": "process/coach-buyer-panel.md (future)",
+      "kind": "human_panel_book",
+      "pass_condition": "verdict = BOOK (Marcus/David/Jordan persona panel + coach-presence check)",
+      "standard": "SALE",
+      "mechanical": false,
+      "human_gate_only": true,
+      "built": false,
+      "status": "FUTURE-HUMAN-GATE-ONLY",
+      "recorded": "PENDING",
+      "metric_trace": "does it move Week-2 activation? (>=30% Week-2 activated retention = >=3 readiness-adjusted sessions in 14 days)",
+      "must_not_auto_pass": true,
+      "note": "DEFINED now, BUILT in a later mission. Marcus/David/Jordan persona panel + coach-presence check (>=1 specific observation + forward hook + identity tie) + the metric trace (does it move Week-2 activation?). Never auto-green; RECORDED-PENDING until a human signs the verdict under the DUAL GATE."
+    }
+  },
+  "ship_law": "A TransformFit artifact ships ONLY on a hard-AND of the BUILT mechanical Tier-1 gates that apply to its type (each GREEN, one RED blocks ship) AND a sealed ProofPacket (proof-or-it-didn't-happen). The future HUMAN-GATE-ONLY members (adversarial_teardown, coach_buyer_panel) are DEFINED as RECORDED-PENDING — they are neither auto-greened nor fatally blocking in this mission; at runtime the ship-gate logs them as RECORDED-PENDING/future. Maker != grader. Mechanical RED blocks ship; human members are signed, not code-checked.",
+  "artifact_types": {
+    "screen": {
+      "description": "A Flutter screen / view (the daily wake-up loop, Moments of Truth, danger-zone interventions).",
+      "tier_1": [
+        {"gate": "design_lint", "why": "screen must satisfy L4 design laws (orange<=3, WCAG AA, font-role, radius)"},
+        {"gate": "build_test_gate", "why": "screen must compile (flutter analyze) and its widget tests must pass"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "screen scored vs named-gold for its surface; authored-exp >= 86 + activation >= 82"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "Marcus/David/Jordan panel: does this screen move Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "feature": {
+      "description": "A Flutter feature module (state, logic, integration) — e.g. readiness engine, dai-adapt narration.",
+      "tier_1": [
+        {"gate": "build_test_gate", "why": "feature must compile and its unit/widget tests must pass"},
+        {"gate": "doctrine_lint", "why": "feature copy / surfaced strings must be free of banned anti-patterns (incl. silent-fallback)"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "feature scored vs named-gold for its surface; authored-exp >= 86 + activation >= 82"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this feature move Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "coach_message": {
+      "description": "A coach-voice message (the 8 L1 message rules + L2 banned anti-patterns apply).",
+      "tier_1": [
+        {"gate": "doctrine_lint", "why": "message must be free of L1/L2 banned anti-patterns (body-shame, slop, false promises, streak-shame, silent-fallback)"},
+        {"gate": "message_rule_lint", "why": "message must satisfy all 8 L1 message rules (<=60 words, no emoji, >=1 data token, <=1 question, echo, no generic encouragement, honest uncertainty, weave memory)"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "message scored vs named-gold for the coach-voice surface; authored-exp >= 86 + activation >= 82"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this message move Week-2 activation? coach-presence check + BOOK verdict"}
+      ]
+    },
+    "copy": {
+      "description": "Marketing / in-app copy (paywall, onboarding, upgrade, notification).",
+      "tier_1": [
+        {"gate": "doctrine_lint", "why": "copy must be free of L1/L2 banned anti-patterns (false promises, fake scarcity, dark-pattern cancel)"},
+        {"gate": "message_rule_lint", "why": "copy must satisfy the 8 L1 message rules where applicable (concise, no emoji, specific, honest)"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "copy scored vs named-gold for its surface; authored-exp >= 86 + activation >= 82"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this copy move Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "edge_function": {
+      "description": "A Supabase edge function / backend handler (the dai-adapt invariant lives here).",
+      "tier_1": [
+        {"gate": "doctrine_lint", "why": "edge-function surfaced strings must be free of banned anti-patterns; the silent hardcoded-template fallback is a banned L1 pattern (the dai-adapt invariant)"},
+        {"gate": "build_test_gate", "why": "edge function must compile (analyze) and its tests must pass"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "edge function scored vs named-gold; authored-exp >= 86 + activation >= 82"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this edge function's surfaced output move Week-2 activation? BOOK verdict + metric trace"}
+      ]
+    }
+  },
+  "gate_maturity": {
+    "mechanical_fail_closed_built": [
+      "doctrine_lint",
+      "message_rule_lint",
+      "design_lint",
+      "build_test_gate"
+    ],
+    "human_gate_only_no_runner_yet": [
+      "adversarial_teardown",
+      "coach_buyer_panel"
+    ],
+    "note": "Tier-2 (adversarial_teardown) and Tier-3 (coach_buyer_panel) are DEFINED now as future HUMAN-GATE-ONLY RECORDED-PENDING gates. They are never auto-greened. A later mission adds runners so they can graduate into the mechanical hard-AND once gold is calibrated (M3)."
+  }
+}
