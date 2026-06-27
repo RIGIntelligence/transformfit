@@ -10,6 +10,7 @@
 ## Mission note
 
 - `TRANSFORMFIT-DOCTRINE.md` (added in M1) is required binding reading for all agents.
+- `TRANSFORMFIT-DOCTRINE.md` is binding law, every doctrine law is checkable, and it is not a suggestion.
 
 ## Commit convention
 
