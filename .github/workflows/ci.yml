@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  flutter:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup nvm and Node 22.22.3
+        shell: bash
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          mkdir -p "$NVM_DIR"
+          curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+          source "$NVM_DIR/nvm.sh"
+          nvm install 22.22.3
+          nvm use 22.22.3
+          node --version
+
+      - name: Setup Flutter 3.44.4
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.4
+          channel: stable
+
+      - name: Export Flutter PATH
+        shell: bash
+        run: |
+          echo "$(dirname "$(which flutter)")" >> "$GITHUB_PATH"
+          flutter --version
+
+      - name: Flutter pub get
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          flutter pub get
+
+      - name: Flutter analyze
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          flutter analyze
+
+      - name: Flutter test
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          flutter test
+
+      - name: Flutter build web
+        shell: bash
+        run: |
+          source "$HOME/.nvm/nvm.sh"
+          export PATH="$(dirname "$(which flutter)"):$PATH"
+          flutter build web
