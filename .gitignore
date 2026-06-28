@@ -47,6 +47,7 @@ app.*.map.json
 # Secrets
 .env
 *.env
+.env.*
 *.pem
 *.key
 *.p12
