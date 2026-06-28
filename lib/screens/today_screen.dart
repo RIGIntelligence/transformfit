@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:transformfit/app_providers.dart';
+import 'package:transformfit/navigation/auth_state.dart';
 
 class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
@@ -39,6 +41,28 @@ class TodayScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   child: const Text('Start session'),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Semantics(
+                button: true,
+                label: 'Open profile',
+                child: TextButton(
+                  onPressed: () => context.go('/profile'),
+                  child: const Text('Open profile'),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Semantics(
+                button: true,
+                label: 'Sign out',
+                child: TextButton(
+                  onPressed: () {
+                    ref
+                        .read(authGuardStateProvider)
+                        .setStatus(AuthGuardStatus.unauthenticated);
+                  },
+                  child: const Text('Sign out'),
                 ),
               ),
             ],
