@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transformfit/app_providers.dart';
-import 'package:transformfit/theme/digital_atelier.dart';
 
 class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
@@ -17,16 +16,30 @@ class TodayScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Today',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+              Semantics(
+                header: true,
+                label: 'Today heading',
+                child: Text(
+                  'Today',
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
-                coachNote,
-                style: Theme.of(context).textTheme.bodyLarge,
+              Semantics(
+                label: 'Coach note',
+                child: Text(
+                  coachNote,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Semantics(
+                button: true,
+                label: 'Start today session',
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Start session'),
+                ),
               ),
             ],
           ),
