@@ -4,12 +4,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:transformfit/bootstrap/app_bootstrap.dart';
 import 'package:transformfit/navigation/app_router.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 SemanticsHandle? _webSemanticsHandle;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb) {
@@ -17,11 +18,9 @@ void main() {
     usePathUrlStrategy();
   }
 
-  runApp(
-    const ProviderScope(
-      child: TransformFitApp(),
-    ),
-  );
+  await AppBootstrap().initialize();
+
+  runApp(const ProviderScope(child: TransformFitApp()));
 }
 
 class TransformFitApp extends ConsumerWidget {
