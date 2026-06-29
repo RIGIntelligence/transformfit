@@ -35,3 +35,15 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter-VariableFont_opsz,wght.ttf
+    # The Flutter web engine hardcodes "Roboto" as its internal fallback font
+    # and fetches it from fonts.gstatic.com at runtime, even when every app
+    # widget resolves to a bundled family (Flutter issue #163554). The only
+    # endorsed way to stop that third-party fetch is to register a local
+    # "Roboto" family. We alias it to the bundled Inter variable font so the
+    # engine's Roboto fallback resolves to a same-origin asset that is already
+    # loaded for the Inter family (no extra download, zero gstatic requests),
+    # preserving the bundled-fonts-only contract: only Playfair + Inter .ttf
+    # are ever fetched, all from the app's own origin.
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Inter-VariableFont_opsz,wght.ttf
