@@ -75,4 +75,86 @@ void main() {
       expect(ratio, greaterThanOrEqualTo(4.5));
     });
   });
+
+  group('Bundled-fonts-only contract (no Roboto fetch)', () {
+    /// Every TextStyle slot that could ever resolve a glyph must point at a
+    /// bundled family (Inter or Playfair). If any slot is null or 'Roboto',
+    /// Flutter web will request Roboto from fonts.gstatic.com at runtime,
+    /// violating the bundled-fonts-only contract (VAL-FND-013).
+    const bundledFonts = {DigitalAtelierTokens.dataFontFamily, DigitalAtelierTokens.coachVoiceFontFamily};
+
+    void expectEveryStyleBundled(TextTheme theme, String label) {
+      final styles = <String, TextStyle?>{
+        'displayLarge': theme.displayLarge,
+        'displayMedium': theme.displayMedium,
+        'displaySmall': theme.displaySmall,
+        'headlineLarge': theme.headlineLarge,
+        'headlineMedium': theme.headlineMedium,
+        'headlineSmall': theme.headlineSmall,
+        'titleLarge': theme.titleLarge,
+        'titleMedium': theme.titleMedium,
+        'titleSmall': theme.titleSmall,
+        'bodyLarge': theme.bodyLarge,
+        'bodyMedium': theme.bodyMedium,
+        'bodySmall': theme.bodySmall,
+        'labelLarge': theme.labelLarge,
+        'labelMedium': theme.labelMedium,
+        'labelSmall': theme.labelSmall,
+      };
+
+      for (final entry in styles.entries) {
+        final family = entry.value?.fontFamily;
+        expect(
+          family,
+          isNotNull,
+          reason: '$label.${entry.key} has no fontFamily (would fall back to Roboto)',
+        );
+        expect(
+          family,
+          isIn(bundledFonts),
+          reason: '$label.${entry.key} resolves to "$family" (must be a bundled font: $bundledFonts)',
+        );
+        expect(
+          family,
+          isNot('Roboto'),
+          reason: '$label.${entry.key} resolves to Roboto (the third-party fetch we are eliminating)',
+        );
+      }
+    }
+
+    test('root default font resolves to bundled Inter (not Roboto)', () {
+      final theme = buildDigitalAtelierTheme();
+      // ThemeData.fontFamily is a constructor-only param (no public getter),
+      // so verify the observable contract: every ambient data-voice style and
+      // the typography default resolve to Inter, never Roboto.
+      expect(theme.textTheme.bodyMedium?.fontFamily, DigitalAtelierTokens.dataFontFamily);
+      expect(theme.textTheme.bodySmall?.fontFamily, DigitalAtelierTokens.dataFontFamily);
+      expect(theme.typography.white.bodyMedium?.fontFamily, DigitalAtelierTokens.dataFontFamily);
+      expect(theme.typography.white.bodyMedium?.fontFamily, isNot('Roboto'));
+    });
+
+    test('every textTheme style resolves to a bundled font', () {
+      final theme = buildDigitalAtelierTheme();
+      expectEveryStyleBundled(theme.textTheme, 'textTheme');
+    });
+
+    test('every primaryTextTheme style resolves to a bundled font', () {
+      final theme = buildDigitalAtelierTheme();
+      expectEveryStyleBundled(theme.primaryTextTheme, 'primaryTextTheme');
+    });
+
+    test('Material3 typography black + white resolve to bundled fonts', () {
+      final theme = buildDigitalAtelierTheme();
+      expectEveryStyleBundled(theme.typography.black, 'typography.black');
+      expectEveryStyleBundled(theme.typography.white, 'typography.white');
+    });
+
+    test('coach-voice roles stay Playfair and data roles stay Inter', () {
+      final theme = buildDigitalAtelierTheme();
+      expect(theme.textTheme.headlineMedium?.fontFamily, 'Playfair');
+      expect(theme.textTheme.titleMedium?.fontFamily, 'Playfair');
+      expect(theme.textTheme.bodyLarge?.fontFamily, 'Inter');
+      expect(theme.textTheme.bodyMedium?.fontFamily, 'Inter');
+    });
+  });
 }
