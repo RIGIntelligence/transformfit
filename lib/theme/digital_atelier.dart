@@ -14,6 +14,11 @@ class DigitalAtelierTokens {
 }
 
 ThemeData buildDigitalAtelierTheme() {
+  final shape =
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
+      );
+
   const colorScheme = ColorScheme.dark(
     surface: DigitalAtelierTokens.background,
     onSurface: DigitalAtelierTokens.textPrimary,
@@ -52,21 +57,28 @@ ThemeData buildDigitalAtelierTheme() {
 
   return ThemeData(
     brightness: Brightness.dark,
+    fontFamily: DigitalAtelierTokens.dataFontFamily,
     scaffoldBackgroundColor: DigitalAtelierTokens.background,
     colorScheme: colorScheme,
     textTheme: baseTextTheme,
     useMaterial3: true,
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       color: Color(0xFF0A0A0A),
       margin: EdgeInsets.zero,
+      shape: shape,
+      surfaceTintColor: Colors.transparent,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: DigitalAtelierTokens.accentOrange,
         foregroundColor: DigitalAtelierTokens.background,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
-        ),
+        shape: shape,
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: DigitalAtelierTokens.textPrimary,
+        shape: shape,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
