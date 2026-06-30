@@ -70,6 +70,302 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 export const DEFAULT_MODEL = "z-ai/glm-5.1";
 
 // ---------------------------------------------------------------------------
+// R1–R8 message-rule guardrail — deterministic post-composition lint.
+//
+// Applied to BOTH the deterministic-fallback and the LLM-success path so the
+// doctrine message rules (TRANSFORMFIT-DOCTRINE.md L1-4..L1-11 and the
+// harness message_rule_lint.py R1-R8) hold regardless of the narration
+// source. Auto-correctable rules (R2 word-count, R3 no-emoji, R4
+// no-banned-phrase, R8 <=1-question, and packet-number contradiction) are
+// handled here. The deterministic fallback currently exceeds 60 words on
+// common goal/equip/phrase combos (the ONB-032 bug) and echoes a user '?'
+// verbatim (the ONB-036 bug); the LLM-success path (parseNarrative) currently
+// has no guardrail at all beyond trimming — this block fixes both.
+// ---------------------------------------------------------------------------
+
+/** Banned generic-encouragement phrases (R4, L1-7). */
+export const BANNED_PHRASES: readonly string[] = [
+  "great job",
+  "you got this",
+  "keep it up",
+  "you're crushing it",
+  "way to go",
+  "nice work",
+  "awesome job",
+  "proud of you",
+  "you're doing great",
+  "fantastic work",
+  "good for you",
+  "well done",
+  "good job",
+  "amazing job",
+  "keep going",
+  "hang in there",
+];
+
+/** Data-token keywords (R5, L1-8): a narrative passes if it contains a
+ * number OR one of these — tied to a concrete plan datum. */
+export const DATA_KEYWORDS: readonly string[] = [
+  "goal",
+  "days a week",
+  "days/week",
+  "session",
+  "sets",
+  "reps",
+  "rpe",
+  "week",
+];
+
+/** Emoji character-class (Unicode ranges), reused by the sanitizer + guardrail. */
+const EMOJI_RE =
+  /[\u{1F1E6}-\u{1F1FF}\u{1F300}-\u{1F5FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+/gu;
+
+/** Context the guardrail needs to detect packet-number contradictions. */
+export interface GuardrailContext {
+  goal: string;
+  daysPerWord: string;
+  daysPerWeek: number;
+  effectiveEquipment: string[];
+  dayCount: number;
+  exerciseCount: number;
+  goalCopy: { headline: string; reasoning: string; cue: string };
+}
+
+export function buildGuardrailContext(req: NarrateRequest): GuardrailContext {
+  return {
+    goal: req.goal,
+    daysPerWord: _daysWord(req.daysPerWeek),
+    daysPerWeek: req.daysPerWeek,
+    effectiveEquipment: req.effectiveEquipment,
+    dayCount: req.days.length,
+    exerciseCount: req.days.reduce((n, d) => n + d.exercises.length, 0),
+    goalCopy: _goalCopy(req.goal),
+  };
+}
+
+/** Word count (whitespace-delimited; 0 for empty/whitespace-only). */
+export function wordCount(s: string): number {
+  const t = s.trim();
+  return t.length === 0 ? 0 : t.split(/\s+/).length;
+}
+
+/** Emoji count (number of matched emoji runs). */
+export function emojiCount(s: string): number {
+  const m = s.match(EMOJI_RE);
+  return m ? m.length : 0;
+}
+
+/** Question-mark count. */
+export function questionCount(s: string): number {
+  return (s.match(/\?/g) || []).length;
+}
+
+/** Whether the text contains a banned generic-encouragement phrase (R4). */
+export function hasBannedPhrase(s: string): boolean {
+  const lower = s.toLowerCase();
+  return BANNED_PHRASES.some((p) => lower.includes(p.toLowerCase()));
+}
+
+/** Whether the text references >=1 concrete data token: a digit or a
+ * plan-bound keyword (goal / schedule / session / sets / reps / rpe). */
+export function hasDataToken(s: string): boolean {
+  if (/\d/.test(s)) return true;
+  const lower = s.toLowerCase();
+  return DATA_KEYWORDS.some((k) => lower.includes(k.toLowerCase()));
+}
+
+/** Strip all emoji runs (R3). */
+export function stripEmoji(s: string): string {
+  return s.replace(EMOJI_RE, "").replace(/\s+/g, " ").trim();
+}
+
+/** Strip banned generic-encouragement phrases (R4). Case-insensitive,
+ * cleans up leftover whitespace/punctuation from removal. */
+export function stripBannedPhrases(s: string): string {
+  let out = s;
+  for (const p of BANNED_PHRASES) {
+    out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "");
+  }
+  return out.replace(/\s{2,}/g, " ").replace(/^\s*,\s*/, "").replace(/,\s*$/, "").trim();
+}
+
+/** Reduce question marks to at most one (R8) — keeps the first. */
+export function stripExcessQuestions(s: string): string {
+  let seen = 0;
+  return s.replace(/\?/g, (m) => {
+    seen += 1;
+    return seen === 1 ? m : "";
+  });
+}
+
+/** Truncate to at most `maxWords` words (R2). Cuts on a word boundary and
+ * appends an ellipsis only if truncation happened. */
+export function truncateWords(s: string, maxWords: number): string {
+  const words = s.trim().split(/\s+/);
+  if (words.length <= maxWords) return s.trim();
+  const trimmed = words.slice(0, maxWords).join(" ");
+  return trimmed.replace(/[,\s]+$/, "") + "…";
+}
+
+/** Detect a packet-number contradiction: the text names a cardinal day-count
+ * (digit or English number word) that disagrees with the known plan
+ * days/week. Returns a human-readable offending-field description, or null
+ * when the quoted plan numbers are consistent with the packet. */
+export function detectPacketContradiction(text: string, ctx: GuardrailContext): string | null {
+  const lower = text.toLowerCase();
+  const daysNum = ctx.daysPerWeek;
+
+  // Match bare "N days" / "train(ing) N days" / "N-day" patterns that state
+  // an absolute day count (distinct from "N days a week").
+  const dayNumRe = new RegExp(`(\\d+)[\\s-]*days?(?:\\s*a\\s*week)?`, "gi");
+  let m: RegExpExecArray | null;
+  while ((m = dayNumRe.exec(lower)) !== null) {
+    // Skip the canonical "N days a week" phrasing that matches our real value.
+    const before = lower.slice(Math.max(0, m.index - 20), m.index);
+    const after = lower.slice(m.index + m[0].length, m.index + m[0].length + 12);
+    if (/a(\s*week)?$/.test(after.trim())) {
+      // "N days a week" — only contradictory if N != daysNum.
+      const n = parseInt(m[1], 10);
+      if (!Number.isNaN(n) && n !== daysNum) return `daysPerWeek(claimed ${n} days a week, actual ${daysNum})`;
+      continue;
+    }
+    if (/\bweek\b/.test(after) || /\bweek\b/.test(before)) continue;
+    const n = parseInt(m[1], 10);
+    if (!Number.isNaN(n) && n !== daysNum) return `daysPerWeek(claimed ${n} days, actual ${daysNum})`;
+  }
+
+  // English number words (one..twelve) in "X days" patterns.
+  const numWords: Record<string, number> = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7,
+    eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12,
+  };
+  const wordRe =
+    new RegExp(`\\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[\\s-]*days?\\b`, "gi");
+  while ((m = wordRe.exec(lower)) !== null) {
+    const after = lower.slice(m.index + m[0].length, m.index + m[0].length + 12);
+    if (/a(\s*week)?$/.test(after.trim())) {
+      const claimed = numWords[m[1].toLowerCase()];
+      if (claimed !== undefined && claimed !== daysNum) {
+        return `daysPerWeek(claimed ${m[1]} days a week, actual ${daysNum})`;
+      }
+      continue;
+    }
+    const claimed = numWords[m[1].toLowerCase()];
+    if (claimed !== undefined && claimed !== daysNum) {
+      return `daysPerWeek(claimed ${m[1]} days, actual ${daysNum})`;
+    }
+  }
+  return null;
+}
+
+/** Apply auto-correctable R2-R3-R4-R8 rules to a single text field. Order:
+ * emoji (R3) → excess questions (R8) → banned phrases (R4) → word truncation
+ * (R2, last so appended tokens stay inside the 60-word budget). */
+export function applyFieldGuardrail(text: string): string {
+  let t = text;
+  t = stripEmoji(t);
+  t = stripExcessQuestions(t);
+  t = stripBannedPhrases(t);
+  t = truncateWords(t, 60);
+  return t;
+}
+
+/** Run the full R1-R8 guardrail on a composed narrative. Auto-corrects each
+ * field for R2/R3/R4/R8, then regenerates any field from the deterministic
+ * template when (a) the text contradicts an immutable packet number, or (b)
+ * the composed block has no data token (R5). Returns the corrected narrative
+ * plus the list of corrections applied (for observability/tests). */
+export function applyNarrativeGuardrail(
+  n: PlanNarrative,
+  req: NarrateRequest,
+): { narrative: PlanNarrative; corrections: string[] } {
+  const ctx = buildGuardrailContext(req);
+  const corrections: string[] = [];
+
+  let headline = applyFieldGuardrail(n.headline);
+  let reasoning = applyFieldGuardrail(n.reasoning);
+  let coaching_cue = applyFieldGuardrail(n.coaching_cue);
+  if (headline !== n.headline) corrections.push("headline: R2/R3/R4/R8 corrected");
+  if (reasoning !== n.reasoning) corrections.push("reasoning: R2/R3/R4/R8 corrected");
+  if (coaching_cue !== n.coaching_cue) corrections.push("coaching_cue: R2/R3/R4/R8 corrected");
+
+  // Packet-number contradiction — regenerate the offending field from the
+  // deterministic template so we never ship a hallucinated number.
+  const contradiction = detectPacketContradiction(`${headline} ${reasoning} ${coaching_cue}`, ctx);
+  if (contradiction) {
+    reasoning = applyFieldGuardrail(
+      `${ctx.goalCopy.reasoning} You're training ${ctx.daysPerWord} days a week.`,
+    );
+    corrections.push(`reasoning: regenerated (contradiction: ${contradiction})`);
+  }
+
+  // Data-token requirement (R5) over the composed block.
+  const block = [headline, reasoning, coaching_cue].filter(Boolean).join(" ");
+  if (!hasDataToken(block)) {
+    reasoning = applyFieldGuardrail(
+      `${ctx.goalCopy.reasoning} You're training ${ctx.daysPerWord} days a week.`,
+    );
+    corrections.push("reasoning: regenerated (no data token / R5)");
+  }
+
+  // Narrative-level R8: the composed message block must have <=1 '?' total.
+  // Per-field strip keeps the first '?' *per field*; if multiple fields each
+  // retain one, the block total can still exceed the doctrine limit. Prune
+  // trailing '?' from reasoning then coaching_cue until the composed block
+  // carries at most one '?'. (Headlines in our templates never contain '?',
+  // so this is ordinarily a no-op — added because R8 is per-message-block, not
+  // per-field, and LLM output is not constrained by our template patterns.)
+  let r8Repaired = false;
+  const r8Block = () => questionCount(`${headline} ${reasoning} ${coaching_cue}`);
+  if (r8Block() > 1) {
+    coaching_cue = _dropExcessFromField(coaching_cue, 0);
+  }
+  if (r8Block() > 1) {
+    reasoning = _dropExcessFromField(reasoning, 0);
+  }
+  if (r8Block() > 1) {
+    // Last-resort: drop '?' from the headline too (should be rare).
+    headline = _dropExcessFromField(headline, 1);
+    r8Repaired = true;
+  }
+  if (r8Repaired) {
+    corrections.push("narrative: R8 trimmed to <=1 '?' across message block");
+  }
+
+  return {
+    narrative: {
+      headline,
+      reasoning,
+      changes_made: n.changes_made,
+      coaching_cue,
+      model_used: n.model_used,
+      is_fallback: n.is_fallback,
+    },
+    corrections,
+  };
+}
+
+/** Drop all '?' characters from a field text (used by the narrative-level R8
+ * trim when trailing fields must contribute zero '?'). */
+function _dropExcessFromField(text: string, keep: number): string {
+  let seen = 0;
+  return text.replace(/\?/g, (m) => {
+    seen += 1;
+    return seen <= keep ? m : "";
+  });
+}
+
+/** Truncate a composed block text so it contains at most one '?', keeping the
+ * first occurrence. */
+function _truncateQuestionsToOne(text: string): string {
+  let seen = 0;
+  return text.replace(/\?/g, (m) => {
+    seen += 1;
+    return seen === 1 ? m : "";
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Deterministic fallback (NEVER a silent one-size template)
 // ---------------------------------------------------------------------------
 
@@ -146,24 +442,28 @@ export function deterministicNarrative(req: NarrateRequest): PlanNarrative {
     ? ` You told me "${sanitizeUserPhrase(req.userPhrase)}" — that's the through-line here.`
     : "";
 
-  const headline = saneHeadline;
-  const reasoning =
-    `${c.reasoning} You're training ${days} days a week as a ${exp} with access to ${eq}.${phraseClause}`;
-  const coaching_cue = saneCue;
-
-  return {
-    headline,
-    reasoning,
+  const composed: PlanNarrative = {
+    headline: saneHeadline,
+    reasoning:
+      `${c.reasoning} You're training ${days} days a week as a ${exp} with access to ${eq}.${phraseClause}`,
     changes_made: [`Plan built for ${req.goal} goal`, `${req.daysPerWeek} sessions/week`],
-    coaching_cue,
+    coaching_cue: saneCue,
     model_used: "deterministic",
     is_fallback: true,
   };
+
+  // Run the R1-R8 guardrail so the deterministic fallback obeys every
+  // message rule — currently the reasoning exceeds 60 words on common
+  // goal/equip/phrase combos (ONB-032) and could echo a user '?' (ONB-036).
+  return applyNarrativeGuardrail(composed, req).narrative;
 }
 
-/** Strip emoji + markup from a user phrase before echoing it into coach copy. */
+/** Strip emoji + markup + question marks from a user phrase before echoing
+ * it into coach copy (R8 at the input layer: a user-supplied '?' must not be
+ * echoed back as an extra question mark — ONB-036). */
 export function sanitizeUserPhrase(raw: string): string {
-  // Remove emoji/symbol ranges, collapse whitespace, strip HTML-ish markup.
+  // Remove emoji/symbol ranges, collapse whitespace, strip HTML-ish markup,
+  // and strip question marks.
   const noEmoji = raw
     // emoji & symbol blocks
     .replace(/[\u{1F600}-\u{1F64F}]/gu, "")
@@ -177,7 +477,8 @@ export function sanitizeUserPhrase(raw: string): string {
     .replace(/[\u{200D}\u{20E3}\u{FE0F}]/gu, "")
     // angle-bracket markup
     .replace(/<[^>]*>/g, "");
-  return noEmoji.replace(/\s+/g, " ").trim();
+  // Strip question marks (R8 input sanitizer).
+  return noEmoji.replace(/\?/g, "").replace(/\s+/g, " ").trim();
 }
 
 // ---------------------------------------------------------------------------
@@ -222,8 +523,11 @@ function buildNarratePrompt(req: NarrateRequest): { system: string; user: string
   return { system, user };
 }
 
-/** Parse the LLM content into a PlanNarrative, or null on any failure. */
-function parseNarrative(content: string): PlanNarrative | null {
+/** Parse the LLM content into a PlanNarrative, or null on any failure.
+ * Runs the full R1-R8 guardrail on the parsed text fields so the
+ * LLM-success path is held to the same doctrine standard as the deterministic
+ * fallback (originally parseNarrative only trimmed — that was the gap). */
+export function parseNarrative(content: string, req: NarrateRequest): PlanNarrative | null {
   // Find the first JSON object in the content (defensive against fenced prose).
   const start = content.indexOf("{");
   const end = content.lastIndexOf("}");
@@ -241,7 +545,7 @@ function parseNarrative(content: string): PlanNarrative | null {
   const coaching_cue = typeof o.coaching_cue === "string" ? o.coaching_cue.trim() : "";
   const changes = Array.isArray(o.changes_made) ? o.changes_made.filter((x): x is string => typeof x === "string") : [];
   if (!headline || !reasoning || !coaching_cue) return null;
-  return {
+  const raw: PlanNarrative = {
     headline,
     reasoning,
     changes_made: changes,
@@ -249,6 +553,7 @@ function parseNarrative(content: string): PlanNarrative | null {
     model_used: "", // filled in by caller with the real model name
     is_fallback: false,
   };
+  return applyNarrativeGuardrail(raw, req).narrative;
 }
 
 // ---------------------------------------------------------------------------
@@ -326,7 +631,7 @@ export async function narratePlan(req: NarrateRequest): Promise<PlanNarrative> {
     return deterministicNarrative(req);
   }
 
-  const parsed = parseNarrative(content);
+  const parsed = parseNarrative(content, req);
   if (!parsed) {
     return deterministicNarrative(req);
   }
