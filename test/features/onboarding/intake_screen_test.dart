@@ -376,7 +376,9 @@ void main() {
       expect(facade.persistedGoal, 'build_strength');
       expect(facade.persistedDays, 4);
       expect(facade.persistedWhyNow, 'because of my knee rehab');
-      expect(facade.completeOnboardingCalled, isTrue);
+      // completeOnboarding is NOT called on Finish (VAL-ONB-060); it is
+      // called only when the user proceeds past the plan reveal.
+      expect(facade.completeOnboardingCalled, isFalse);
     });
 
     testWidgets('no paywall nodes appear on any intake step', (
@@ -422,13 +424,13 @@ void main() {
       expectNoPaywall();
     });
 
-    testWidgets('completeOnboarding is NOT called until the final step finishes', (
+    testWidgets('completeOnboarding is NOT called when Finish is tapped (VAL-ONB-060)', (
       WidgetTester tester,
     ) async {
       final facade = _FakeProfileFacade();
       await _pumpApp(tester, facade);
 
-      // walking through must not call completeOnboarding until finish
+      // walking through must not call completeOnboarding
       await tester.tap(find.bySemanticsLabel('Goal: build_strength'));
       await tester.pumpAndSettle();
       expect(facade.completeOnboardingCalled, isFalse);
@@ -455,9 +457,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(facade.completeOnboardingCalled, isFalse);
 
+      // Finish navigates to the plan reveal; completeOnboarding is NOT
+      // called until the user proceeds past the reveal (VAL-ONB-060).
       await tester.tap(find.bySemanticsLabel('Finish'));
       await tester.pumpAndSettle();
-      expect(facade.completeOnboardingCalled, isTrue);
+      expect(facade.completeOnboardingCalled, isFalse);
     });
 
     testWidgets('Back control is hidden on the first step', (

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/features/onboarding/intake_screen.dart';
 import 'package:transformfit/features/onboarding/landing_screen.dart';
+import 'package:transformfit/features/onboarding/plan_reveal_screen.dart';
 import 'package:transformfit/features/onboarding/welcome_screen.dart';
 import 'package:transformfit/navigation/auth_state.dart';
 import 'package:transformfit/screens/auth_screen.dart';
@@ -55,6 +56,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'intake',
             name: 'onboarding-intake',
             builder: (context, state) => const IntakeScreen(),
+          ),
+          GoRoute(
+            path: 'plan-reveal',
+            name: 'onboarding-plan-reveal',
+            builder: (context, state) => const PlanRevealScreen(),
           ),
         ],
       ),

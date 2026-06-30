@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
@@ -129,9 +128,10 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
       _error = null;
     });
     try {
-      // Persist intake and flip onboarding-complete together so the flag is
-      // never set with a half-built profile (VAL-ONB-060). Both happen server
-      // side via the profile facade.
+      // Persist intake answers. The onboarding-complete flag is NOT
+      // flipped here — the plan reveal screen is the next step in the
+      // flow, and the user must see their plan before being released
+      // into the main app (VAL-ONB-060).
       await ref.read(profileFacadeProvider).persistIntake(
             userId: userId,
             goal: _goal,
@@ -142,14 +142,6 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
             limitations: _limitations.isEmpty ? null : _limitations,
             whyNow: _whyNow.trim().isEmpty ? null : _whyNow.trim(),
           );
-      await ref.read(profileFacadeProvider).completeOnboarding(userId);
-      // Refresh the auth guard so it re-resolves the profile and routes the
-      // now-onboarded user out of /onboarding into the main app (VAL-ONB-060:
-      // flip happens only here, at the end of the flow).
-      await ref.read(authControllerProvider).refresh();
-      if (mounted) {
-        context.go('/');
-      }
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -157,6 +149,12 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
           _error = 'Could not save your answers. Please try again.';
         });
       }
+      return;
+    }
+    if (mounted) {
+      setState(() {
+        _submitting = false;
+      });
     }
   }
 
