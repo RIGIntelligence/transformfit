@@ -33,8 +33,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         redirect: (context, state) {
           // The M2 onboarding flow starts at the landing surface; the bare
           // /onboarding path always forwards there so deep links and the
-          // auth guard resolve to a coherent first screen.
-          if (state.matchedLocation == '/onboarding') {
+          // auth guard resolve to a coherent first screen. Only redirect the
+          // exact /onboarding path, not its sub-routes.
+          if (state.uri.path == '/onboarding') {
             return '/onboarding/landing';
           }
           return null;
