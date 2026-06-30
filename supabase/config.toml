@@ -279,12 +279,23 @@ max_frequency = "5s"
 # Deployed as the `auth-before-user-created` Deno edge function (see
 # supabase/functions/auth-before-user-created/index.ts). It rejects signups whose
 # email domain is `example.com` (case-insensitive) with a 422, satisfying
-# VAL-AUTH-002. Cloud wiring uses the management API fields
-# `hook_before_user_created_enabled` + `hook_before_user_created_uri`; this
-# config.toml entry mirrors the wiring for local `supabase start` dev.
-[auth.hook.before_user_created]
-enabled = true
-uri = "http://127.0.0.1:54321/functions/v1/auth-before-user-created"
+# VAL-AUTH-002.
+#
+# CLOUD WIRING is via the Supabase management API fields
+# `hook_before_user_created_enabled=true` + `hook_before_user_created_uri`
+# (set by the m1-gotrue-email-domain-block worker), NOT via this config.toml
+# entry. The local-mirror block below is intentionally commented out: the
+# Supabase CLI 2.106.0 config schema requires an `auth.hook.*.secrets`
+# sub-table for any enabled HTTP hook, and our hook performs no Standard
+# Webhooks signature verification (it is invoked server-side by GoTrue and only
+# inspects the email domain), so there is no meaningful secret to declare.
+# Leaving the block enabled blocked `supabase functions deploy` with
+# "Missing required field in config: auth.hook.before_user_created.secrets".
+# Removing the local mirror does NOT affect the cloud-wired hook.
+# [auth.hook.before_user_created]
+# enabled = true
+# uri = "http://127.0.0.1:54321/functions/v1/auth-before-user-created"
+# secrets = []
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
 # [auth.hook.custom_access_token]
