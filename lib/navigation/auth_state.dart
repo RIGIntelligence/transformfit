@@ -9,8 +9,12 @@ enum AuthGuardStatus {
 }
 
 class AuthGuardState extends ChangeNotifier {
-  AuthGuardState({AuthGuardStatus initialStatus = AuthGuardStatus.unauthenticated})
-    : _status = initialStatus;
+  /// Defaults to [AuthGuardStatus.loading] so the route guard shows a neutral
+  /// loading surface (never protected content) until the real Supabase session
+  /// resolves. Callers (tests) may pass an explicit [initialStatus].
+  AuthGuardState({
+    AuthGuardStatus initialStatus = AuthGuardStatus.loading,
+  }) : _status = initialStatus;
 
   AuthGuardStatus _status;
 

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/main.dart';
 import 'package:transformfit/navigation/app_router.dart';
 import 'package:transformfit/navigation/auth_state.dart';
@@ -10,7 +11,10 @@ void main() {
       initialStatus: AuthGuardStatus.unauthenticated,
     );
     final container = ProviderContainer(
-      overrides: [authGuardStateProvider.overrideWithValue(authState)],
+      overrides: [
+        authGuardStateProvider.overrideWithValue(authState),
+        authControllerProvider.overrideWithValue(AuthController.noop()),
+      ],
     );
     addTearDown(container.dispose);
 
@@ -22,7 +26,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Auth'), findsOneWidget);
+    expect(find.text('Welcome back'), findsOneWidget);
     expect(find.text('Today'), findsNothing);
   });
 
@@ -33,7 +37,10 @@ void main() {
       initialStatus: AuthGuardStatus.authenticatedNoProfile,
     );
     final container = ProviderContainer(
-      overrides: [authGuardStateProvider.overrideWithValue(authState)],
+      overrides: [
+        authGuardStateProvider.overrideWithValue(authState),
+        authControllerProvider.overrideWithValue(AuthController.noop()),
+      ],
     );
     addTearDown(container.dispose);
 
@@ -54,7 +61,10 @@ void main() {
       initialStatus: AuthGuardStatus.authenticatedWithProfile,
     );
     final container = ProviderContainer(
-      overrides: [authGuardStateProvider.overrideWithValue(authState)],
+      overrides: [
+        authGuardStateProvider.overrideWithValue(authState),
+        authControllerProvider.overrideWithValue(AuthController.noop()),
+      ],
     );
     final router = container.read(appRouterProvider);
     addTearDown(container.dispose);
@@ -78,7 +88,10 @@ void main() {
       initialStatus: AuthGuardStatus.authenticatedWithProfile,
     );
     final container = ProviderContainer(
-      overrides: [authGuardStateProvider.overrideWithValue(authState)],
+      overrides: [
+        authGuardStateProvider.overrideWithValue(authState),
+        authControllerProvider.overrideWithValue(AuthController.noop()),
+      ],
     );
     final router = container.read(appRouterProvider);
     addTearDown(container.dispose);
@@ -102,7 +115,10 @@ void main() {
       initialStatus: AuthGuardStatus.unauthenticated,
     );
     final container = ProviderContainer(
-      overrides: [authGuardStateProvider.overrideWithValue(authState)],
+      overrides: [
+        authGuardStateProvider.overrideWithValue(authState),
+        authControllerProvider.overrideWithValue(AuthController.noop()),
+      ],
     );
     addTearDown(container.dispose);
 
@@ -115,7 +131,7 @@ void main() {
 
     expect(find.text('Today'), findsNothing);
     await tester.pumpAndSettle();
-    expect(find.text('Auth'), findsOneWidget);
+    expect(find.text('Welcome back'), findsOneWidget);
     expect(find.text('Today'), findsNothing);
   });
 }

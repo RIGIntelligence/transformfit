@@ -2,13 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/app_providers.dart';
-import 'package:transformfit/navigation/auth_state.dart';
+import 'package:transformfit/features/auth/auth_controller.dart';
 
-class TodayScreen extends ConsumerWidget {
+class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TodayScreen> createState() => _TodayScreenState();
+}
+
+class _TodayScreenState extends ConsumerState<TodayScreen> {
+  bool _signingOut = false;
+
+  Future<void> _signOut() async {
+    if (_signingOut) return;
+    setState(() => _signingOut = true);
+    try {
+      await ref.read(authFacadeProvider).signOut();
+      // The auth stream fires `signedOut` -> the guard redirects to /auth.
+    } finally {
+      if (mounted) setState(() => _signingOut = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final coachNote = ref.watch(coachNoteProvider);
 
     return Scaffold(
@@ -57,12 +75,14 @@ class TodayScreen extends ConsumerWidget {
                 button: true,
                 label: 'Sign out',
                 child: TextButton(
-                  onPressed: () {
-                    ref
-                        .read(authGuardStateProvider)
-                        .setStatus(AuthGuardStatus.unauthenticated);
-                  },
-                  child: const Text('Sign out'),
+                  onPressed: _signingOut ? null : _signOut,
+                  child: _signingOut
+                      ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Sign out'),
                 ),
               ),
             ],

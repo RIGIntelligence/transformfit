@@ -5,6 +5,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:transformfit/bootstrap/app_bootstrap.dart';
+import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/navigation/app_router.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
@@ -28,6 +29,9 @@ class TransformFitApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Keep the auth controller alive so the Supabase auth stream drives the
+    // route guard (sign-in/sign-out/session-persistence -> redirect).
+    ref.watch(authControllerProvider);
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(

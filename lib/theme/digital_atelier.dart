@@ -7,6 +7,10 @@ class DigitalAtelierTokens {
   static const Color textPrimary = Color(0xFFF0EDE8);
   static const Color accentOrange = Color(0xFFF97316);
 
+  /// Muted red for inline error text (distinct from the accent token so it
+  /// does not consume the <=3 accent-uses-per-screen budget).
+  static const Color errorText = Color(0xFFE5484D);
+
   static const String coachVoiceFontFamily = 'Playfair';
   static const String dataFontFamily = 'Inter';
 
