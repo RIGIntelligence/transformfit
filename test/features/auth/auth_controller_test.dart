@@ -59,6 +59,17 @@ class _FakeProfileFacade implements ProfileFacade {
     onboardingCompleted = true;
     exists = true;
   }
+
+  @override
+  Future<void> persistIntake({
+    required String userId,
+    String? goal,
+    int? trainingDaysPerWeek,
+    List<String>? equipment,
+    String? experienceLevel,
+    List<String>? limitations,
+    String? whyNow,
+  }) async {}
 }
 
 void main() {

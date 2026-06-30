@@ -178,4 +178,15 @@ class _NoopProfileFacade implements ProfileFacade {
 
   @override
   Future<void> completeOnboarding(String userId) async {}
+
+  @override
+  Future<void> persistIntake({
+    required String userId,
+    String? goal,
+    int? trainingDaysPerWeek,
+    List<String>? equipment,
+    String? experienceLevel,
+    List<String>? limitations,
+    String? whyNow,
+  }) async {}
 }

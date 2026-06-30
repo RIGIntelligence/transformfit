@@ -79,6 +79,20 @@ abstract class ProfileFacade {
 
   /// Marks the user's profile as having completed onboarding.
   Future<void> completeOnboarding(String userId);
+
+  /// Persists the intake-quiz answers to the user's profile. Called only after
+  /// the full flow finishes (never mid-intake), so [completeOnboarding] and
+  /// [persistIntake] flip together and the onboarding-complete flag is never
+  /// set with a half-built profile (VAL-ONB-060).
+  Future<void> persistIntake({
+    required String userId,
+    String? goal,
+    int? trainingDaysPerWeek,
+    List<String>? equipment,
+    String? experienceLevel,
+    List<String>? limitations,
+    String? whyNow,
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -287,6 +301,37 @@ class SupabaseProfileFacade implements ProfileFacade {
           .eq('id', userId);
     } catch (e) {
       debugPrint('completeOnboarding error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> persistIntake({
+    required String userId,
+    String? goal,
+    int? trainingDaysPerWeek,
+    List<String>? equipment,
+    String? experienceLevel,
+    List<String>? limitations,
+    String? whyNow,
+  }) async {
+    if (!_supabaseReady()) return;
+    try {
+      final updates = <String, Object?>{};
+      if (goal != null) updates['goal'] = goal;
+      if (trainingDaysPerWeek != null) {
+        updates['training_days_per_week'] = trainingDaysPerWeek;
+      }
+      if (equipment != null) updates['equipment'] = equipment;
+      if (experienceLevel != null) updates['experience_level'] = experienceLevel;
+      if (limitations != null) updates['limitations'] = limitations;
+      if (whyNow != null) updates['identity_anchor'] = whyNow;
+      await Supabase.instance.client
+          .from('profiles')
+          .update(updates)
+          .eq('id', userId);
+    } catch (e) {
+      debugPrint('persistIntake error: $e');
       rethrow;
     }
   }
