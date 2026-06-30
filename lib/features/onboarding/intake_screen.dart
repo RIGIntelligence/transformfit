@@ -46,6 +46,7 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
   final List<String> _experienceLevels = [];
   final List<String> _limitations = [];
   String _whyNow = '';
+  late final TextEditingController _whyNowController;
 
   bool _submitting = false;
   String? _error;
@@ -89,6 +90,18 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
   ];
 
   _IntakeStep get _step => _IntakeStep.values[_current];
+
+  @override
+  void initState() {
+    super.initState();
+    _whyNowController = TextEditingController(text: _whyNow);
+  }
+
+  @override
+  void dispose() {
+    _whyNowController.dispose();
+    super.dispose();
+  }
 
   bool get _canAdvance {
     return switch (_step) {
@@ -550,6 +563,7 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
           ),
           const SizedBox(height: 24),
           TextField(
+            controller: _whyNowController,
             maxLines: 4,
             onChanged: (value) => setState(() => _whyNow = value),
             decoration: const InputDecoration(

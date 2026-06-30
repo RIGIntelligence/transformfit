@@ -308,6 +308,46 @@ void main() {
       expect(facade.persistedWhyNow, 'I want to feel strong again');
     });
 
+    testWidgets('why-now text survives back and forward navigation', (
+      WidgetTester tester,
+    ) async {
+      final facade = _FakeProfileFacade();
+      await _pumpApp(tester, facade);
+
+      await tester.tap(find.bySemanticsLabel('Goal: build_strength'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Schedule: 4 days'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Equipment: dumbbells'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Experience: intermediate'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Injury: none'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'because I need momentum');
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Back'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.widgetWithText(TextField, 'because I need momentum'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('forward navigation advances one step at a time', (
       WidgetTester tester,
     ) async {
