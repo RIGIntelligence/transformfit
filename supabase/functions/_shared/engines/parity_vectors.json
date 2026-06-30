@@ -1,0 +1,72 @@
+[
+  {
+    "name": "strength-barbell-adv",
+    "intake": {
+      "goal": "build_strength",
+      "trainingDaysPerWeek": 4,
+      "equipment": ["barbell", "dumbbells", "machines"],
+      "experienceLevel": "advanced",
+      "limitations": []
+    }
+  },
+  {
+    "name": "bodyweight-mobility-beginner",
+    "intake": {
+      "goal": "improve_mobility",
+      "trainingDaysPerWeek": 3,
+      "equipment": [],
+      "experienceLevel": "beginner",
+      "limitations": ["none"]
+    }
+  },
+  {
+    "name": "get-fitter-dumbbells-intermediate-knee",
+    "intake": {
+      "goal": "get_fitter",
+      "trainingDaysPerWeek": 5,
+      "equipment": ["dumbbells", "resistance_bands", "pull_up_bar"],
+      "experienceLevel": "intermediate",
+      "limitations": ["knee", "shoulder"]
+    }
+  },
+  {
+    "name": "lose-fat-kettlebells-2d-wrist",
+    "intake": {
+      "goal": "lose_fat",
+      "trainingDaysPerWeek": 2,
+      "equipment": ["kettlebells", "dumbbells"],
+      "experienceLevel": "beginner",
+      "limitations": ["wrist"]
+    }
+  },
+  {
+    "name": "train-for-sport-bands-3d-null-exp",
+    "intake": {
+      "goal": "train_for_sport",
+      "trainingDaysPerWeek": 3,
+      "equipment": ["resistance_bands"],
+      "experienceLevel": null,
+      "limitations": ["back"]
+    }
+  },
+  {
+    "name": "muscle-gym-6d-adv-none",
+    "intake": {
+      "goal": "build_muscle",
+      "trainingDaysPerWeek": 6,
+      "equipment": ["barbell", "dumbbells", "machines", "cables", "pull_up_bar"],
+      "experienceLevel": "advanced",
+      "limitations": []
+    }
+  },
+  {
+    "name": "strength-bodyweight-shoulderkneeankle",
+    "intake": {
+      "goal": "build_strength",
+      "trainingDaysPerWeek": 3,
+      "equipment": ["bodyweight"],
+      "experienceLevel": "intermediate",
+      "limitations": ["shoulder", "knee", "ankle"]
+    }
+  }
+]
