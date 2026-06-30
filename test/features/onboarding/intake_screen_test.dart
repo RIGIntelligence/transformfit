@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/features/auth/auth_service.dart';
 import 'package:transformfit/features/onboarding/intake_screen.dart';
@@ -72,13 +73,34 @@ class _FakeAuthFacade implements AuthFacade {
 }
 
 Widget _wrap({required _FakeProfileFacade profileFacade}) {
+  final router = GoRouter(
+    initialLocation: '/onboarding/intake',
+    routes: [
+      GoRoute(
+        path: '/onboarding/intake',
+        builder: (context, state) => const IntakeScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/plan-reveal',
+        builder: (context, state) => Scaffold(
+          body: Center(
+            child: Semantics(
+              label: 'Plan reveal body',
+              child: Text('Plan reveal'),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+
   return ProviderScope(
     overrides: [
       profileFacadeProvider.overrideWithValue(profileFacade),
       authFacadeProvider.overrideWithValue(_FakeAuthFacade()),
     ],
-    child: const MaterialApp(
-      home: IntakeScreen(),
+    child: MaterialApp.router(
+      routerConfig: router,
     ),
   );
 }
@@ -471,6 +493,47 @@ void main() {
       await _pumpApp(tester, facade);
 
       expect(find.bySemanticsLabel('Back'), findsNothing);
+    });
+
+    testWidgets('Finish advances to the plan reveal (no dead-end)', (
+      WidgetTester tester,
+    ) async {
+      final facade = _FakeProfileFacade();
+      await _pumpApp(tester, facade);
+
+      // walk through required steps to reach the last (why-now) step
+      await tester.tap(find.bySemanticsLabel('Goal: build_strength'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Schedule: 4 days'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Equipment: dumbbells'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Experience: intermediate'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Injury: none'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Next'));
+      await tester.pumpAndSettle();
+
+      // intake was persisted...
+      await tester.tap(find.bySemanticsLabel('Finish'));
+      // Allow the async _finish (awaits persistIntake) to complete AND give
+      // the GoRouter a moment to process the navigation it triggers.
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+      expect(facade.persistedGoal, 'build_strength');
+
+      // ...and the user was advanced to the plan reveal (no dead-end).
+      expect(find.text('Plan reveal'), findsOneWidget);
     });
 
     testWidgets('Last step shows a Finish control instead of Next', (

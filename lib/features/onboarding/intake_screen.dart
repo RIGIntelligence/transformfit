@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
@@ -142,6 +143,13 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
             limitations: _limitations.isEmpty ? null : _limitations,
             whyNow: _whyNow.trim().isEmpty ? null : _whyNow.trim(),
           );
+      // The user has finished intake; advance them to the plan reveal so
+      // they see their generated plan before being released into the main
+      // app. This is the next step in the onboarding E2E flow — without it
+      // the intake screen is a dead-end.
+      if (mounted) {
+        context.go('/onboarding/plan-reveal');
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
