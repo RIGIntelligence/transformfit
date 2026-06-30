@@ -260,7 +260,10 @@ export function detectPacketContradiction(text: string, ctx: GuardrailContext): 
 
 /** Apply auto-correctable R2-R3-R4-R8 rules to a single text field. Order:
  * emoji (R3) → excess questions (R8) → banned phrases (R4) → word truncation
- * (R2, last so appended tokens stay inside the 60-word budget). */
+ * (R2, last so appended tokens stay inside the per-field budget). Note this
+ * truncates the FIELD to 60 words; the composed-block R2 (<=60 words for the
+ * joined headline+reasoning+coaching_cue) is enforced separately in
+ * applyNarrativeGuardrail via truncateComposedBlock. */
 export function applyFieldGuardrail(text: string): string {
   let t = text;
   t = stripEmoji(t);
@@ -268,6 +271,58 @@ export function applyFieldGuardrail(text: string): string {
   t = stripBannedPhrases(t);
   t = truncateWords(t, 60);
   return t;
+}
+
+/** Truncate the COMPOSED message block (headline + reasoning + coaching_cue
+ * joined as a single string) to <=60 words. The harness message_rule_lint.py
+ * applies R2 to the joined block, NOT per-field — so even when each field is
+ * individually under 60 words, the joined block can exceed it (ONB-032).
+ *
+ * Strategy: iteratively remove one word from the MIDDLE of the LONGEST field,
+ * re-join, and re-check until the composed block is within budget. We remove
+ * from the middle (keeping the first ~half and last ~half words) rather than
+ * truncating from the end so that trailing content — notably the echoed user
+ * phrase appended to the deterministic reasoning — is preserved (R1 echo).
+ * Truncating the longest field each round minimizes the number of fields
+ * touched and preserves the most content overall. */
+export function truncateComposedBlock(
+  headline: string,
+  reasoning: string,
+  coaching_cue: string,
+  maxWords = 60,
+): { headline: string; reasoning: string; coaching_cue: string } {
+  let h = headline;
+  let r = reasoning;
+  let c = coaching_cue;
+
+  // Iteratively trim the longest field until the joined block fits.
+  for (let guard = 0; guard < 500; guard++) {
+    const block = [h, r, c].filter(Boolean).join(" ");
+    if (wordCount(block) <= maxWords) break;
+
+    // Find the longest field by word count and trim one word from its middle.
+    const fields: Array<[number, () => string, (v: string) => void]> = [
+      [wordCount(h), () => h, (v: string) => h = v],
+      [wordCount(r), () => r, (v: string) => r = v],
+      [wordCount(c), () => c, (v: string) => c = v],
+    ];
+    fields.sort((a, b) => b[0] - a[0]);
+    const [, get, set] = fields[0];
+    const current = get();
+    const currentWc = wordCount(current.replace(/…$/, ""));
+    if (currentWc <= 1) {
+      // Can't trim further without emptying; empty it to guarantee termination.
+      set("");
+    } else {
+      // Remove one word from the middle (keep first ~half + last ~half).
+      const words = current.replace(/…$/, "").split(/\s+/);
+      const mid = Math.floor(words.length / 2);
+      words.splice(mid, 1);
+      set(words.join(" "));
+    }
+  }
+
+  return { headline: h, reasoning: r, coaching_cue: c };
 }
 
 /** Run the full R1-R8 guardrail on a composed narrative. Auto-corrects each
@@ -331,6 +386,27 @@ export function applyNarrativeGuardrail(
   if (r8Repaired) {
     corrections.push("narrative: R8 trimmed to <=1 '?' across message block");
   }
+
+  // Composed-block R2: the harness message_rule_lint.py applies R2 to the
+  // JOINED block (headline + reasoning + coaching_cue), not per-field. After
+  // per-field cleaning, the joined block can still exceed 60 words — truncate
+  // the longest field iteratively until the composed block fits (ONB-032 fix).
+  const before = [headline, reasoning, coaching_cue].filter(Boolean).join(" ");
+  const trimmed = truncateComposedBlock(headline, reasoning, coaching_cue);
+  if (
+    trimmed.headline !== headline || trimmed.reasoning !== reasoning ||
+    trimmed.coaching_cue !== coaching_cue
+  ) {
+    const after = [trimmed.headline, trimmed.reasoning, trimmed.coaching_cue].filter(Boolean).join(
+      " ",
+    );
+    corrections.push(
+      `narrative: R2 composed-block truncated from ${wordCount(before)} to ${wordCount(after)} words`,
+    );
+  }
+  headline = trimmed.headline;
+  reasoning = trimmed.reasoning;
+  coaching_cue = trimmed.coaching_cue;
 
   return {
     narrative: {

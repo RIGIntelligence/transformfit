@@ -24,6 +24,7 @@ import {
   sanitizeUserPhrase,
   applyNarrativeGuardrail,
   applyFieldGuardrail,
+  truncateComposedBlock,
   wordCount,
   emojiCount,
   questionCount,
@@ -256,6 +257,29 @@ Deno.test("pure helpers: truncateWords (R2)", () => {
   assertEquals(truncateWords("short text", 60), "short text");
 });
 
+Deno.test("pure helpers: truncateComposedBlock enforces <=60 words on joined block", () => {
+  // Three fields each 30 words -> joined is 90 words, must trim to <=60.
+  const h = Array(30).fill("headline").join(" ");
+  const r = Array(30).fill("reasoning").join(" ");
+  const c = Array(30).fill("cue").join(" ");
+  const result = truncateComposedBlock(h, r, c, 60);
+  const composed = [result.headline, result.reasoning, result.coaching_cue].join(" ");
+  assert(
+    wordCount(composed) <= 60,
+    `composed block still ${wordCount(composed)} words > 60`,
+  );
+});
+
+Deno.test("pure helpers: truncateComposedBlock is a no-op when already within budget", () => {
+  const h = "Short headline";
+  const r = "Brief reasoning.";
+  const c = "Quick cue.";
+  const result = truncateComposedBlock(h, r, c, 60);
+  assertEquals(result.headline, h);
+  assertEquals(result.reasoning, r);
+  assertEquals(result.coaching_cue, c);
+});
+
 Deno.test("pure helpers: detectPacketContradiction", () => {
   const ctx = buildGuardrailContext({
     goal: "build_muscle",
@@ -333,26 +357,22 @@ const MAX_REQUEST = {
   userPhrase: "I want to feel strong in my own skin again no matter what anyone thinks",
 };
 
-Deno.test("deterministic fallback: R2 word-count <=60 for MIN inputs", () => {
+Deno.test("deterministic fallback: R2 composed-block word-count <=60 for MIN inputs", () => {
   const n = deterministicNarrative(MIN_REQUEST);
-  for (const [field, text] of [
-    ["headline", n.headline],
-    ["reasoning", n.reasoning],
-    ["coaching_cue", n.coaching_cue],
-  ] as const) {
-    assert(wordCount(text) <= 60, `${field} word-count ${wordCount(text)} > 60: ${text}`);
-  }
+  const composed = [n.headline, n.reasoning, n.coaching_cue].join(" ");
+  assert(
+    wordCount(composed) <= 60,
+    `composed block word-count ${wordCount(composed)} > 60: ${composed}`,
+  );
 });
 
-Deno.test("deterministic fallback: R2 word-count <=60 under MAX load (ONB-032 fix)", () => {
+Deno.test("deterministic fallback: R2 composed-block word-count <=60 under MAX load (ONB-032 fix)", () => {
   const n = deterministicNarrative(MAX_REQUEST);
-  for (const [field, text] of [
-    ["headline", n.headline],
-    ["reasoning", n.reasoning],
-    ["coaching_cue", n.coaching_cue],
-  ] as const) {
-    assert(wordCount(text) <= 60, `${field} word-count ${wordCount(text)} > 60: ${text}`);
-  }
+  const composed = [n.headline, n.reasoning, n.coaching_cue].join(" ");
+  assert(
+    wordCount(composed) <= 60,
+    `composed block word-count ${wordCount(composed)} > 60: ${composed}`,
+  );
 });
 
 Deno.test("deterministic fallback: R3 no emoji", () => {
@@ -391,9 +411,17 @@ Deno.test("deterministic fallback: user '?' stripped in echo (no excess question
     ...MIN_REQUEST,
     userPhrase: "Can I really get strong?",
   });
-  // 'Can I' and the stripped phrase must appear verbatim minus the '?'.
-  assert(n.reasoning.includes("Can I really get strong"));
+  // The user phrase's '?' must be stripped (R8 input sanitizer).
   assert(!/\?/.test(n.reasoning), "reasoning should not contain '?'");
+  // The composed block must obey R2 (<=60 words) — truncation may shorten
+  // the echoed phrase, but at least one significant user word should remain
+  // (R1 echo: "strong" is the content-bearing token here).
+  const composed = [n.headline, n.reasoning, n.coaching_cue].join(" ");
+  assert(wordCount(composed) <= 60, `composed block ${wordCount(composed)} words > 60`);
+  assert(
+    composed.toLowerCase().includes("strong"),
+    `user word "strong" should still be echoed after truncation: ${composed}`,
+  );
 });
 
 // ---------------------------------------------------------------------------=
@@ -449,7 +477,7 @@ Deno.test("mocked LLM-success: R4 strips banned generic encouragement", () => {
   assert(!hasBannedPhrase(n.coaching_cue), `cue: ${n.coaching_cue}`);
 });
 
-Deno.test("mocked LLM-success: R2 truncates to <=60 words", () => {
+Deno.test("mocked LLM-success: R2 composed-block word-count <=60", () => {
   const longBlock = Array(100).fill("your training plan is ready").join(" ");
   const raw: PlanNarrative = {
     headline: "Here is your plan for the week ahead",
@@ -460,7 +488,11 @@ Deno.test("mocked LLM-success: R2 truncates to <=60 words", () => {
     is_fallback: false,
   };
   const { narrative: n } = applyNarrativeGuardrail(raw, makeReq());
-  assert(wordCount(n.reasoning.replace(/…$/, "")) <= 60, `reasoning too long: ${wordCount(n.reasoning)}`);
+  const composed = [n.headline, n.reasoning, n.coaching_cue].join(" ");
+  assert(
+    wordCount(composed) <= 60,
+    `composed block word-count ${wordCount(composed)} > 60: ${composed}`,
+  );
 });
 
 Deno.test("mocked LLM-success: regenerates R5 when composed block lacks data token", () => {
@@ -561,7 +593,7 @@ Deno.test("parseNarrative: applies R4 to LLM JSON output (strips banned phrases)
   assert(!hasBannedPhrase(parsed!.reasoning));
 });
 
-Deno.test("parseNarrative: applies R2 to LLM JSON output (truncates >60 words)", () => {
+Deno.test("parseNarrative: applies R2 to LLM JSON output (composed-block <=60 words)", () => {
   const longReasoning = Array(100).fill("your training plan is ready").join(" ");
   const llmJson = JSON.stringify({
     headline: "Here is your plan",
@@ -571,7 +603,11 @@ Deno.test("parseNarrative: applies R2 to LLM JSON output (truncates >60 words)",
   });
   const parsed = parseNarrative(llmJson, makeReq());
   assert(parsed !== null);
-  assert(wordCount(parsed!.reasoning.replace(/…$/, "")) <= 60);
+  const composed = [parsed!.headline, parsed!.reasoning, parsed!.coaching_cue].join(" ");
+  assert(
+    wordCount(composed) <= 60,
+    `composed block word-count ${wordCount(composed)} > 60: ${composed}`,
+  );
 });
 
 Deno.test("parseNarrative: regenerates R5 when LLM output lacks data token", () => {
@@ -641,7 +677,11 @@ Deno.test("narratePlan (mocked LLM): applies R3/R4/R8/R2 guardrail to LLM output
   assert(questionCount(all) <= 1, `too many '?': ${questionCount(all)}`);
   assert(!hasBannedPhrase(captured.headline), `headline: ${captured.headline}`);
   assert(!hasBannedPhrase(captured.coaching_cue), `cue: ${captured.coaching_cue}`);
-  assert(wordCount(captured.reasoning.replace(/…$/, "")) <= 60);
+  const composedLlmr2 = [captured.headline, captured.reasoning, captured.coaching_cue].join(" ");
+  assert(
+    wordCount(composedLlmr2) <= 60,
+    `composed block word-count ${wordCount(composedLlmr2)} > 60: ${composedLlmr2}`,
+  );
 });
 
 Deno.test("narratePlan (mocked LLM): regenerates reasoning contradicting packet numbers", async () => {
