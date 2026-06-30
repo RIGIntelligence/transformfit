@@ -58,3 +58,6 @@ secrets/
 # the ProofPacket files are demonstrated by running the ship-gate, not
 # committed as source).
 transformfit-harness/packets/
+
+# Factory/browser validation traces can include request metadata and test users.
+validation/
