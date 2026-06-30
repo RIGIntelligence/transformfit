@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore_for_file: use_build_context_synchronously
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/engine/plan_generation.dart';
-import 'package:transformfit/features/auth/auth_controller.dart';
 import 'package:transformfit/features/onboarding/plan_reveal_controller.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
@@ -155,26 +154,25 @@ class _PlanRevealScreenState extends ConsumerState<PlanRevealScreen> {
           ),
           const SizedBox(height: 20),
 
-          // Beat 7: CTA — explicit "start session 1" action
+          // Beat 7: CTA — explicit "start session 1" action. Leads into the
+          // first-session handoff (MoT4) — never a dead-end, never a paywall.
+          //
+          // VAL-ONB-060: the onboarding-complete flag is NOT flipped here.
+          // It flips only after the handoff CTA, so the guard keeps the user
+          // in /onboarding for the handoff and the flag is true only after
+          // the full flow finishes.
           Semantics(
             label: 'CTA beat',
             container: true,
             explicitChildNodes: true,
             child: _StartSessionButton(
-              onPressed: () async {
-                // Flip onboarding-complete only after the user proceeds
-                // past the reveal (VAL-ONB-060: the reveal is part of the
-                // onboarding flow, so the flag was not set during intake).
-                final router = GoRouter.of(context);
-                final userId = ref.read(authFacadeProvider).currentUserId();
-                if (userId != null) {
-                  await ref
-                      .read(profileFacadeProvider)
-                      .completeOnboarding(userId);
-                  await ref.read(authControllerProvider).refresh();
-                }
-                if (!mounted) return;
-                router.go('/');
+              onPressed: () {
+                // Navigate to the handoff, passing the intake so the first
+                // session is reconstructed deterministically (offline-first).
+                GoRouter.of(context).go(
+                  '/onboarding/handoff',
+                  extra: state.intake,
+                );
               },
             ),
           ),

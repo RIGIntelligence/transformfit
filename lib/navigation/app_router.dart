@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transformfit/engine/plan_generation.dart';
+import 'package:transformfit/features/onboarding/first_session_handoff_screen.dart';
 import 'package:transformfit/features/onboarding/intake_screen.dart';
 import 'package:transformfit/features/onboarding/landing_screen.dart';
 import 'package:transformfit/features/onboarding/plan_reveal_screen.dart';
@@ -61,6 +63,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'plan-reveal',
             name: 'onboarding-plan-reveal',
             builder: (context, state) => const PlanRevealScreen(),
+          ),
+          GoRoute(
+            path: 'handoff',
+            name: 'onboarding-handoff',
+            builder: (context, state) {
+              // The intake is passed from the plan reveal CTA via
+              // `extra`. Fall back to a deterministic default so deep links
+              // and tests still render a coherent first session.
+              final extra = state.extra;
+              final intake = extra is PlanIntake
+                  ? extra
+                  : const PlanIntake(
+                      goal: 'get_fitter',
+                      trainingDaysPerWeek: 3,
+                      equipment: ['bodyweight'],
+                      experienceLevel: 'intermediate',
+                    );
+              return FirstSessionHandoffScreen(intake: intake);
+            },
           ),
         ],
       ),

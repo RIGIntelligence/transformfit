@@ -30,6 +30,19 @@ class PlanRevealState {
     int count(String s) => s.trim().isEmpty ? 0 : s.trim().split(RegExp(r'\s+')).length;
     return count(headline) + count(reasoning) + count(coachingCue);
   }
+
+  /// Reconstruct the [PlanIntake] that produced this plan. Used to pass the
+  /// intake to the first-session handoff so it can deterministically render
+  /// session 1 without a network round-trip (offline-first).
+  PlanIntake get intake => PlanIntake(
+        goal: plan.goal,
+        trainingDaysPerWeek: plan.daysPerWeek,
+        equipment: plan.effectiveEquipment
+            .where((e) => e != 'bodyweight')
+            .toList(),
+        experienceLevel: plan.experienceLevel,
+        limitations: plan.contraindications,
+      );
 }
 
 /// Controller that calls the `generate-plan` edge function and surfaces the
