@@ -2,6 +2,51 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:transformfit/engine/plan_generation.dart';
 
+/// Holds the intake the user actually entered, seeded by the intake screen
+/// just before navigating to `/onboarding/plan-reveal`. The plan-reveal
+/// controller reads its real [PlanIntake] from here instead of hardcoding a
+/// default — the canonical data-carrying path (onboarding-data-flow.md,
+/// "seeded Riverpod provider"). A null value means no intake has been seeded
+/// yet (e.g. a deep link straight to plan-reveal); the controller then falls
+/// back to a deterministic default and flags the result as a fallback.
+///
+/// Backed by a simple [Notifier] (Riverpod 6 — the legacy [StateProvider] was
+/// removed). The intake screen calls `setIntake(...)` before navigating; the
+/// controller reads via [pendingIntakeProvider].
+class PendingIntake extends Notifier<PlanIntake?> {
+  @override
+  PlanIntake? build() => null;
+
+  /// Seed the intake captured during the intake quiz. Ignored if [intake]
+  /// is null (no-op) so callers can pass a nullable without branching.
+  void setIntake(PlanIntake? intake) {
+    state = intake;
+  }
+}
+
+final pendingIntakeProvider = NotifierProvider<PendingIntake, PlanIntake?>(
+  PendingIntake.new,
+);
+
+/// Companion side-channel for the user's free-text "why now" phrase
+/// (identity_anchor). [PlanIntake] has no field for it, and the edge function
+/// reads it from the request body only (never the profile server-side), so the
+/// intake screen seeds this provider immediately before navigating to
+/// `/onboarding/plan-reveal`. The controller sends it as `userPhrase` and
+/// echoes a sanitized copy for the Recognition beat (VAL-ONB-031/059).
+class UserWhyNow extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void setPhrase(String? phrase) {
+    state = phrase;
+  }
+}
+
+final userWhyNowProvider = NotifierProvider<UserWhyNow, String?>(
+  UserWhyNow.new,
+);
+
 /// The state of the plan reveal screen.
 class PlanRevealState {
   const PlanRevealState({
@@ -51,15 +96,34 @@ class PlanRevealState {
 class PlanRevealController extends AsyncNotifier<PlanRevealState> {
   @override
   Future<PlanRevealState> build() async {
-    // The default intake; in a full implementation this would be read from
-    // the persisted profile. For M2 the reveal runs immediately after intake
-    // and the profile has been written by the intake screen.
-    const intake = PlanIntake(
-      goal: 'get_fitter',
-      trainingDaysPerWeek: 3,
-      equipment: ['bodyweight'],
-      experienceLevel: 'intermediate',
-    );
+    // Read the ACTUAL intake the user entered. The intake screen seeds
+    // [pendingIntakeProvider] immediately before navigating here (see
+    // IntakeScreen._finish). This is the single source of truth — there is
+    // no hardcoded default intake anymore (onboarding-data-flow.md,
+    // Controller & Test Authenticity). A null value only occurs on a deep
+    // link straight to plan-reveal with no prior intake; in that case we
+    // fall back to a deterministic default and flag the result as a fallback.
+    final intake = ref.read(pendingIntakeProvider) ??
+        const PlanIntake(
+          goal: 'get_fitter',
+          trainingDaysPerWeek: 3,
+          equipment: ['bodyweight'],
+          experienceLevel: 'intermediate',
+        );
+
+    // The user's "why now" phrase (identity anchor) for the LLM to echo
+    // (VAL-ONB-031 / VAL-ONB-059). Sent in the request body as userPhrase;
+    // the edge function sanitizes + echoes it inside its narrative. We keep
+    // a local sanitized copy for the Recognition beat so the screen can
+    // render it even when the network path returns an LLM-less fallback.
+    final String? userPhrase = ref.read(pendingIntakeProvider) == null
+        ? null
+        : _localWhyNow(ref);
+    final String? echoed = userPhrase == null
+        ? null
+        : _sanitizeUserPhrase(userPhrase);
+
+    final fallbackIntake = intake;
 
     try {
       final client = Supabase.instance.client;
@@ -71,6 +135,10 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
           'equipment': intake.equipment,
           'experienceLevel': intake.experienceLevel,
           'limitations': intake.limitations,
+          // R1 echo: the real user phrase so the LLM can echo the user's
+          // words back (VAL-ONB-031). The edge function reads it from the
+          // body only — it does NOT read the profile server-side.
+          'userPhrase': userPhrase,
         },
       );
       if (response.data == null) {
@@ -87,14 +155,15 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
         changesMade: _list(data['changes_made']),
         isFallback: data['is_fallback'] == true,
         modelUsed: _str(data['model_used']),
-        echoedPhrase: data['echoed_phrase'] is String
-            ? _sanitizeUserPhrase(data['echoed_phrase'] as String)
-            : null,
+        // The generate-plan response does NOT carry a discrete echoed_phrase
+        // field; the echo lives inside the LLM-written reasoning. We surface
+        // the user's own sanitized phrase for the Recognition beat.
+        echoedPhrase: echoed,
       );
     } catch (_) {
       // Edge function unavailable: fall back to the local deterministic engine
       // and flag it honestly (VAL-ONB-058: surfaced fallback, never silent).
-      final plan = generatePlan(intake);
+      final plan = generatePlan(fallbackIntake);
       return PlanRevealState(
         plan: plan,
         headline: 'Your first week is ready.',
@@ -105,9 +174,16 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
         changesMade: ['Plan built for ${plan.goal} goal', '${plan.daysPerWeek} sessions/week'],
         isFallback: true,
         modelUsed: 'deterministic',
+        echoedPhrase: echoed,
       );
     }
   }
+
+  /// The raw "why now" phrase the user entered, if any. Pulled from
+  /// [pendingIntakeProvider] via the fact that we cannot store the phrase on
+  /// [PlanIntake] (it has no whyNow field) — so we keep a tiny side channel
+  /// through a companion provider the intake screen also seeds.
+  static String? _localWhyNow(Ref ref) => ref.read(userWhyNowProvider);
 
   static String _str(dynamic v) => (v is String && v.isNotEmpty) ? v : '';
   static List<String> _list(dynamic v) =>

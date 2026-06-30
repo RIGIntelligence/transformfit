@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transformfit/engine/plan_generation.dart';
 import 'package:transformfit/features/auth/auth_controller.dart';
+import 'package:transformfit/features/onboarding/plan_reveal_controller.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 /// Conversational, multi-step intake quiz (M2).
@@ -147,6 +149,24 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
       // they see their generated plan before being released into the main
       // app. This is the next step in the onboarding E2E flow — without it
       // the intake screen is a dead-end.
+      //
+      // Seed the REAL intake the user entered (goal / schedule / equipment /
+      // experience / limitations) plus their "why now" phrase into the
+      // pending-intake providers so the plan-reveal controller reads the
+      // actual user inputs rather than a hardcoded default
+      // (onboarding-data-flow.md, Controller & Test Authenticity).
+      ref.read(pendingIntakeProvider.notifier).setIntake(PlanIntake(
+        goal: _goal ?? 'get_fitter',
+        trainingDaysPerWeek: _daysPerWeek ?? 3,
+        equipment: _equipment,
+        experienceLevel:
+            _experienceLevels.isEmpty ? null : _experienceLevels.first,
+        limitations:
+            _limitations.isEmpty ? const [] : _limitations,
+      ));
+      ref
+          .read(userWhyNowProvider.notifier)
+          .setPhrase(_whyNow.trim().isEmpty ? null : _whyNow.trim());
       if (mounted) {
         context.go('/onboarding/plan-reveal');
       }
