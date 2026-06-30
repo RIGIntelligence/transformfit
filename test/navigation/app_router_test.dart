@@ -30,7 +30,7 @@ void main() {
     expect(find.text('Today'), findsNothing);
   });
 
-  testWidgets('Authenticated users without profile are redirected to onboarding', (
+  testWidgets('Authenticated users without profile are redirected to onboarding landing', (
     tester,
   ) async {
     final authState = AuthGuardState(
@@ -52,7 +52,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Onboarding'), findsOneWidget);
+    // The guard routes to /onboarding which redirects to /onboarding/landing.
+    expect(find.bySemanticsLabel('Coach value claim'), findsOneWidget);
+    expect(find.bySemanticsLabel('Begin onboarding'), findsOneWidget);
     expect(find.text('Today'), findsNothing);
   });
 

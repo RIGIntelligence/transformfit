@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transformfit/features/onboarding/intake_screen.dart';
+import 'package:transformfit/features/onboarding/landing_screen.dart';
+import 'package:transformfit/features/onboarding/welcome_screen.dart';
 import 'package:transformfit/navigation/auth_state.dart';
 import 'package:transformfit/screens/auth_screen.dart';
 import 'package:transformfit/screens/loading_screen.dart';
 import 'package:transformfit/screens/not_found_screen.dart';
-import 'package:transformfit/screens/onboarding_screen.dart';
 import 'package:transformfit/screens/profile_screen.dart';
 import 'package:transformfit/screens/today_screen.dart';
 
@@ -28,7 +30,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/onboarding',
         name: 'onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        redirect: (context, state) {
+          // The M2 onboarding flow starts at the landing surface; the bare
+          // /onboarding path always forwards there so deep links and the
+          // auth guard resolve to a coherent first screen.
+          if (state.matchedLocation == '/onboarding') {
+            return '/onboarding/landing';
+          }
+          return null;
+        },
+        routes: [
+          GoRoute(
+            path: 'landing',
+            name: 'onboarding-landing',
+            builder: (context, state) => const LandingScreen(),
+          ),
+          GoRoute(
+            path: 'welcome',
+            name: 'onboarding-welcome',
+            builder: (context, state) => const WelcomeScreen(),
+          ),
+          GoRoute(
+            path: 'intake',
+            name: 'onboarding-intake',
+            builder: (context, state) => const IntakeScreen(),
+          ),
+        ],
       ),
       GoRoute(
         path: '/loading',
@@ -44,6 +71,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final status = authState.status;
       final location = state.matchedLocation;
+      final inOnboarding = location == '/onboarding' ||
+          location.startsWith('/onboarding/');
 
       if (status == AuthGuardStatus.loading) {
         return location == '/loading' ? null : '/loading';
@@ -54,10 +83,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (status == AuthGuardStatus.authenticatedNoProfile) {
-        return location == '/onboarding' ? null : '/onboarding';
+        return inOnboarding ? null : '/onboarding';
       }
 
-      if (location == '/auth' || location == '/onboarding' || location == '/loading') {
+      if (location == '/auth' || inOnboarding || location == '/loading') {
         return '/';
       }
 
