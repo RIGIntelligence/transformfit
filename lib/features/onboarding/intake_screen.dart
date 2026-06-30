@@ -137,13 +137,16 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
             goal: _goal,
             trainingDaysPerWeek: _daysPerWeek,
             equipment: _equipment,
-            experienceLevel: _experienceLevels.isEmpty ? null : _experienceLevels.first,
+            experienceLevel:
+                _experienceLevels.isEmpty ? null : _experienceLevels.first,
             limitations: _limitations.isEmpty ? null : _limitations,
             whyNow: _whyNow.trim().isEmpty ? null : _whyNow.trim(),
           );
       await ref.read(profileFacadeProvider).completeOnboarding(userId);
       // Refresh the auth guard so it re-resolves the profile and routes the
-      // now-onboarded user out of /onboarding into the main app.
+      // now-onboarded user out of /onboarding into the main app (VAL-ONB-060:
+      // flip happens only here, at the end of the flow).
+      await ref.read(authControllerProvider).refresh();
       if (mounted) {
         context.go('/');
       }
@@ -520,15 +523,11 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
             style: theme.textTheme.bodyMedium,
           ),
           const SizedBox(height: 24),
-          Semantics(
-            label: 'Why now text field',
-            textField: true,
-            child: TextField(
-              maxLines: 4,
-              onChanged: (value) => setState(() => _whyNow = value),
-              decoration: const InputDecoration(
-                hintText: 'e.g. I am tired of starting over every January.',
-              ),
+          TextField(
+            maxLines: 4,
+            onChanged: (value) => setState(() => _whyNow = value),
+            decoration: const InputDecoration(
+              hintText: 'e.g. I am tired of starting over every January.',
             ),
           ),
           if (_error != null) ...[
