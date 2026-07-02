@@ -9,21 +9,44 @@
 // user is resolved from the JWT ONLY; any caller-supplied user_id is ignored.
 import { assert, assertEquals, assertNotEquals } from "jsr:@std/assert";
 import { handler, type GeneratePlanResponse } from "./index.ts";
-import {
-  decodeJwtPayload,
-  base64urlDecode,
-  type AuthUser,
-} from "../_shared/auth.ts";
 
 // --- helpers ---------------------------------------------------------------
 
-function makeJwt(payload: Record<string, unknown>): string {
-  const enc = (obj: unknown) => {
-    const json = JSON.stringify(obj);
-    const b64 = btoa(json);
-    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  };
-  return `${enc({ alg: "HS256", typ: "JWT" })}.${enc(payload)}.signature`;
+const TEST_JWT_SECRET = "transformfit-test-jwt-secret";
+Deno.env.set("SUPABASE_JWT_SECRET", TEST_JWT_SECRET);
+Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
+Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
+
+function enc(obj: unknown): string {
+  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function encBytes(bytes: Uint8Array): string {
+  let binary = "";
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function makeJwt(payload: Record<string, unknown>): Promise<string> {
+  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${enc({
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    iss: "supabase",
+    aud: "authenticated",
+    ...payload,
+  })}`;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(TEST_JWT_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = new Uint8Array(await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(signingInput),
+  ));
+  return `${signingInput}.${encBytes(sig)}`;
 }
 
 function authedReq(token: string, body: unknown): Request {
@@ -67,7 +90,7 @@ Deno.test("generate-plan: rejects malformed JWT (4xx)", async () => {
 });
 
 Deno.test("generate-plan: valid JWT -> 200 with a complete deterministic plan packet", async () => {
-  const jwt = makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
+  const jwt = await makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
   // Ensure no OpenRouter key so the deterministic fallback path fires.
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
@@ -99,7 +122,7 @@ Deno.test("generate-plan: valid JWT -> 200 with a complete deterministic plan pa
 });
 
 Deno.test("generate-plan: acting user resolved from JWT ONLY; body user_id=B ignored when JWT sub=A", async () => {
-  const jwt = makeJwt({ sub: "user-a", role: "authenticated" });
+  const jwt = await makeJwt({ sub: "user-a", role: "authenticated" });
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
   let res: Response;
@@ -123,7 +146,7 @@ Deno.test("generate-plan: acting user resolved from JWT ONLY; body user_id=B ign
 
 Deno.test("generate-plan: never returns 501 even on LLM failure (always 200)", async () => {
   // No OpenRouter key => deterministic fallback. Still 200.
-  const jwt = makeJwt({ sub: "user-c" });
+  const jwt = await makeJwt({ sub: "user-c" });
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
   let res: Response;
@@ -150,7 +173,7 @@ Deno.test("generate-plan: never returns 501 even on LLM failure (always 200)", a
 });
 
 Deno.test("generate-plan: numbers/exercises come ONLY from the engine (immaterial of LLM)", async () => {
-  const jwt = makeJwt({ sub: "user-d" });
+  const jwt = await makeJwt({ sub: "user-d" });
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
   let a: GeneratePlanResponse, b: GeneratePlanResponse;
@@ -184,7 +207,7 @@ Deno.test("generate-plan: numbers/exercises come ONLY from the engine (immateria
 });
 
 Deno.test("generate-plan: surfaced fallback has user phrase echo in reasoning", async () => {
-  const jwt = makeJwt({ sub: "user-e" });
+  const jwt = await makeJwt({ sub: "user-e" });
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
   let res: Response;

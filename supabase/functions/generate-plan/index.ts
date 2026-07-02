@@ -105,7 +105,7 @@ export async function handler(req: Request): Promise<Response> {
   const jsonHeaders = { "content-type": "application/json" };
 
   // 1. Resolve the user from the JWT ONLY.
-  const { user, response } = resolveUser(req);
+  const { user, response } = await resolveUser(req);
   if (response !== null || user === null) {
     return response ?? new Response(JSON.stringify({ error: "Unauthorized." }), {
       status: 401,

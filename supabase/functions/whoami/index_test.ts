@@ -3,11 +3,42 @@
 import { assert, assertEquals } from "jsr:@std/assert";
 import { handler } from "./index.ts";
 
-/** Build a minimal JWT with the given payload (signature not verified by helper). */
-function makeJwt(payload: Record<string, unknown>): string {
-  const enc = (obj: unknown) =>
-    btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  return `${enc({ alg: "HS256", typ: "JWT" })}.${enc(payload)}.sig`;
+const TEST_JWT_SECRET = "transformfit-test-jwt-secret";
+Deno.env.set("SUPABASE_JWT_SECRET", TEST_JWT_SECRET);
+Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
+Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
+
+function enc(obj: unknown): string {
+  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function encBytes(bytes: Uint8Array): string {
+  let binary = "";
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/** Build a signed HS256 JWT with the given payload. */
+async function makeJwt(payload: Record<string, unknown>): Promise<string> {
+  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${enc({
+    exp: Math.floor(Date.now() / 1000) + 3600,
+    iss: "supabase",
+    aud: "authenticated",
+    ...payload,
+  })}`;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(TEST_JWT_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = new Uint8Array(await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(signingInput),
+  ));
+  return `${signingInput}.${encBytes(sig)}`;
 }
 
 function whoamiReq(opts: {
@@ -32,7 +63,7 @@ function whoamiReq(opts: {
 // --- JWT-only enforcement (VAL-AUTH-022): body user_id ignored ---
 
 Deno.test("whoami: A's JWT + body user_id=B -> 200, user=A, body ignored, impersonation flagged", async () => {
-  const jwtA = makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
+  const jwtA = await makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
   const res = await handler(whoamiReq({ jwt: jwtA, body: { user_id: "user-b" } }));
   assertEquals(res.status, 200);
   assertEquals(res.headers.get("content-type"), "application/json");
@@ -45,7 +76,7 @@ Deno.test("whoami: A's JWT + body user_id=B -> 200, user=A, body ignored, impers
 });
 
 Deno.test("whoami: body user_id === jwt sub -> impersonation_attempt false", async () => {
-  const jwt = makeJwt({ sub: "user-a" });
+  const jwt = await makeJwt({ sub: "user-a" });
   const res = await handler(whoamiReq({ jwt, body: { user_id: "user-a" } }));
   assertEquals(res.status, 200);
   const body = await res.json();
@@ -55,7 +86,7 @@ Deno.test("whoami: body user_id === jwt sub -> impersonation_attempt false", asy
 });
 
 Deno.test("whoami: no body user_id -> body_user_id_ignored null", async () => {
-  const jwt = makeJwt({ sub: "user-a" });
+  const jwt = await makeJwt({ sub: "user-a" });
   const res = await handler(whoamiReq({ jwt, body: { other: "x" } }));
   assertEquals(res.status, 200);
   const body = await res.json();
@@ -89,13 +120,13 @@ Deno.test("whoami: garbage token -> 401", async () => {
 });
 
 Deno.test("whoami: JWT missing sub -> 401", async () => {
-  const jwt = makeJwt({ email: "a@transformfit.test" });
+  const jwt = await makeJwt({ email: "a@transformfit.test" });
   const res = await handler(whoamiReq({ jwt, body: {} }));
   assertEquals(res.status, 401);
 });
 
 Deno.test("whoami: malformed JSON body does not crash; JWT user still returned", async () => {
-  const jwt = makeJwt({ sub: "user-a" });
+  const jwt = await makeJwt({ sub: "user-a" });
   const req = new Request("https://x/whoami", {
     method: "POST",
     headers: { authorization: `Bearer ${jwt}`, "content-type": "application/json" },
@@ -109,7 +140,7 @@ Deno.test("whoami: malformed JSON body does not crash; JWT user still returned",
 });
 
 Deno.test("whoami: GET with valid JWT -> 200 (no body to parse)", async () => {
-  const jwt = makeJwt({ sub: "user-a" });
+  const jwt = await makeJwt({ sub: "user-a" });
   const res = await handler(whoamiReq({ jwt, method: "GET" }));
   assertEquals(res.status, 200);
   const body = await res.json();

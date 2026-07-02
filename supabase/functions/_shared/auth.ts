@@ -6,13 +6,10 @@
 //   guard). Requests with no / malformed / undecodable JWT are rejected with
 //   401 and perform NO data mutation.
 //
-// Signature verification: when an edge function is deployed with
-// `--verify-jwt` (the default for authenticated functions), the Supabase
-// gateway validates the JWT signature + expiry BEFORE the function runs, so
-// the token reaching this helper is already signature-verified. This helper
-// additionally enforces presence + decodability + a `sub` claim so it remains
-// correct even if a function is ever deployed with `--no-verify-jwt`, and so
-// the impersonation guard is testable in isolation.
+// Signature verification: this helper verifies HS256 Supabase JWTs using
+// SUPABASE_JWT_SECRET and fails closed when the secret is unavailable. It also
+// checks exp, iss, and aud so a function accidentally deployed with
+// `--no-verify-jwt` still rejects forged or expired tokens.
 //
 // This helper NEVER trusts a caller-supplied user_id. The returned `AuthUser`
 // is derived exclusively from the JWT `sub` / `email` / `role` claims.
@@ -71,6 +68,13 @@ export interface JwtPayload {
   exp?: number;
   iat?: number;
   iss?: string;
+  aud?: string | string[];
+  [key: string]: unknown;
+}
+
+export interface JwtHeader {
+  alg?: string;
+  typ?: string;
   [key: string]: unknown;
 }
 
@@ -94,6 +98,73 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
   }
 }
 
+export function decodeJwtHeader(token: string): JwtHeader | null {
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  const json = base64urlDecode(parts[0]);
+  if (json === null) return null;
+  try {
+    const header = JSON.parse(json);
+    if (typeof header !== "object" || header === null) return null;
+    return header as JwtHeader;
+  } catch {
+    return null;
+  }
+}
+
+function base64urlToBytes(input: string): Uint8Array | null {
+  try {
+    let s = input.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = s.length % 4;
+    if (pad === 2) s += "==";
+    else if (pad === 3) s += "=";
+    else if (pad === 1) return null;
+    const binary = atob(s);
+    return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  } catch {
+    return null;
+  }
+}
+
+async function verifyHs256(token: string, secret: string): Promise<boolean> {
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  const header = decodeJwtHeader(token);
+  if (!header || header.alg !== "HS256") return false;
+  const signature = base64urlToBytes(parts[2]);
+  if (signature === null) return false;
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["verify"],
+  );
+  const signatureBytes = new Uint8Array(signature.byteLength);
+  signatureBytes.set(signature);
+  return await crypto.subtle.verify(
+    "HMAC",
+    key,
+    signatureBytes,
+    new TextEncoder().encode(`${parts[0]}.${parts[1]}`),
+  );
+}
+
+function expectedIssuer(): string {
+  return Deno.env.get("SUPABASE_JWT_ISSUER") ?? "supabase";
+}
+
+function expectedAudience(): string {
+  return Deno.env.get("SUPABASE_JWT_AUDIENCE") ?? "authenticated";
+}
+
+function hasAudience(payload: JwtPayload, expected: string): boolean {
+  const aud = payload.aud;
+  if (typeof aud === "string") return aud === expected;
+  if (Array.isArray(aud)) return aud.includes(expected);
+  return false;
+}
+
 /**
  * Resolve the acting user from the request's Authorization: Bearer <jwt>
  * header. Any caller-supplied user_id (in the body / query) is deliberately
@@ -102,7 +173,7 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
  * Returns { user, response: null } on success, or { user: null, response } on
  * rejection (missing / malformed / undecodable JWT, or no `sub` claim).
  */
-export function resolveUser(req: Request): ResolveResult {
+export async function resolveUser(req: Request): Promise<ResolveResult> {
   const authHeader =
     req.headers.get("authorization") ?? req.headers.get("Authorization");
   if (!authHeader) {
@@ -119,6 +190,23 @@ export function resolveUser(req: Request): ResolveResult {
   const payload = decodeJwtPayload(token);
   if (!payload) {
     return { user: null, response: unauthorized("Invalid or malformed JWT.") };
+  }
+  const secret = Deno.env.get("SUPABASE_JWT_SECRET")?.trim();
+  if (!secret) {
+    return { user: null, response: unauthorized("JWT verification is not configured.") };
+  }
+  if (!(await verifyHs256(token, secret))) {
+    return { user: null, response: unauthorized("Invalid JWT signature.") };
+  }
+  const now = Math.floor(Date.now() / 1000);
+  if (typeof payload.exp !== "number" || payload.exp <= now) {
+    return { user: null, response: unauthorized("JWT is expired or missing exp.") };
+  }
+  if (payload.iss !== expectedIssuer()) {
+    return { user: null, response: unauthorized("JWT issuer is invalid.") };
+  }
+  if (!hasAudience(payload, expectedAudience())) {
+    return { user: null, response: unauthorized("JWT audience is invalid.") };
   }
   if (!payload.sub || typeof payload.sub !== "string" || payload.sub.length === 0) {
     return { user: null, response: unauthorized("JWT has no subject (sub) claim.") };

@@ -28,4 +28,28 @@ class DriftStoreBootstrap {
       driftWorkerUri: Uri.parse('drift_worker.js'),
     );
   }
+
+  Future<void> close() async {
+    final handle = _databaseHandle;
+    _databaseHandle = null;
+    if (handle == null) {
+      return;
+    }
+    await _closeDatabaseHandle(handle);
+  }
+
+  Future<void> _closeDatabaseHandle(Object handle) async {
+    try {
+      final executor = (handle as dynamic).resolvedExecutor;
+      await executor.close();
+      return;
+    } on NoSuchMethodError {
+      // Some tests and future adapters may return the closeable object directly.
+    }
+    try {
+      await (handle as dynamic).close();
+    } on NoSuchMethodError {
+      // Plain Object test doubles have nothing to dispose.
+    }
+  }
 }

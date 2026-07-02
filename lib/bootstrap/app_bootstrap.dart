@@ -38,6 +38,8 @@ class AppBootstrap {
 
   static bool _supabaseInitialized = false;
 
+  static String _diagnosticCode(Object error) => error.runtimeType.toString();
+
   Future<AppBootstrapState> initialize() async {
     final errors = <String>[];
     var driftInitialized = false;
@@ -47,8 +49,9 @@ class AppBootstrap {
       await driftStoreBootstrap.initialize();
       driftInitialized = driftStoreBootstrap.isInitialized || !kIsWeb;
     } catch (error) {
-      errors.add('drift_init_failed: $error');
-      debugPrint('Drift store initialization failed: $error');
+      final code = _diagnosticCode(error);
+      errors.add('drift_init_failed:$code');
+      debugPrint('Drift store initialization failed: $code');
     }
 
     if (environment.hasSupabaseConfig) {
@@ -60,9 +63,10 @@ class AppBootstrap {
         supabaseInitialized = true;
         unawaited(_warmSupabaseClient());
       } catch (error) {
-        errors.add('supabase_init_failed: $error');
+        final code = _diagnosticCode(error);
+        errors.add('supabase_init_failed:$code');
         debugPrint(
-          'Supabase initialization failed, continuing app boot: $error',
+          'Supabase initialization failed, continuing app boot: $code',
         );
       }
     } else {

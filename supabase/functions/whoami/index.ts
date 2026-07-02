@@ -29,7 +29,7 @@ interface WhoamiResponse {
 }
 
 export async function handler(req: Request): Promise<Response> {
-  const { user, response } = resolveUser(req);
+  const { user, response } = await resolveUser(req);
   if (response !== null || user === null) {
     // No/invalid JWT: reject and perform no mutation (read-only function).
     return response ?? new Response("Unauthorized", { status: 401 });

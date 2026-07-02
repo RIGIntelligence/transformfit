@@ -146,6 +146,8 @@ String _mapAuthError(Object error) {
   return 'Something went wrong. Please try again.';
 }
 
+String _diagnosticCode(Object error) => error.runtimeType.toString();
+
 /// Real [AuthFacade] backed by `supabase_flutter`.
 ///
 /// Defensive against Supabase not being initialized (offline / tests): the
@@ -244,7 +246,7 @@ class SupabaseAuthFacade implements AuthFacade {
       // re-guard and server-side invalidation.
       await auth.signOut();
     } catch (e) {
-      debugPrint('signOut error (ignored): $e');
+      debugPrint('signOut error (ignored): ${_diagnosticCode(e)}');
     }
   }
 
@@ -284,7 +286,7 @@ class SupabaseProfileFacade implements ProfileFacade {
       }
       return const ProfileSnapshot(exists: false, onboardingCompleted: false);
     } catch (e) {
-      debugPrint('fetchProfile error: $e');
+      debugPrint('fetchProfile error: ${_diagnosticCode(e)}');
       // Avoid leaking the authenticated user into the main app when we cannot
       // confirm onboarding state.
       return const ProfileSnapshot(exists: false, onboardingCompleted: false);
@@ -300,7 +302,7 @@ class SupabaseProfileFacade implements ProfileFacade {
           .update({'onboarding_completed': true})
           .eq('id', userId);
     } catch (e) {
-      debugPrint('completeOnboarding error: $e');
+      debugPrint('completeOnboarding error: ${_diagnosticCode(e)}');
       rethrow;
     }
   }
@@ -331,7 +333,7 @@ class SupabaseProfileFacade implements ProfileFacade {
           .update(updates)
           .eq('id', userId);
     } catch (e) {
-      debugPrint('persistIntake error: $e');
+      debugPrint('persistIntake error: ${_diagnosticCode(e)}');
       rethrow;
     }
   }
