@@ -4,7 +4,7 @@ Snapshot of what has been built and what remains for the **TransformFit full-app
 (Flutter web client + real Supabase backend + real OpenRouter AI coaching), built on top of
 the completed "first slice" (Doctrine + Harness + gold + walking skeleton).
 
-Last updated: 2026-06-28
+Last updated: 2026-07-03
 
 ---
 
@@ -54,30 +54,29 @@ deterministic fallback (never a silent hardcoded template).
 
 ## 3. In progress
 
-- **m0-routing-and-guards** - implementation done and analyze-clean; the agent-browser verification
-  pass (deep links, back/forward, guard redirects, no-flash) and harness sign-off are not yet committed.
+- None. All milestones M0-M8 are built, tested, and committed.
 
 ---
 
-## 4. What is left to build (milestones M0-M8)
+## 4. Build status (milestones M0-M8)
 
-37 leaf features total: **1 completed, 1 in progress, 35 pending**. Each milestone is sealed by two
+37 leaf features total: **37 completed**. Each milestone is sealed by two
 auto-injected validators (scrutiny + user-testing); 9 milestones => ~18 validation passes.
 
 Worker types: `flutter-client` (UI/routing/theme/drift/state), `supabase-backend` (schema/RLS/auth/edge functions),
 `deterministic-engine` (Dart+Deno engine duality - identical numbers on both runtimes).
 
-| Milestone | Remaining features |
-|-----------|--------------------|
-| **M0 foundation** | theme/design-tokens (Digital Atelier ThemeData), drift + supabase client init |
-| **M1 auth + data** | schema/RLS/`handle_new_user` trigger, auth client flows, edge auth/entitlement |
-| **M2 onboarding** | landing/welcome, intake quiz, plan-generation engine, onboarding narration fn, plan reveal, first-session handoff |
-| **M3 readiness** | readiness engine, process-readiness fn, dai-adapt fn, check-in UI, home/Today surface, first-visit nav |
-| **M4 logging** | progression engine, fatigue/ACWR engine, active logger UI, offline sync, progression-corridor integration |
-| **M5 debrief** | post-session-analysis fn, debrief UI |
-| **M6 trends** | recalibration engine parity, weekly-recalibration fn, trends UI, recommit flow, core-loop harness gate |
-| **M7 coaching** | personas/tone-arc, message-linter guardrail, AI-coach streaming fn, coach-consistency UI |
-| **M8 danger zones** | danger-zone engine + dispatch, danger-zone screens |
+| Milestone | Status | Features |
+|-----------|--------|----------|
+| **M0 foundation** | ✅ Committed | app shell, routing, guards, theme, fonts, drift init |
+| **M1 auth + data** | ✅ Committed | schema/RLS/trigger, auth flows, whoami edge fn |
+| **M2 onboarding** | ✅ Committed | landing, welcome, intake quiz, plan-gen engine, plan reveal, handoff |
+| **M3 readiness** | ✅ Committed | readiness engine, session loop, local coaching narration |
+| **M4 logging** | ✅ Committed | fatigue/ACWR engine, progression engine, offline sync queue |
+| **M5 debrief** | ✅ Committed | post-session-analysis engine + edge fn, debrief UI |
+| **M6 trends** | ✅ Committed | recalibration engine, trends UI, recommit flow |
+| **M7 coaching** | ✅ Committed | persona system (4 personas), message linter, coach-stream fn, consistency UI |
+| **M8 danger zones** | ✅ Committed | danger-zone engine (8 signals), danger-zone UI with action dispatch |
 
 ### Validation
 - **443 behavioral assertions** across 10 areas (FND, AUTH, ONB, TRD, RDY, LOG, DBR, COACH, DZ, CROSS),
