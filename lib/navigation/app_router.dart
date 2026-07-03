@@ -1,11 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transformfit/engine/danger_zone.dart';
 import 'package:transformfit/engine/plan_generation.dart';
+import 'package:transformfit/features/body_composition/body_composition_screen.dart';
+import 'package:transformfit/features/coaching/coach_command_screen.dart';
+import 'package:transformfit/features/coaching/coach_consistency_screen.dart';
+import 'package:transformfit/features/danger_zones/danger_zone_screen.dart';
+import 'package:transformfit/features/debrief/debrief_screen.dart';
+import 'package:transformfit/features/trends/recommit_screen.dart';
+import 'package:transformfit/features/trends/trends_screen.dart';
 import 'package:transformfit/features/onboarding/first_session_handoff_screen.dart';
 import 'package:transformfit/features/onboarding/intake_screen.dart';
 import 'package:transformfit/features/onboarding/landing_screen.dart';
 import 'package:transformfit/features/onboarding/plan_reveal_screen.dart';
 import 'package:transformfit/features/onboarding/welcome_screen.dart';
+import 'package:transformfit/features/progress/progress_screen.dart';
+import 'package:transformfit/features/proof/proof_card_screen.dart';
+import 'package:transformfit/features/workout/active_workout_screen.dart';
+import 'package:transformfit/features/workout/workout_prefill.dart';
 import 'package:transformfit/navigation/auth_state.dart';
 import 'package:transformfit/screens/auth_screen.dart';
 import 'package:transformfit/screens/loading_screen.dart';
@@ -24,6 +36,63 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/',
         name: 'today',
         builder: (context, state) => const TodayScreen(),
+      ),
+      GoRoute(
+        path: '/workout',
+        name: 'workout',
+        builder: (context, state) {
+          final extra = state.extra;
+          return ActiveWorkoutScreen(
+            initialPrefill: extra is WorkoutPrefill ? extra : null,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/proof',
+        name: 'proof',
+        builder: (context, state) => const ProofCardScreen(),
+      ),
+      GoRoute(
+        path: '/progress',
+        name: 'progress',
+        builder: (context, state) => const ProgressScreen(),
+      ),
+      GoRoute(
+        path: '/composition',
+        name: 'composition',
+        builder: (context, state) => const BodyCompositionScreen(),
+      ),
+      GoRoute(
+        path: '/coach',
+        name: 'coach-command',
+        builder: (context, state) => const CoachCommandScreen(),
+      ),
+      GoRoute(
+        path: '/coach-consistency',
+        name: 'coach-consistency',
+        builder: (context, state) => const CoachConsistencyScreen(),
+      ),
+      GoRoute(
+        path: '/debrief',
+        name: 'debrief',
+        builder: (context, state) => const DebriefScreen(),
+      ),
+      GoRoute(
+        path: '/trends',
+        name: 'trends',
+        builder: (context, state) => const TrendsScreen(),
+      ),
+      GoRoute(
+        path: '/recommit',
+        name: 'recommit',
+        builder: (context, state) => const RecommitScreen(),
+      ),
+      GoRoute(
+        path: '/safety',
+        name: 'safety',
+        builder: (context, state) => const DangerZoneScreen(
+          result: DangerZoneResult(signals: [], overallSeverity: 'clear'),
+        ),
       ),
       GoRoute(
         path: '/auth',
@@ -99,15 +168,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final status = authState.status;
       final location = state.matchedLocation;
-      final inOnboarding = location == '/onboarding' ||
-          location.startsWith('/onboarding/');
+      final inOnboarding =
+          location == '/onboarding' || location.startsWith('/onboarding/');
+      final isPublicFirstValueRoute = location == '/auth' || inOnboarding;
 
       if (status == AuthGuardStatus.loading) {
         return location == '/loading' ? null : '/loading';
       }
 
       if (status == AuthGuardStatus.unauthenticated) {
-        return location == '/auth' ? null : '/auth';
+        if (isPublicFirstValueRoute) {
+          return null;
+        }
+        if (location == '/' || location == '/loading') {
+          return '/onboarding';
+        }
+        return '/auth';
       }
 
       if (status == AuthGuardStatus.authenticatedNoProfile) {
