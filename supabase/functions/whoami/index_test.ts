@@ -1,6 +1,6 @@
 // Handler tests for the whoami edge function.
 // Run: deno test --allow-all supabase/functions/whoami/index_test.ts
-import { assert, assertEquals } from "jsr:@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { handler } from "./index.ts";
 
 const TEST_JWT_SECRET = "transformfit-test-jwt-secret";
@@ -9,23 +9,29 @@ Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
 Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
 
 function enc(obj: unknown): string {
-  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 function encBytes(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
+    /=+$/,
+    "",
+  );
 }
 
 /** Build a signed HS256 JWT with the given payload. */
 async function makeJwt(payload: Record<string, unknown>): Promise<string> {
-  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${enc({
-    exp: Math.floor(Date.now() / 1000) + 3600,
-    iss: "supabase",
-    aud: "authenticated",
-    ...payload,
-  })}`;
+  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${
+    enc({
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "supabase",
+      aud: "authenticated",
+      ...payload,
+    })
+  }`;
   const key = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(TEST_JWT_SECRET),
@@ -33,11 +39,13 @@ async function makeJwt(payload: Record<string, unknown>): Promise<string> {
     false,
     ["sign"],
   );
-  const sig = new Uint8Array(await crypto.subtle.sign(
-    "HMAC",
-    key,
-    new TextEncoder().encode(signingInput),
-  ));
+  const sig = new Uint8Array(
+    await crypto.subtle.sign(
+      "HMAC",
+      key,
+      new TextEncoder().encode(signingInput),
+    ),
+  );
   return `${signingInput}.${encBytes(sig)}`;
 }
 
@@ -51,20 +59,29 @@ function whoamiReq(opts: {
     headers.set("authorization", `Bearer ${opts.jwt}`);
   }
   const method = opts.method ?? "POST";
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/whoami", {
-    method,
-    headers,
-    body: method !== "GET" && method !== "DELETE"
-      ? JSON.stringify(opts.body ?? {})
-      : undefined,
-  });
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/whoami",
+    {
+      method,
+      headers,
+      body: method !== "GET" && method !== "DELETE"
+        ? JSON.stringify(opts.body ?? {})
+        : undefined,
+    },
+  );
 }
 
 // --- JWT-only enforcement (VAL-AUTH-022): body user_id ignored ---
 
 Deno.test("whoami: A's JWT + body user_id=B -> 200, user=A, body ignored, impersonation flagged", async () => {
-  const jwtA = await makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
-  const res = await handler(whoamiReq({ jwt: jwtA, body: { user_id: "user-b" } }));
+  const jwtA = await makeJwt({
+    sub: "user-a",
+    email: "a@transformfit.test",
+    role: "authenticated",
+  });
+  const res = await handler(
+    whoamiReq({ jwt: jwtA, body: { user_id: "user-b" } }),
+  );
   assertEquals(res.status, 200);
   assertEquals(res.headers.get("content-type"), "application/json");
   const body = await res.json();
@@ -97,7 +114,9 @@ Deno.test("whoami: no body user_id -> body_user_id_ignored null", async () => {
 // --- No / invalid JWT -> 401, no mutation (VAL-AUTH-023) ---
 
 Deno.test("whoami: no Authorization header -> 401 JSON error", async () => {
-  const res = await handler(whoamiReq({ jwt: null, body: { user_id: "user-b" } }));
+  const res = await handler(
+    whoamiReq({ jwt: null, body: { user_id: "user-b" } }),
+  );
   assertEquals(res.status, 401);
   assertEquals(res.headers.get("content-type"), "application/json");
   const body = await res.json();
@@ -129,7 +148,10 @@ Deno.test("whoami: malformed JSON body does not crash; JWT user still returned",
   const jwt = await makeJwt({ sub: "user-a" });
   const req = new Request("https://x/whoami", {
     method: "POST",
-    headers: { authorization: `Bearer ${jwt}`, "content-type": "application/json" },
+    headers: {
+      authorization: `Bearer ${jwt}`,
+      "content-type": "application/json",
+    },
     body: "<<<not json",
   });
   const res = await handler(req);

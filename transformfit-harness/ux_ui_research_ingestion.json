@@ -1,0 +1,784 @@
+{
+  "schema": "transformfit.ux_ui_research_ingestion.v1",
+  "version": "2026-07-02.2",
+  "mission": "Make the competitive UX/UI scraper and app-research lessons auditable inside TransformFit screens and AI coaching workflows.",
+  "source_status": {
+    "requested_github_repo": "rodgemd1-lgtm/ux-ui-scraper",
+    "requested_repo_status": "not_found_or_not_accessible_from_current_gh_auth",
+    "agent_reach_backend": "github: gh CLI, exa_search: Exa via mcporter, web: Jina Reader",
+    "canonical_transformfit_remote": "https://github.com/RIGIntelligence/transformfit.git",
+    "note": "Do not claim the named ux-ui-scraper repo is embedded until the exact repo/path is found. This ingestion binds current public-source ledger evidence and records the missing repo as a gap."
+  },
+  "upstream_artifacts": [
+    {
+      "id": "competitive_reverse_engineering",
+      "path": "transformfit-harness/competitive_reverse_engineering.json",
+      "schema": "transformfit.competitive_reverse_engineering.v1",
+      "required_gate": "competitive_reverse_engineering_gate"
+    },
+    {
+      "id": "coaching_harness",
+      "path": "transformfit-harness/coaching_harness.json",
+      "schema": "transformfit.coaching_harness.v1",
+      "required_gate": "coaching_harness_gate"
+    }
+  ],
+  "research_sources": [
+    {
+      "id": "src_macrofactor_workouts_product",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "MacroFactor Workouts",
+      "evidence_level": "public_product_page",
+      "source_url": "https://macrofactor.com/workouts/",
+      "use": "Active workout logging, smart progression, timers, exercise tips, progress surfaces, and dashboard customization."
+    },
+    {
+      "id": "src_macrofactor_workouts_app_store",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "MacroFactor Workouts App Store",
+      "evidence_level": "store_listing",
+      "source_url": "https://apps.apple.com/us/app/macrofactor-workouts-tracker/id6737156524",
+      "use": "Store-listing evidence for progressive overload, technique media, and progress communication."
+    },
+    {
+      "id": "src_macrofactor_workouts_google_play",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "MacroFactor Workouts Google Play",
+      "evidence_level": "store_listing",
+      "source_url": "https://play.google.com/store/apps/details?id=com.sbs.train",
+      "use": "Store-listing evidence for custom plans, smart warm-up, RIR, and exercise swaps."
+    },
+    {
+      "id": "src_hevy_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Hevy - Workout Tracker Gym Log",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/hevy-workout-tracker-gym-log/id1458862350",
+      "use": "Public preview evidence for social strength logging, history, stats, and fast repeated set entry."
+    },
+    {
+      "id": "src_fitbod_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Fitbod: Gym & Fitness Planner",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/fitbod-gym-fitness-planner/id1041517543",
+      "use": "Public preview evidence for adaptive plans and workout readiness framing."
+    },
+    {
+      "id": "src_ladder_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "LADDER Strength Training Plans",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/ladder-strength-training-plans/id1502936453",
+      "use": "Public preview evidence for plan continuity, guided sessions, and subscription onboarding clarity."
+    },
+    {
+      "id": "src_liftoff_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Liftoff - Ranked Gym Workouts",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/liftoff-ranked-gym-workouts/id6448081563",
+      "use": "Public preview evidence for ranked performance feedback and gym-log motivation loops."
+    },
+    {
+      "id": "src_strava_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Strava: Run, Bike, Walk",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/strava-run-bike-walk/id426826309",
+      "use": "Public preview evidence for social proof, activity feed, streak alternatives, and community motivation."
+    },
+    {
+      "id": "src_garmin_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Garmin Connect™",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/garmin-connect/id583446403",
+      "use": "Public preview evidence for dense health metrics, trends, and device-linked proof surfaces."
+    },
+    {
+      "id": "src_cal_ai_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Cal AI - Calorie Tracker",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/cal-ai-calorie-tracker/id6480417616",
+      "use": "Public preview evidence for question-led onboarding and fast personalized plan setup."
+    },
+    {
+      "id": "src_nike_run_club_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Nike Run Club: Running Coach",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/nike-run-club-running-coach/id387771637",
+      "use": "Public preview evidence for coached sessions, training plans, and encouragement tied to an activity goal."
+    },
+    {
+      "id": "src_calm_health_app_store_preview",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "Calm Health",
+      "evidence_level": "screen_state_capture",
+      "source_url": "https://apps.apple.com/us/app/calm-health/id1669369516",
+      "use": "Public preview evidence for calm recovery positioning, low-pressure care tone, and trust signals."
+    },
+    {
+      "id": "src_macrofactor_macro_tracker_app_store",
+      "kind": "competitive_ledger_app",
+      "ledger_app_name": "MacroFactor - Macro Tracker",
+      "evidence_level": "store_listing",
+      "source_url": "https://apps.apple.com/us/app/macrofactor-macro-tracker/id1553503471",
+      "use": "Store-listing evidence for algorithmic coaching, behavior science language, and evidence-informed narration."
+    },
+    {
+      "id": "src_ux_ui_scraper_repo_requested",
+      "kind": "missing_external_repo",
+      "status": "not_found_or_not_accessible",
+      "source_url": "https://github.com/rodgemd1-lgtm/ux-ui-scraper",
+      "use": "Recorded as an unresolved source gap. It may not be used as proof for shipped UI decisions until located and ingested."
+    }
+  ],
+  "ux_principles": [
+    {
+      "id": "uxp_fast_active_logging",
+      "source_ids": [
+        "src_macrofactor_workouts_product",
+        "src_hevy_app_store_preview",
+        "src_liftoff_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "active_workout_log",
+        "today"
+      ],
+      "screen_observable": true,
+      "principle": "The workout logger must prioritize fast repeated set entry, immediate undo, timer context, and previous-performance recall over decorative layout."
+    },
+    {
+      "id": "uxp_readiness_adjusted_next_action",
+      "source_ids": [
+        "src_macrofactor_workouts_google_play",
+        "src_fitbod_app_store_preview",
+        "src_ladder_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "onboarding_intake",
+        "plan_reveal",
+        "today",
+        "active_workout_log"
+      ],
+      "screen_observable": true,
+      "principle": "The user should always see the next appropriate action adjusted to plan, readiness, and recent context."
+    },
+    {
+      "id": "uxp_explain_plan_before_ask",
+      "source_ids": [
+        "src_cal_ai_app_store_preview",
+        "src_macrofactor_macro_tracker_app_store",
+        "src_fitbod_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "onboarding_intake",
+        "plan_reveal",
+        "first_session_handoff"
+      ],
+      "screen_observable": true,
+      "principle": "Personalization must explain why it is asking and what changed in the plan before asking the user to trust the result."
+    },
+    {
+      "id": "uxp_progress_without_body_shame",
+      "source_ids": [
+        "src_strava_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_hevy_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "progress",
+        "proof_card",
+        "profile"
+      ],
+      "screen_observable": true,
+      "principle": "Progress and sharing surfaces should emphasize completed behavior, strength, recovery, and consistency instead of body-ranking or before/after framing."
+    },
+    {
+      "id": "uxp_coach_voice_with_data_token",
+      "source_ids": [
+        "src_macrofactor_macro_tracker_app_store",
+        "src_nike_run_club_app_store_preview",
+        "src_calm_health_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "today",
+        "plan_reveal",
+        "progress",
+        "active_workout_log"
+      ],
+      "screen_observable": true,
+      "principle": "Coach copy must be short, specific, and grounded in one data token or user phrase so the user feels recognized rather than managed by generic motivation."
+    },
+    {
+      "id": "uxp_recovery_as_kept_promise",
+      "source_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "target_screen_ids": [
+        "today",
+        "active_workout_log",
+        "progress"
+      ],
+      "screen_observable": true,
+      "principle": "Low-readiness days must count an appropriate recovery action as completion, not failure."
+    },
+    {
+      "id": "uxp_goal_to_session_continuity",
+      "source_ids": [
+        "src_ladder_app_store_preview",
+        "src_nike_run_club_app_store_preview",
+        "src_fitbod_app_store_preview"
+      ],
+      "target_screen_ids": [
+        "welcome",
+        "first_session_handoff",
+        "active_workout_log"
+      ],
+      "screen_observable": true,
+      "principle": "The path from promise to first session must feel continuous: goal, plan, first action, and live logger should share vocabulary and state."
+    },
+    {
+      "id": "uxp_safety_boundary_at_action_point",
+      "source_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "target_screen_ids": [
+        "today",
+        "active_workout_log",
+        "progress"
+      ],
+      "screen_observable": true,
+      "principle": "When pain or injury risk appears, the coach must surface a stop/modify boundary at the action point before any progression cue."
+    },
+    {
+      "id": "uxp_audit_the_research_claim",
+      "source_ids": [
+        "src_macrofactor_workouts_product",
+        "src_hevy_app_store_preview",
+        "src_ux_ui_scraper_repo_requested"
+      ],
+      "target_screen_ids": [
+        "plan_reveal",
+        "active_workout_log",
+        "progress",
+        "proof_card"
+      ],
+      "screen_observable": true,
+      "principle": "No design lesson is treated as shipped proof unless it cites a real source ID; missing research repos remain named gaps rather than hidden assumptions."
+    }
+  ],
+  "screen_traceability": [
+    {
+      "id": "welcome",
+      "screen_path": "lib/features/onboarding/welcome_screen.dart",
+      "source_ids": [
+        "src_ladder_app_store_preview",
+        "src_nike_run_club_app_store_preview",
+        "src_cal_ai_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_goal_to_session_continuity",
+        "uxp_explain_plan_before_ask"
+      ],
+      "ux_invariants": [
+        {
+          "id": "literal_offer_first",
+          "statement": "The first screen names the transformation category and next step without a marketing-only detour.",
+          "test_surface": "welcome_screen_widget"
+        },
+        {
+          "id": "low_friction_start",
+          "statement": "Primary action starts intake or demo without nested choice overload.",
+          "test_surface": "welcome_screen_widget"
+        },
+        {
+          "id": "same_vocabulary",
+          "statement": "Goal language carries into plan reveal and first-session handoff.",
+          "test_surface": "onboarding_flow_widget"
+        }
+      ],
+      "product_metrics": [
+        "start_intake_rate",
+        "demo_to_first_session_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "onboarding_intake",
+      "screen_path": "lib/features/onboarding/intake_screen.dart",
+      "source_ids": [
+        "src_cal_ai_app_store_preview",
+        "src_fitbod_app_store_preview",
+        "src_macrofactor_macro_tracker_app_store"
+      ],
+      "ux_principle_ids": [
+        "uxp_explain_plan_before_ask",
+        "uxp_readiness_adjusted_next_action"
+      ],
+      "ux_invariants": [
+        {
+          "id": "question_reason_visible",
+          "statement": "Each major question group makes its plan impact understandable.",
+          "test_surface": "intake_screen_widget"
+        },
+        {
+          "id": "no_body_ranking_language",
+          "statement": "Intake avoids before/after, shame, and body-ranking framing.",
+          "test_surface": "doctrine_lint"
+        },
+        {
+          "id": "resume_safe",
+          "statement": "Inputs survive route changes and can be submitted deterministically.",
+          "test_surface": "intake_screen_widget"
+        }
+      ],
+      "product_metrics": [
+        "intake_completion_rate",
+        "plan_generation_success_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "doctrine_lint",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "plan_reveal",
+      "screen_path": "lib/features/onboarding/plan_reveal_screen.dart",
+      "source_ids": [
+        "src_macrofactor_macro_tracker_app_store",
+        "src_fitbod_app_store_preview",
+        "src_cal_ai_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_explain_plan_before_ask",
+        "uxp_coach_voice_with_data_token",
+        "uxp_audit_the_research_claim"
+      ],
+      "ux_invariants": [
+        {
+          "id": "why_now_echo",
+          "statement": "The reveal echoes a sanitized user phrase or deterministic fallback reason.",
+          "test_surface": "plan_reveal_screen_widget"
+        },
+        {
+          "id": "deterministic_fallback_visible",
+          "statement": "Fallback state is honest and never pretends an LLM personalized the plan.",
+          "test_surface": "plan_reveal_controller_test"
+        },
+        {
+          "id": "next_session_bridge",
+          "statement": "The screen offers a concrete first-session handoff instead of ending at explanation.",
+          "test_surface": "first_session_handoff_widget"
+        }
+      ],
+      "product_metrics": [
+        "plan_reveal_to_first_session_rate",
+        "fallback_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "coaching_harness_gate",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "today",
+      "screen_path": "lib/screens/today_screen.dart",
+      "source_ids": [
+        "src_garmin_app_store_preview",
+        "src_strava_app_store_preview",
+        "src_macrofactor_workouts_product"
+      ],
+      "ux_principle_ids": [
+        "uxp_readiness_adjusted_next_action",
+        "uxp_recovery_as_kept_promise",
+        "uxp_coach_voice_with_data_token"
+      ],
+      "ux_invariants": [
+        {
+          "id": "one_next_action",
+          "statement": "The Today screen resolves to one prominent action for readiness, workout, recovery, or debrief.",
+          "test_surface": "today_screen_widget"
+        },
+        {
+          "id": "readiness_context",
+          "statement": "The screen shows the user's readiness/recovery context before asking for effort.",
+          "test_surface": "today_screen_widget"
+        },
+        {
+          "id": "live_workout_route",
+          "statement": "The workout logger is reachable from authenticated and demo paths.",
+          "test_surface": "app_router_test"
+        }
+      ],
+      "product_metrics": [
+        "daily_open_to_action_rate",
+        "week_2_activated_retention"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "active_workout_log",
+      "screen_path": "lib/features/workout/active_workout_screen.dart",
+      "source_ids": [
+        "src_macrofactor_workouts_product",
+        "src_macrofactor_workouts_google_play",
+        "src_hevy_app_store_preview",
+        "src_liftoff_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_fast_active_logging",
+        "uxp_readiness_adjusted_next_action",
+        "uxp_audit_the_research_claim"
+      ],
+      "ux_invariants": [
+        {
+          "id": "fast_set_logging",
+          "statement": "The set row must support quick weight, rep, and RIR entry with a stable Log Set action.",
+          "test_surface": "active_workout_screen_test"
+        },
+        {
+          "id": "previous_set_reference",
+          "statement": "The logger shows previous or planned performance context before the next set.",
+          "test_surface": "active_workout_screen_test"
+        },
+        {
+          "id": "rest_timer",
+          "statement": "A visible rest/session timer remains available during active logging.",
+          "test_surface": "active_workout_screen_test"
+        },
+        {
+          "id": "smart_progression",
+          "statement": "Generated prescriptions advance through planned sets and stable exercise IDs.",
+          "test_surface": "active_workout_screen_test"
+        },
+        {
+          "id": "undo_safety",
+          "statement": "A mistakenly logged set can be undone without corrupting queue state.",
+          "test_surface": "active_workout_screen_test"
+        }
+      ],
+      "product_metrics": [
+        "sets_logged_per_session",
+        "session_finish_rate",
+        "log_set_error_recovery_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "progress",
+      "screen_path": "lib/features/progress/progress_screen.dart",
+      "source_ids": [
+        "src_garmin_app_store_preview",
+        "src_strava_app_store_preview",
+        "src_hevy_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_progress_without_body_shame",
+        "uxp_recovery_as_kept_promise",
+        "uxp_coach_voice_with_data_token"
+      ],
+      "ux_invariants": [
+        {
+          "id": "behavioral_metrics_first",
+          "statement": "Progress summarizes sessions, recovery wins, volume, and consistency before appearance metrics.",
+          "test_surface": "progress_screen_test"
+        },
+        {
+          "id": "coach_interpretation",
+          "statement": "Progress copy interprets what changed and the next best action in fewer than 60 words.",
+          "test_surface": "message_rule_lint"
+        },
+        {
+          "id": "body_neutral",
+          "statement": "Progress surfaces remain body-neutral and avoid weight-loss success framing.",
+          "test_surface": "doctrine_lint"
+        }
+      ],
+      "product_metrics": [
+        "progress_open_after_session_rate",
+        "next_session_commit_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "doctrine_lint",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "proof_card",
+      "screen_path": "lib/features/proof/proof_card_screen.dart",
+      "source_ids": [
+        "src_strava_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_hevy_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_progress_without_body_shame",
+        "uxp_audit_the_research_claim"
+      ],
+      "ux_invariants": [
+        {
+          "id": "opt_in_share",
+          "statement": "Proof cards require explicit review before copy and never auto-publish or pressure sharing.",
+          "test_surface": "proof_card_screen_test"
+        },
+        {
+          "id": "privacy_redacted_share_text",
+          "statement": "Share copy excludes exact load, exercise name, session notes, injury details, and body-comparison language.",
+          "test_surface": "proof_card_test + proof_card_screen_test"
+        },
+        {
+          "id": "sourceable_claims",
+          "statement": "Any shareable claim traces to completed behavior or session data.",
+          "test_surface": "proof_card_test"
+        },
+        {
+          "id": "body_neutral_share",
+          "statement": "Share copy avoids before/after and weight-loss language.",
+          "test_surface": "doctrine_lint"
+        }
+      ],
+      "product_metrics": [
+        "proof_card_created_rate",
+        "share_intent_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "doctrine_lint",
+        "build_test_gate"
+      ]
+    },
+    {
+      "id": "profile",
+      "screen_path": "lib/screens/profile_screen.dart",
+      "source_ids": [
+        "src_garmin_app_store_preview",
+        "src_calm_health_app_store_preview",
+        "src_macrofactor_macro_tracker_app_store"
+      ],
+      "ux_principle_ids": [
+        "uxp_progress_without_body_shame",
+        "uxp_audit_the_research_claim"
+      ],
+      "ux_invariants": [
+        {
+          "id": "data_controls_visible",
+          "statement": "Profile exposes account, plan, and data-control paths without hiding them behind coach copy.",
+          "test_surface": "profile_screen_widget"
+        },
+        {
+          "id": "trusted_tone",
+          "statement": "Profile copy uses calm, administrative language instead of hype.",
+          "test_surface": "doctrine_lint"
+        },
+        {
+          "id": "route_clarity",
+          "statement": "Profile shows the primary routes a user can inspect: Today, workout, progress, proof.",
+          "test_surface": "profile_screen_widget"
+        }
+      ],
+      "product_metrics": [
+        "settings_success_rate",
+        "support_deflection_rate"
+      ],
+      "gate_ids": [
+        "ux_ui_research_ingestion_gate",
+        "doctrine_lint",
+        "build_test_gate"
+      ]
+    }
+  ],
+  "coaching_workflow_traceability": [
+    {
+      "workflow_id": "day_0_activation",
+      "source_ids": [
+        "src_cal_ai_app_store_preview",
+        "src_ladder_app_store_preview",
+        "src_nike_run_club_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_goal_to_session_continuity",
+        "uxp_explain_plan_before_ask",
+        "uxp_coach_voice_with_data_token"
+      ],
+      "behavioral_mechanisms": [
+        "fresh-start effect",
+        "implementation intention",
+        "single next action"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "no_generic_encouragement"
+      ]
+    },
+    {
+      "workflow_id": "doms_or_low_readiness",
+      "source_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "ux_principle_ids": [
+        "uxp_recovery_as_kept_promise",
+        "uxp_readiness_adjusted_next_action"
+      ],
+      "behavioral_mechanisms": [
+        "self-efficacy protection",
+        "loss aversion reframed as kept promise",
+        "recovery identity"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "no_shame_language"
+      ]
+    },
+    {
+      "workflow_id": "progress_interpretation",
+      "source_ids": [
+        "src_hevy_app_store_preview",
+        "src_strava_app_store_preview",
+        "src_garmin_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_progress_without_body_shame",
+        "uxp_coach_voice_with_data_token"
+      ],
+      "behavioral_mechanisms": [
+        "competence proof",
+        "specific feedback loop",
+        "next-action priming"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "progress_copy_body_neutral"
+      ]
+    },
+    {
+      "workflow_id": "live_session_guidance",
+      "source_ids": [
+        "src_macrofactor_workouts_product",
+        "src_hevy_app_store_preview",
+        "src_fitbod_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_fast_active_logging",
+        "uxp_readiness_adjusted_next_action",
+        "uxp_coach_voice_with_data_token"
+      ],
+      "behavioral_mechanisms": [
+        "in-session cognitive load reduction",
+        "implementation intention",
+        "transparent next-set rationale"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_quality_eval_gate"
+      ]
+    },
+    {
+      "workflow_id": "coasting_or_overreaching",
+      "source_ids": [
+        "src_macrofactor_workouts_product",
+        "src_liftoff_app_store_preview",
+        "src_fitbod_app_store_preview"
+      ],
+      "ux_principle_ids": [
+        "uxp_fast_active_logging",
+        "uxp_readiness_adjusted_next_action",
+        "uxp_recovery_as_kept_promise"
+      ],
+      "behavioral_mechanisms": [
+        "challenge with autonomy",
+        "bounded correction",
+        "risk feedback without shame"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "no_shame_language"
+      ]
+    },
+    {
+      "workflow_id": "pain_or_injury_guardrail",
+      "source_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "ux_principle_ids": [
+        "uxp_safety_boundary_at_action_point",
+        "uxp_recovery_as_kept_promise",
+        "uxp_readiness_adjusted_next_action"
+      ],
+      "behavioral_mechanisms": [
+        "safety-first friction",
+        "autonomy-preserving modification",
+        "trust repair after risk signal"
+      ],
+      "guardrail_ids": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_quality_eval_gate"
+      ]
+    }
+  ],
+  "quality_standard": {
+    "minimum_source_ids_per_screen": 3,
+    "minimum_ux_invariants_per_screen": 3,
+    "minimum_product_metrics_per_screen": 1,
+    "required_screen_ids": [
+      "welcome",
+      "onboarding_intake",
+      "plan_reveal",
+      "today",
+      "active_workout_log",
+      "progress",
+      "proof_card",
+      "profile"
+    ],
+    "required_active_workout_invariants": [
+      "fast_set_logging",
+      "previous_set_reference",
+      "rest_timer",
+      "smart_progression",
+      "undo_safety"
+    ],
+    "hard_blocks": [
+      "A screen cites only the missing ux-ui-scraper repo.",
+      "A coaching workflow has no research source trace.",
+      "The active workout logger loses MacroFactor/Hevy-style fast logging evidence.",
+      "A source ID does not resolve to the competitive ledger or an explicit missing-source gap.",
+      "Public preview evidence is described as authenticated in-app capture."
+    ]
+  },
+  "proof_obligations": [
+    "ux_ui_research_ingestion_gate must pass before claiming scraper or competitive lessons are embedded.",
+    "coaching_harness_gate must pass after any coaching workflow traceability change.",
+    "competitive_reverse_engineering_gate --require-complete must pass before claiming the 100-app public-source ledger is complete.",
+    "Any unresolved repo, private screenshot, or first-party capture gap must be named as a gap rather than used as proof.",
+    "Every screen trace must identify at least one product metric tied to Week-2 activation, session completion, proof creation, or retention."
+  ]
+}

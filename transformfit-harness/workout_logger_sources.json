@@ -1,0 +1,68 @@
+{
+  "schema": "transformfit.workout_logger_sources.v1",
+  "retrieved_at": "2026-07-02",
+  "sources": [
+    {
+      "id": "src_macrofactor_workouts_product",
+      "name": "MacroFactor Workouts product page",
+      "source_url": "https://macrofactor.com/workouts/",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Smart, dynamic workout tracker and coach benchmark for adaptive strength logging."
+    },
+    {
+      "id": "src_macrofactor_workouts_google_play",
+      "name": "MacroFactor Workouts Google Play listing",
+      "source_url": "https://play.google.com/store/apps/details?hl=en_US&id=com.sbs.train",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Progressive overload and active workout tracking benchmark."
+    },
+    {
+      "id": "src_hevy_app_store_preview",
+      "name": "Hevy App Store preview",
+      "source_url": "https://apps.apple.com/us/app/hevy-workout-tracker-gym-log/id1458862350",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Fast set logging, routine planning, progress tracking, and community benchmark."
+    },
+    {
+      "id": "src_hevy_rest_timer",
+      "name": "Hevy automatic rest timer feature page",
+      "source_url": "https://www.hevyapp.com/features/workout-rest-timer/",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Automatic post-set rest timer and rest-between-sets benchmark."
+    },
+    {
+      "id": "src_strong_app_store_preview",
+      "name": "Strong App Store preview",
+      "source_url": "https://apps.apple.com/ar/app/strong-workout-tracker-gym-log/id464254577?l=en",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Simple strength logger benchmark for auto countdown, previous performance, warm-up calculator, and PR graphs."
+    },
+    {
+      "id": "src_fitbod_ai_why_2026",
+      "name": "TechRadar Fitbod AI fitness interview",
+      "source_url": "https://www.techradar.com/health-fitness/fitness-apps/its-no-longer-enough-for-an-app-to-tell-you-what-to-do-people-want-to-know-why-fitness-app-fitbods-founder-on-the-reason-behind-the-ai-fitness-boom",
+      "retrieved_at": "2026-07-02",
+      "product_use": "2026 AI fitness benchmark: users want workout recommendations to explain why."
+    }
+  ],
+  "workout_logger_quality_bar": [
+    "Fast logging remains one-thumb reachable.",
+    "Progressive overload is explicit intent, not hidden magic.",
+    "Previous performance includes exact set, date, and readiness context.",
+    "Rest timing shows selected rest versus prescribed rest and a post-set countdown target.",
+    "Low readiness becomes active behavior: cap load/RPE, reduce planned sets, and block PR chasing before progression.",
+    "Pain safety blocks load progression, caps effort, and routes the user to pain-free work or finishing.",
+    "Technique substitutions load a conservative variation, visible cue, reduced effort, and plan-counting identity without overwriting the original exercise reference."
+  ],
+  "team_panel_proxy": {
+    "designers": 4,
+    "fitness_coaches": 4,
+    "top_fitness_influencer_patterns": 10,
+    "artists_photographers": 4,
+    "ai_engineers": 4,
+    "nutritionists": 3,
+    "behavioral_science_specialists": 4,
+    "simulated_users": 20,
+    "boundary": "Public-pattern and simulated-panel evidence only; no outreach, endorsement, paid recruiting, or public claim is authorized."
+  }
+}

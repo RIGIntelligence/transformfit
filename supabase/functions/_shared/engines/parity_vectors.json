@@ -54,7 +54,13 @@
     "intake": {
       "goal": "build_muscle",
       "trainingDaysPerWeek": 6,
-      "equipment": ["barbell", "dumbbells", "machines", "cables", "pull_up_bar"],
+      "equipment": [
+        "barbell",
+        "dumbbells",
+        "machines",
+        "cables",
+        "pull_up_bar"
+      ],
       "experienceLevel": "advanced",
       "limitations": []
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transformfit/widgets/transformfit_brand_mark.dart';
 
 /// MoT2 — Install to first open.
 ///
@@ -26,20 +27,16 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const TransformFitBrandMark(width: 176),
+              const SizedBox(height: 28),
               Semantics(
                 header: true,
                 label: 'Welcome heading',
                 excludeSemantics: true,
-                child: Text(
-                  'Welcome',
-                  style: theme.textTheme.headlineMedium,
-                ),
+                child: Text('Welcome', style: theme.textTheme.headlineMedium),
               ),
               const SizedBox(height: 16),
-              Text(
-                _body,
-                style: theme.textTheme.bodyLarge,
-              ),
+              Text(_body, style: theme.textTheme.bodyLarge),
               const Spacer(),
               Semantics(
                 button: true,

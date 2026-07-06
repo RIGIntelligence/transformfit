@@ -69,6 +69,13 @@ export interface NarrateResult extends PlanNarrative {
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 export const DEFAULT_MODEL = "z-ai/glm-5.1";
 
+// Local Ollama integration (RIG Mac Studio).
+// When OLLAMA_HOST is set, narration tries the local model first — zero API
+// cost, sub-second latency on the LAN. Falls back to OpenRouter if the local
+// call fails or times out.
+const OLLAMA_HOST = (Deno.env.get("OLLAMA_HOST") ?? "").trim();
+const OLLAMA_MODEL = (Deno.env.get("OLLAMA_MODEL") ?? "ornith:35b").trim();
+
 // ---------------------------------------------------------------------------
 // R1–R8 message-rule guardrail — deterministic post-composition lint.
 //
@@ -184,9 +191,15 @@ export function stripEmoji(s: string): string {
 export function stripBannedPhrases(s: string): string {
   let out = s;
   for (const p of BANNED_PHRASES) {
-    out = out.replace(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "");
+    out = out.replace(
+      new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+      "",
+    );
   }
-  return out.replace(/\s{2,}/g, " ").replace(/^\s*,\s*/, "").replace(/,\s*$/, "").trim();
+  return out.replace(/\s{2,}/g, " ").replace(/^\s*,\s*/, "").replace(
+    /,\s*$/,
+    "",
+  ).trim();
 }
 
 /** Reduce question marks to at most one (R8) — keeps the first. */
@@ -211,7 +224,10 @@ export function truncateWords(s: string, maxWords: number): string {
  * (digit or English number word) that disagrees with the known plan
  * days/week. Returns a human-readable offending-field description, or null
  * when the quoted plan numbers are consistent with the packet. */
-export function detectPacketContradiction(text: string, ctx: GuardrailContext): string | null {
+export function detectPacketContradiction(
+  text: string,
+  ctx: GuardrailContext,
+): string | null {
   const lower = text.toLowerCase();
   const daysNum = ctx.daysPerWeek;
 
@@ -222,27 +238,49 @@ export function detectPacketContradiction(text: string, ctx: GuardrailContext): 
   while ((m = dayNumRe.exec(lower)) !== null) {
     // Skip the canonical "N days a week" phrasing that matches our real value.
     const before = lower.slice(Math.max(0, m.index - 20), m.index);
-    const after = lower.slice(m.index + m[0].length, m.index + m[0].length + 12);
+    const after = lower.slice(
+      m.index + m[0].length,
+      m.index + m[0].length + 12,
+    );
     if (/a(\s*week)?$/.test(after.trim())) {
       // "N days a week" — only contradictory if N != daysNum.
       const n = parseInt(m[1], 10);
-      if (!Number.isNaN(n) && n !== daysNum) return `daysPerWeek(claimed ${n} days a week, actual ${daysNum})`;
+      if (!Number.isNaN(n) && n !== daysNum) {
+        return `daysPerWeek(claimed ${n} days a week, actual ${daysNum})`;
+      }
       continue;
     }
     if (/\bweek\b/.test(after) || /\bweek\b/.test(before)) continue;
     const n = parseInt(m[1], 10);
-    if (!Number.isNaN(n) && n !== daysNum) return `daysPerWeek(claimed ${n} days, actual ${daysNum})`;
+    if (!Number.isNaN(n) && n !== daysNum) {
+      return `daysPerWeek(claimed ${n} days, actual ${daysNum})`;
+    }
   }
 
   // English number words (one..twelve) in "X days" patterns.
   const numWords: Record<string, number> = {
-    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7,
-    eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10,
+    eleven: 11,
+    twelve: 12,
   };
-  const wordRe =
-    new RegExp(`\\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[\\s-]*days?\\b`, "gi");
+  const wordRe = new RegExp(
+    `\\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[\\s-]*days?\\b`,
+    "gi",
+  );
   while ((m = wordRe.exec(lower)) !== null) {
-    const after = lower.slice(m.index + m[0].length, m.index + m[0].length + 12);
+    const after = lower.slice(
+      m.index + m[0].length,
+      m.index + m[0].length + 12,
+    );
     if (/a(\s*week)?$/.test(after.trim())) {
       const claimed = numWords[m[1].toLowerCase()];
       if (claimed !== undefined && claimed !== daysNum) {
@@ -340,18 +378,29 @@ export function applyNarrativeGuardrail(
   let headline = applyFieldGuardrail(n.headline);
   let reasoning = applyFieldGuardrail(n.reasoning);
   let coaching_cue = applyFieldGuardrail(n.coaching_cue);
-  if (headline !== n.headline) corrections.push("headline: R2/R3/R4/R8 corrected");
-  if (reasoning !== n.reasoning) corrections.push("reasoning: R2/R3/R4/R8 corrected");
-  if (coaching_cue !== n.coaching_cue) corrections.push("coaching_cue: R2/R3/R4/R8 corrected");
+  if (headline !== n.headline) {
+    corrections.push("headline: R2/R3/R4/R8 corrected");
+  }
+  if (reasoning !== n.reasoning) {
+    corrections.push("reasoning: R2/R3/R4/R8 corrected");
+  }
+  if (coaching_cue !== n.coaching_cue) {
+    corrections.push("coaching_cue: R2/R3/R4/R8 corrected");
+  }
 
   // Packet-number contradiction — regenerate the offending field from the
   // deterministic template so we never ship a hallucinated number.
-  const contradiction = detectPacketContradiction(`${headline} ${reasoning} ${coaching_cue}`, ctx);
+  const contradiction = detectPacketContradiction(
+    `${headline} ${reasoning} ${coaching_cue}`,
+    ctx,
+  );
   if (contradiction) {
     reasoning = applyFieldGuardrail(
       `${ctx.goalCopy.reasoning} You're training ${ctx.daysPerWord} days a week.`,
     );
-    corrections.push(`reasoning: regenerated (contradiction: ${contradiction})`);
+    corrections.push(
+      `reasoning: regenerated (contradiction: ${contradiction})`,
+    );
   }
 
   // Data-token requirement (R5) over the composed block.
@@ -371,7 +420,8 @@ export function applyNarrativeGuardrail(
   // so this is ordinarily a no-op — added because R8 is per-message-block, not
   // per-field, and LLM output is not constrained by our template patterns.)
   let r8Repaired = false;
-  const r8Block = () => questionCount(`${headline} ${reasoning} ${coaching_cue}`);
+  const r8Block = () =>
+    questionCount(`${headline} ${reasoning} ${coaching_cue}`);
   if (r8Block() > 1) {
     coaching_cue = _dropExcessFromField(coaching_cue, 0);
   }
@@ -397,11 +447,14 @@ export function applyNarrativeGuardrail(
     trimmed.headline !== headline || trimmed.reasoning !== reasoning ||
     trimmed.coaching_cue !== coaching_cue
   ) {
-    const after = [trimmed.headline, trimmed.reasoning, trimmed.coaching_cue].filter(Boolean).join(
-      " ",
-    );
+    const after = [trimmed.headline, trimmed.reasoning, trimmed.coaching_cue]
+      .filter(Boolean).join(
+        " ",
+      );
     corrections.push(
-      `narrative: R2 composed-block truncated from ${wordCount(before)} to ${wordCount(after)} words`,
+      `narrative: R2 composed-block truncated from ${wordCount(before)} to ${
+        wordCount(after)
+      } words`,
     );
   }
   headline = trimmed.headline;
@@ -445,18 +498,23 @@ function _truncateQuestionsToOne(text: string): string {
 // Deterministic fallback (NEVER a silent one-size template)
 // ---------------------------------------------------------------------------
 
-const _GOAL_COPY: Record<string, { headline: string; reasoning: string; cue: string }> = {
+const _GOAL_COPY: Record<
+  string,
+  { headline: string; reasoning: string; cue: string }
+> = {
   build_muscle: {
     headline: "Built to grow — your muscle-first plan is ready.",
     reasoning:
       "This plan prioritizes the rep ranges and volume that drive hypertrophy, spread across your available days so each muscle group gets work and recovery.",
-    cue: "Track your sets. Small reps-in-reserve wins this week add up to visible change.",
+    cue:
+      "Track your sets. Small reps-in-reserve wins this week add up to visible change.",
   },
   build_strength: {
     headline: "Strength is your base — here's how we build it.",
     reasoning:
       "Lower reps, heavier loads, and enough rest between sets to let your nervous system recover. Every session moves the bar toward a new level.",
-    cue: "Warm up with intent. The first set should feel easy — the last set should feel earned.",
+    cue:
+      "Warm up with intent. The first set should feel easy — the last set should feel earned.",
   },
   lose_fat: {
     headline: "Move more, recover well — your fat-loss cadence is set.",
@@ -474,13 +532,15 @@ const _GOAL_COPY: Record<string, { headline: string; reasoning: string; cue: str
     headline: "Move better, feel better — your mobility plan is set.",
     reasoning:
       "Controlled ranges, more sets at moderate effort, and enough variety to work every major joint. Focus on quality of movement, not load.",
-    cue: "Breathe into each rep. If a range feels tight, stay there a beat longer.",
+    cue:
+      "Breathe into each rep. If a range feels tight, stay there a beat longer.",
   },
   train_for_sport: {
     headline: "Sport-ready — your athletic base is loading.",
     reasoning:
       "Power-endurance work in the rep ranges that transfer to the field. We build work capacity without drowning you in volume.",
-    cue: "Explosive on the lift, controlled on the return. That's the rhythm that carries over.",
+    cue:
+      "Explosive on the lift, controlled on the return. That's the rhythm that carries over.",
   },
 };
 
@@ -494,10 +554,14 @@ function _daysWord(n: number): string {
 }
 
 function _eqList(eq: string[]): string {
-  const readable = eq.filter((e) => e !== "bodyweight").map((e) => e.replace(/_/g, " "));
+  const readable = eq.filter((e) => e !== "bodyweight").map((e) =>
+    e.replace(/_/g, " ")
+  );
   if (readable.length === 0) return "just your bodyweight";
   if (readable.length === 1) return readable[0];
-  return `${readable.slice(0, -1).join(", ")} and ${readable[readable.length - 1]}`;
+  return `${readable.slice(0, -1).join(", ")} and ${
+    readable[readable.length - 1]
+  }`;
 }
 
 /**
@@ -511,18 +575,25 @@ export function deterministicNarrative(req: NarrateRequest): PlanNarrative {
   const eq = _eqList(req.effectiveEquipment);
   const days = _daysWord(req.daysPerWeek);
   const exp = req.experienceLevel ?? "intermediate";
-  const saneHeadline = "headline" in c ? c.headline : (c as { headline: string }).headline;
+  const saneHeadline = "headline" in c
+    ? c.headline
+    : (c as { headline: string }).headline;
   const saneCue = "cue" in c ? c.cue : (c as { cues: string }).cues;
 
   const phraseClause = req.userPhrase && req.userPhrase.trim().length > 0
-    ? ` You told me "${sanitizeUserPhrase(req.userPhrase)}" — that's the through-line here.`
+    ? ` You told me "${
+      sanitizeUserPhrase(req.userPhrase)
+    }" — that's the through-line here.`
     : "";
 
   const composed: PlanNarrative = {
     headline: saneHeadline,
     reasoning:
       `${c.reasoning} You're training ${days} days a week as a ${exp} with access to ${eq}.${phraseClause}`,
-    changes_made: [`Plan built for ${req.goal} goal`, `${req.daysPerWeek} sessions/week`],
+    changes_made: [
+      `Plan built for ${req.goal} goal`,
+      `${req.daysPerWeek} sessions/week`,
+    ],
     coaching_cue: saneCue,
     model_used: "deterministic",
     is_fallback: true,
@@ -567,14 +638,20 @@ interface ChatMessage {
 }
 
 /** Build the prompt for the narration LLM. */
-function buildNarratePrompt(req: NarrateRequest): { system: string; user: string } {
-  const planJson = JSON.stringify({
-    goal: req.goal,
-    daysPerWeek: req.daysPerWeek,
-    experienceLevel: req.experienceLevel,
-    effectiveEquipment: req.effectiveEquipment,
-    days: req.days,
-  }, null, 2);
+function buildNarratePrompt(
+  req: NarrateRequest,
+): { system: string; user: string } {
+  const planJson = JSON.stringify(
+    {
+      goal: req.goal,
+      daysPerWeek: req.daysPerWeek,
+      experienceLevel: req.experienceLevel,
+      effectiveEquipment: req.effectiveEquipment,
+      days: req.days,
+    },
+    null,
+    2,
+  );
   const system = [
     "You are a concise, evidence-informed strength coach writing a PLAN REVEAL narration.",
     "You ONLY write the narrative fields (headline, reasoning, coaching cue). You must NEVER change or invent any number, exercise, set, rep, rpe, weight, or equipment. Those are computed by the engine and are immutable.",
@@ -591,7 +668,9 @@ function buildNarratePrompt(req: NarrateRequest): { system: string; user: string
     "```",
     planJson,
     "```",
-    req.userPhrase ? `The user's own "why now" phrase (sanitize if it contains emoji/markup): "${req.userPhrase}"` : "No user phrase supplied.",
+    req.userPhrase
+      ? `The user's own "why now" phrase (sanitize if it contains emoji/markup): "${req.userPhrase}"`
+      : "No user phrase supplied.",
     "",
     "Write the plan-reveal narrative.",
   ].join("\n");
@@ -603,7 +682,10 @@ function buildNarratePrompt(req: NarrateRequest): { system: string; user: string
  * Runs the full R1-R8 guardrail on the parsed text fields so the
  * LLM-success path is held to the same doctrine standard as the deterministic
  * fallback (originally parseNarrative only trimmed — that was the gap). */
-export function parseNarrative(content: string, req: NarrateRequest): PlanNarrative | null {
+export function parseNarrative(
+  content: string,
+  req: NarrateRequest,
+): PlanNarrative | null {
   // Find the first JSON object in the content (defensive against fenced prose).
   const start = content.indexOf("{");
   const end = content.lastIndexOf("}");
@@ -618,8 +700,12 @@ export function parseNarrative(content: string, req: NarrateRequest): PlanNarrat
   const o = obj as Record<string, unknown>;
   const headline = typeof o.headline === "string" ? o.headline.trim() : "";
   const reasoning = typeof o.reasoning === "string" ? o.reasoning.trim() : "";
-  const coaching_cue = typeof o.coaching_cue === "string" ? o.coaching_cue.trim() : "";
-  const changes = Array.isArray(o.changes_made) ? o.changes_made.filter((x): x is string => typeof x === "string") : [];
+  const coaching_cue = typeof o.coaching_cue === "string"
+    ? o.coaching_cue.trim()
+    : "";
+  const changes = Array.isArray(o.changes_made)
+    ? o.changes_made.filter((x): x is string => typeof x === "string")
+    : [];
   if (!headline || !reasoning || !coaching_cue) return null;
   const raw: PlanNarrative = {
     headline,
@@ -633,23 +719,94 @@ export function parseNarrative(content: string, req: NarrateRequest): PlanNarrat
 }
 
 // ---------------------------------------------------------------------------
+// Local Ollama narration (primary path when OLLAMA_HOST is set)
+// ---------------------------------------------------------------------------
+
+/** Try local Ollama for narration. Returns parsed narrative or null (→ caller
+ * falls back to OpenRouter, then deterministic). Uses /api/chat so the system
+ * prompt is passed properly. Timeout is 30s — coaching must not stall onboarding. */
+async function narrateViaOllama(
+  req: NarrateRequest,
+): Promise<PlanNarrative | null> {
+  if (!OLLAMA_HOST) return null;
+
+  const { system, user } = buildNarratePrompt(req);
+
+  let resp: Response;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 30000);
+    resp = await fetch(`${OLLAMA_HOST}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+        options: { temperature: 0.7 },
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+  } catch {
+    return null; // timeout or connection refused → fallback
+  }
+
+  if (!resp.ok) return null;
+
+  let json: unknown;
+  try {
+    json = await resp.json();
+  } catch {
+    return null;
+  }
+
+  // Ollama /api/chat shape: { message: { content: "..." } }
+  const body = json as { message?: { content?: string } };
+  const content = body.message?.content;
+  if (typeof content !== "string" || content.trim().length === 0) {
+    return null;
+  }
+
+  const parsed = parseNarrative(content, req);
+  if (!parsed) return null;
+  parsed.model_used = `ollama:${OLLAMA_MODEL}`;
+  return parsed;
+}
+
+// ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 
 /**
  * Narrate a deterministic training plan.
  *
- * Attempts an LLM call (OpenRouter, response_format: json_object, server-side
- * key). On ANY failure — missing key, HTTP error, malformed content, timeout —
- * returns a deterministic narrative flagged is_fallback:true /
- * model_used:"deterministic". Never throws. Never returns 501.
+ * Tries (in order):
+ *   1. Local Ollama (ornith:35b) when OLLAMA_HOST is set — zero cost, LAN-fast.
+ *   2. OpenRouter (z-ai/glm-5.1) via server-side key, response_format: json_object.
+ *   3. Deterministic narrative (flagged is_fallback:true).
+ *
+ * On ANY failure at any tier, falls through to the next. Never throws.
+ * Never returns 501. The deterministic engine numbers are immutable; the
+ * LLM (local or cloud) only writes narrative.
  *
  * @param req The deterministic plan + options.
- * @returns A PlanNarrative; check `is_fallback` to know if it's the LLM or the deterministic copy.
+ * @returns A PlanNarrative; check `is_fallback` and `model_used` for the source.
  */
 export async function narratePlan(req: NarrateRequest): Promise<PlanNarrative> {
+  // 1. Try local Ollama first (zero cost, low latency on LAN).
+  if (OLLAMA_HOST) {
+    const local = await narrateViaOllama(req);
+    if (local) return local;
+    // Local failed → fall through to OpenRouter.
+  }
+
   const apiKey = (Deno.env.get("OPENROUTER_API_KEY") ?? "").trim();
-  const model = (Deno.env.get("OPENROUTER_MODEL") ?? DEFAULT_MODEL).trim() || DEFAULT_MODEL;
+  const model = (Deno.env.get("OPENROUTER_MODEL") ?? DEFAULT_MODEL).trim() ||
+    DEFAULT_MODEL;
 
   if (!apiKey) {
     return deterministicNarrative(req);

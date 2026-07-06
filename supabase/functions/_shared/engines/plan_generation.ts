@@ -76,70 +76,510 @@ interface _Ex {
 // makes this exercise unsafe".
 const _catalog: readonly _Ex[] = [
   // chest (compound)
-  { id: 'barbell_bench_press', name: 'Barbell Bench Press', muscleGroup: 'chest', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder'] },
-  { id: 'dumbbell_bench_press', name: 'Dumbbell Bench Press', muscleGroup: 'chest', equipment: 'dumbbells', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder'] },
-  { id: 'pushup', name: 'Push-Up', muscleGroup: 'chest', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['shoulder', 'wrist'] },
-  { id: 'dumbbell_fly', name: 'Dumbbell Fly', muscleGroup: 'chest', equipment: 'dumbbells', isCompound: false, difficulty: 'intermediate', contraindications: ['shoulder'] },
-  { id: 'cable_fly', name: 'Cable Fly', muscleGroup: 'chest', equipment: 'cables', isCompound: false, difficulty: 'intermediate', contraindications: ['shoulder'] },
-  { id: 'machine_chest_press', name: 'Machine Chest Press', muscleGroup: 'chest', equipment: 'machines', isCompound: true, difficulty: 'beginner', contraindications: ['shoulder'] },
-  { id: 'banded_chest_press', name: 'Banded Chest Press', muscleGroup: 'chest', equipment: 'resistance_bands', isCompound: true, difficulty: 'beginner', contraindications: ['shoulder'] },
+  {
+    id: "barbell_bench_press",
+    name: "Barbell Bench Press",
+    muscleGroup: "chest",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "dumbbell_bench_press",
+    name: "Dumbbell Bench Press",
+    muscleGroup: "chest",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "pushup",
+    name: "Push-Up",
+    muscleGroup: "chest",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["shoulder", "wrist"],
+  },
+  {
+    id: "dumbbell_fly",
+    name: "Dumbbell Fly",
+    muscleGroup: "chest",
+    equipment: "dumbbells",
+    isCompound: false,
+    difficulty: "intermediate",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "cable_fly",
+    name: "Cable Fly",
+    muscleGroup: "chest",
+    equipment: "cables",
+    isCompound: false,
+    difficulty: "intermediate",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "machine_chest_press",
+    name: "Machine Chest Press",
+    muscleGroup: "chest",
+    equipment: "machines",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "banded_chest_press",
+    name: "Banded Chest Press",
+    muscleGroup: "chest",
+    equipment: "resistance_bands",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
   // back (compound)
-  { id: 'pull_up', name: 'Pull-Up', muscleGroup: 'back', equipment: 'pull_up_bar', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder'] },
-  { id: 'barbell_row', name: 'Barbell Row', muscleGroup: 'back', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: ['back', 'shoulder'] },
-  { id: 'dumbbell_row', name: 'Dumbbell Row', muscleGroup: 'back', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'cable_row', name: 'Cable Row', muscleGroup: 'back', equipment: 'cables', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'lat_pulldown', name: 'Lat Pulldown', muscleGroup: 'back', equipment: 'machines', isCompound: true, difficulty: 'beginner', contraindications: ['shoulder'] },
-  { id: 'resistance_band_row', name: 'Resistance Band Row', muscleGroup: 'back', equipment: 'resistance_bands', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'bodyweight_row', name: 'Bodyweight Inverted Row', muscleGroup: 'back', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['back', 'shoulder'] },
-  { id: 'superman', name: 'Superman Hold', muscleGroup: 'back', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: ['back'] },
+  {
+    id: "pull_up",
+    name: "Pull-Up",
+    muscleGroup: "back",
+    equipment: "pull_up_bar",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "barbell_row",
+    name: "Barbell Row",
+    muscleGroup: "back",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["back", "shoulder"],
+  },
+  {
+    id: "dumbbell_row",
+    name: "Dumbbell Row",
+    muscleGroup: "back",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "cable_row",
+    name: "Cable Row",
+    muscleGroup: "back",
+    equipment: "cables",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "lat_pulldown",
+    name: "Lat Pulldown",
+    muscleGroup: "back",
+    equipment: "machines",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "resistance_band_row",
+    name: "Resistance Band Row",
+    muscleGroup: "back",
+    equipment: "resistance_bands",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "bodyweight_row",
+    name: "Bodyweight Inverted Row",
+    muscleGroup: "back",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back", "shoulder"],
+  },
+  {
+    id: "superman",
+    name: "Superman Hold",
+    muscleGroup: "back",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
   // shoulders
-  { id: 'overhead_press_barbell', name: 'Barbell Overhead Press', muscleGroup: 'shoulders', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder', 'wrist'] },
-  { id: 'overhead_press_dumbbell', name: 'Dumbbell Overhead Press', muscleGroup: 'shoulders', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['shoulder'] },
-  { id: 'lateral_raise_dumbbell', name: 'Dumbbell Lateral Raise', muscleGroup: 'shoulders', equipment: 'dumbbells', isCompound: false, difficulty: 'beginner', contraindications: ['shoulder'] },
-  { id: 'lateral_raise_band', name: 'Band Lateral Raise', muscleGroup: 'shoulders', equipment: 'resistance_bands', isCompound: false, difficulty: 'beginner', contraindications: ['shoulder'] },
-  { id: 'pike_pushup', name: 'Pike Push-Up', muscleGroup: 'shoulders', equipment: 'bodyweight', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder', 'wrist'] },
-  { id: 'face_pull', name: 'Face Pull', muscleGroup: 'shoulders', equipment: 'cables', isCompound: false, difficulty: 'beginner', contraindications: [] },
+  {
+    id: "overhead_press_barbell",
+    name: "Barbell Overhead Press",
+    muscleGroup: "shoulders",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder", "wrist"],
+  },
+  {
+    id: "overhead_press_dumbbell",
+    name: "Dumbbell Overhead Press",
+    muscleGroup: "shoulders",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "lateral_raise_dumbbell",
+    name: "Dumbbell Lateral Raise",
+    muscleGroup: "shoulders",
+    equipment: "dumbbells",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "lateral_raise_band",
+    name: "Band Lateral Raise",
+    muscleGroup: "shoulders",
+    equipment: "resistance_bands",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["shoulder"],
+  },
+  {
+    id: "pike_pushup",
+    name: "Pike Push-Up",
+    muscleGroup: "shoulders",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder", "wrist"],
+  },
+  {
+    id: "face_pull",
+    name: "Face Pull",
+    muscleGroup: "shoulders",
+    equipment: "cables",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
   // biceps
-  { id: 'barbell_curl', name: 'Barbell Curl', muscleGroup: 'biceps', equipment: 'barbell', isCompound: false, difficulty: 'beginner', contraindications: ['wrist'] },
-  { id: 'dumbbell_curl', name: 'Dumbbell Curl', muscleGroup: 'biceps', equipment: 'dumbbells', isCompound: false, difficulty: 'beginner', contraindications: ['wrist'] },
-  { id: 'resistance_band_curl', name: 'Band Curl', muscleGroup: 'biceps', equipment: 'resistance_bands', isCompound: false, difficulty: 'beginner', contraindications: ['wrist'] },
-  { id: 'bodyweight_curl_iso', name: 'Isometric Arm Curl', muscleGroup: 'biceps', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: [] },
+  {
+    id: "barbell_curl",
+    name: "Barbell Curl",
+    muscleGroup: "biceps",
+    equipment: "barbell",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["wrist"],
+  },
+  {
+    id: "dumbbell_curl",
+    name: "Dumbbell Curl",
+    muscleGroup: "biceps",
+    equipment: "dumbbells",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["wrist"],
+  },
+  {
+    id: "resistance_band_curl",
+    name: "Band Curl",
+    muscleGroup: "biceps",
+    equipment: "resistance_bands",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["wrist"],
+  },
+  {
+    id: "bodyweight_curl_iso",
+    name: "Isometric Arm Curl",
+    muscleGroup: "biceps",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
   // triceps
-  { id: 'tricep_dip', name: 'Tricep Dip', muscleGroup: 'triceps', equipment: 'bodyweight', isCompound: true, difficulty: 'intermediate', contraindications: ['shoulder', 'wrist'] },
-  { id: 'dumbbell_skull_crusher', name: 'Dumbbell Skull Crusher', muscleGroup: 'triceps', equipment: 'dumbbells', isCompound: false, difficulty: 'intermediate', contraindications: ['wrist'] },
-  { id: 'cable_pushdown', name: 'Cable Pushdown', muscleGroup: 'triceps', equipment: 'cables', isCompound: false, difficulty: 'beginner', contraindications: ['wrist'] },
-  { id: 'band_pushdown', name: 'Band Pushdown', muscleGroup: 'triceps', equipment: 'resistance_bands', isCompound: false, difficulty: 'beginner', contraindications: [] },
-  { id: 'close_grip_pushup', name: 'Close-Grip Push-Up', muscleGroup: 'triceps', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: ['shoulder', 'wrist'] },
+  {
+    id: "tricep_dip",
+    name: "Tricep Dip",
+    muscleGroup: "triceps",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["shoulder", "wrist"],
+  },
+  {
+    id: "dumbbell_skull_crusher",
+    name: "Dumbbell Skull Crusher",
+    muscleGroup: "triceps",
+    equipment: "dumbbells",
+    isCompound: false,
+    difficulty: "intermediate",
+    contraindications: ["wrist"],
+  },
+  {
+    id: "cable_pushdown",
+    name: "Cable Pushdown",
+    muscleGroup: "triceps",
+    equipment: "cables",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["wrist"],
+  },
+  {
+    id: "band_pushdown",
+    name: "Band Pushdown",
+    muscleGroup: "triceps",
+    equipment: "resistance_bands",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
+  {
+    id: "close_grip_pushup",
+    name: "Close-Grip Push-Up",
+    muscleGroup: "triceps",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["shoulder", "wrist"],
+  },
   // quads
-  { id: 'barbell_back_squat', name: 'Barbell Back Squat', muscleGroup: 'quads', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: ['knee', 'back'] },
-  { id: 'goblet_squat', name: 'Goblet Squat', muscleGroup: 'quads', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['knee'] },
-  { id: 'bodyweight_squat', name: 'Air Squat', muscleGroup: 'quads', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['knee'] },
-  { id: 'leg_press', name: 'Leg Press', muscleGroup: 'quads', equipment: 'machines', isCompound: true, difficulty: 'beginner', contraindications: ['knee', 'back'] },
-  { id: 'lunge_dumbbell', name: 'Dumbbell Lunge', muscleGroup: 'quads', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['knee', 'hip'] },
-  { id: 'bodyweight_lunge', name: 'Bodyweight Lunge', muscleGroup: 'quads', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['knee', 'hip'] },
-  { id: 'band_squat', name: 'Band Squat', muscleGroup: 'quads', equipment: 'resistance_bands', isCompound: true, difficulty: 'beginner', contraindications: ['knee'] },
+  {
+    id: "barbell_back_squat",
+    name: "Barbell Back Squat",
+    muscleGroup: "quads",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["knee", "back"],
+  },
+  {
+    id: "goblet_squat",
+    name: "Goblet Squat",
+    muscleGroup: "quads",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee"],
+  },
+  {
+    id: "bodyweight_squat",
+    name: "Air Squat",
+    muscleGroup: "quads",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee"],
+  },
+  {
+    id: "leg_press",
+    name: "Leg Press",
+    muscleGroup: "quads",
+    equipment: "machines",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee", "back"],
+  },
+  {
+    id: "lunge_dumbbell",
+    name: "Dumbbell Lunge",
+    muscleGroup: "quads",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee", "hip"],
+  },
+  {
+    id: "bodyweight_lunge",
+    name: "Bodyweight Lunge",
+    muscleGroup: "quads",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee", "hip"],
+  },
+  {
+    id: "band_squat",
+    name: "Band Squat",
+    muscleGroup: "quads",
+    equipment: "resistance_bands",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["knee"],
+  },
   // hamstrings
-  { id: 'romanian_deadlift', name: 'Romanian Deadlift', muscleGroup: 'hamstrings', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: ['back'] },
-  { id: 'dumbbell_rdl', name: 'Dumbbell RDL', muscleGroup: 'hamstrings', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'bodyweight_romanian_deadlift', name: 'Bodyweight Single-Leg RDL', muscleGroup: 'hamstrings', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'glute_bridge', name: 'Glute Bridge', muscleGroup: 'hamstrings', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'kettlebell_swing', name: 'Kettlebell Swing', muscleGroup: 'hamstrings', equipment: 'kettlebells', isCompound: true, difficulty: 'intermediate', contraindications: ['back'] },
-  { id: 'resistance_band_good_morning', name: 'Band Good Morning', muscleGroup: 'hamstrings', equipment: 'resistance_bands', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'lying_leg_curl', name: 'Lying Leg Curl', muscleGroup: 'hamstrings', equipment: 'machines', isCompound: false, difficulty: 'beginner', contraindications: [] },
+  {
+    id: "romanian_deadlift",
+    name: "Romanian Deadlift",
+    muscleGroup: "hamstrings",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["back"],
+  },
+  {
+    id: "dumbbell_rdl",
+    name: "Dumbbell RDL",
+    muscleGroup: "hamstrings",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "bodyweight_romanian_deadlift",
+    name: "Bodyweight Single-Leg RDL",
+    muscleGroup: "hamstrings",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "glute_bridge",
+    name: "Glute Bridge",
+    muscleGroup: "hamstrings",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "kettlebell_swing",
+    name: "Kettlebell Swing",
+    muscleGroup: "hamstrings",
+    equipment: "kettlebells",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: ["back"],
+  },
+  {
+    id: "resistance_band_good_morning",
+    name: "Band Good Morning",
+    muscleGroup: "hamstrings",
+    equipment: "resistance_bands",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "lying_leg_curl",
+    name: "Lying Leg Curl",
+    muscleGroup: "hamstrings",
+    equipment: "machines",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
   // glutes
-  { id: 'hip_thrust', name: 'Hip Thrust', muscleGroup: 'glutes', equipment: 'barbell', isCompound: true, difficulty: 'intermediate', contraindications: [] },
-  { id: 'dumbbell_hip_thrust', name: 'Dumbbell Hip Thrust', muscleGroup: 'glutes', equipment: 'dumbbells', isCompound: true, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'bodyweight_glute_bridge_walkout', name: 'Glute Bridge Walkout', muscleGroup: 'glutes', equipment: 'bodyweight', isCompound: true, difficulty: 'beginner', contraindications: [] },
-  { id: 'band_clamshell', name: 'Band Clamshell', muscleGroup: 'glutes', equipment: 'resistance_bands', isCompound: false, difficulty: 'beginner', contraindications: [] },
+  {
+    id: "hip_thrust",
+    name: "Hip Thrust",
+    muscleGroup: "glutes",
+    equipment: "barbell",
+    isCompound: true,
+    difficulty: "intermediate",
+    contraindications: [],
+  },
+  {
+    id: "dumbbell_hip_thrust",
+    name: "Dumbbell Hip Thrust",
+    muscleGroup: "glutes",
+    equipment: "dumbbells",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "bodyweight_glute_bridge_walkout",
+    name: "Glute Bridge Walkout",
+    muscleGroup: "glutes",
+    equipment: "bodyweight",
+    isCompound: true,
+    difficulty: "beginner",
+    contraindications: [],
+  },
+  {
+    id: "band_clamshell",
+    name: "Band Clamshell",
+    muscleGroup: "glutes",
+    equipment: "resistance_bands",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
   // calves
-  { id: 'standing_calf_raise', name: 'Standing Calf Raise', muscleGroup: 'calves', equipment: 'dumbbells', isCompound: false, difficulty: 'beginner', contraindications: ['ankle'] },
-  { id: 'bodyweight_calf_raise', name: 'Bodyweight Calf Raise', muscleGroup: 'calves', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: ['ankle'] },
-  { id: 'machine_calf_raise', name: 'Machine Calf Raise', muscleGroup: 'calves', equipment: 'machines', isCompound: false, difficulty: 'beginner', contraindications: ['ankle'] },
+  {
+    id: "standing_calf_raise",
+    name: "Standing Calf Raise",
+    muscleGroup: "calves",
+    equipment: "dumbbells",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["ankle"],
+  },
+  {
+    id: "bodyweight_calf_raise",
+    name: "Bodyweight Calf Raise",
+    muscleGroup: "calves",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["ankle"],
+  },
+  {
+    id: "machine_calf_raise",
+    name: "Machine Calf Raise",
+    muscleGroup: "calves",
+    equipment: "machines",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["ankle"],
+  },
   // core
-  { id: 'plank', name: 'Plank', muscleGroup: 'core', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: ['back', 'shoulder', 'wrist'] },
-  { id: 'dead_bug', name: 'Dead Bug', muscleGroup: 'core', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: [] },
-  { id: 'bird_dog', name: 'Bird Dog', muscleGroup: 'core', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: ['back'] },
-  { id: 'bodyweight_crunch', name: 'Crunch', muscleGroup: 'core', equipment: 'bodyweight', isCompound: false, difficulty: 'beginner', contraindications: [] },
+  {
+    id: "plank",
+    name: "Plank",
+    muscleGroup: "core",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["back", "shoulder", "wrist"],
+  },
+  {
+    id: "dead_bug",
+    name: "Dead Bug",
+    muscleGroup: "core",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
+  {
+    id: "bird_dog",
+    name: "Bird Dog",
+    muscleGroup: "core",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: ["back"],
+  },
+  {
+    id: "bodyweight_crunch",
+    name: "Crunch",
+    muscleGroup: "core",
+    equipment: "bodyweight",
+    isCompound: false,
+    difficulty: "beginner",
+    contraindications: [],
+  },
 ] as const;
 
 // Stable, deterministic sort: compounds first, then by id.
@@ -162,56 +602,164 @@ function _splitFor(trainingDaysPerWeek: number, dayIndex: number): _SplitRole {
   switch (trainingDaysPerWeek) {
     case 2:
       return dayIndex === 0
-        ? { code: 'full', focus: 'Full Body A', muscleGroups: ['chest', 'back', 'quads', 'hamstrings', 'shoulders', 'biceps'] }
-        : { code: 'full', focus: 'Full Body B', muscleGroups: ['quads', 'glutes', 'chest', 'back', 'triceps', 'core'] };
+        ? {
+          code: "full",
+          focus: "Full Body A",
+          muscleGroups: [
+            "chest",
+            "back",
+            "quads",
+            "hamstrings",
+            "shoulders",
+            "biceps",
+          ],
+        }
+        : {
+          code: "full",
+          focus: "Full Body B",
+          muscleGroups: ["quads", "glutes", "chest", "back", "triceps", "core"],
+        };
     case 3:
       switch (dayIndex) {
         case 0:
-          return { code: 'full', focus: 'Full Body A', muscleGroups: ['chest', 'back', 'quads', 'hamstrings', 'shoulders', 'biceps'] };
+          return {
+            code: "full",
+            focus: "Full Body A",
+            muscleGroups: [
+              "chest",
+              "back",
+              "quads",
+              "hamstrings",
+              "shoulders",
+              "biceps",
+            ],
+          };
         case 1:
-          return { code: 'full', focus: 'Full Body B', muscleGroups: ['quads', 'glutes', 'chest', 'back', 'triceps', 'core'] };
+          return {
+            code: "full",
+            focus: "Full Body B",
+            muscleGroups: [
+              "quads",
+              "glutes",
+              "chest",
+              "back",
+              "triceps",
+              "core",
+            ],
+          };
         default:
-          return { code: 'full', focus: 'Full Body C', muscleGroups: ['hamstrings', 'shoulders', 'back', 'chest', 'calves', 'core'] };
+          return {
+            code: "full",
+            focus: "Full Body C",
+            muscleGroups: [
+              "hamstrings",
+              "shoulders",
+              "back",
+              "chest",
+              "calves",
+              "core",
+            ],
+          };
       }
     case 4:
       switch (dayIndex % 4) {
         case 0:
-          return { code: 'upper', focus: 'Upper A', muscleGroups: ['chest', 'back', 'shoulders', 'biceps', 'triceps'] };
+          return {
+            code: "upper",
+            focus: "Upper A",
+            muscleGroups: ["chest", "back", "shoulders", "biceps", "triceps"],
+          };
         case 1:
-          return { code: 'lower', focus: 'Lower A', muscleGroups: ['quads', 'hamstrings', 'glutes', 'calves', 'core'] };
+          return {
+            code: "lower",
+            focus: "Lower A",
+            muscleGroups: ["quads", "hamstrings", "glutes", "calves", "core"],
+          };
         case 2:
-          return { code: 'upper', focus: 'Upper B', muscleGroups: ['back', 'chest', 'shoulders', 'triceps', 'biceps'] };
+          return {
+            code: "upper",
+            focus: "Upper B",
+            muscleGroups: ["back", "chest", "shoulders", "triceps", "biceps"],
+          };
         default:
-          return { code: 'lower', focus: 'Lower B', muscleGroups: ['hamstrings', 'quads', 'glutes', 'core', 'calves'] };
+          return {
+            code: "lower",
+            focus: "Lower B",
+            muscleGroups: ["hamstrings", "quads", "glutes", "core", "calves"],
+          };
       }
     case 5:
       switch (dayIndex % 5) {
         case 0:
-          return { code: 'push', focus: 'Push', muscleGroups: ['chest', 'shoulders', 'triceps', 'quads'] };
+          return {
+            code: "push",
+            focus: "Push",
+            muscleGroups: ["chest", "shoulders", "triceps", "quads"],
+          };
         case 1:
-          return { code: 'pull', focus: 'Pull', muscleGroups: ['back', 'biceps', 'hamstrings'] };
+          return {
+            code: "pull",
+            focus: "Pull",
+            muscleGroups: ["back", "biceps", "hamstrings"],
+          };
         case 2:
-          return { code: 'legs', focus: 'Legs', muscleGroups: ['quads', 'hamstrings', 'glutes', 'calves'] };
+          return {
+            code: "legs",
+            focus: "Legs",
+            muscleGroups: ["quads", "hamstrings", "glutes", "calves"],
+          };
         case 3:
-          return { code: 'upper', focus: 'Upper', muscleGroups: ['chest', 'back', 'shoulders', 'biceps', 'triceps'] };
+          return {
+            code: "upper",
+            focus: "Upper",
+            muscleGroups: ["chest", "back", "shoulders", "biceps", "triceps"],
+          };
         default:
-          return { code: 'lower', focus: 'Lower', muscleGroups: ['hamstrings', 'quads', 'glutes', 'core', 'calves'] };
+          return {
+            code: "lower",
+            focus: "Lower",
+            muscleGroups: ["hamstrings", "quads", "glutes", "core", "calves"],
+          };
       }
     case 6:
     default:
       switch (dayIndex % 6) {
         case 0:
-          return { code: 'push', focus: 'Push A', muscleGroups: ['chest', 'shoulders', 'triceps', 'quads'] };
+          return {
+            code: "push",
+            focus: "Push A",
+            muscleGroups: ["chest", "shoulders", "triceps", "quads"],
+          };
         case 1:
-          return { code: 'pull', focus: 'Pull A', muscleGroups: ['back', 'biceps', 'hamstrings'] };
+          return {
+            code: "pull",
+            focus: "Pull A",
+            muscleGroups: ["back", "biceps", "hamstrings"],
+          };
         case 2:
-          return { code: 'legs', focus: 'Legs A', muscleGroups: ['quads', 'hamstrings', 'glutes', 'calves'] };
+          return {
+            code: "legs",
+            focus: "Legs A",
+            muscleGroups: ["quads", "hamstrings", "glutes", "calves"],
+          };
         case 3:
-          return { code: 'push', focus: 'Push B', muscleGroups: ['shoulders', 'chest', 'triceps', 'core'] };
+          return {
+            code: "push",
+            focus: "Push B",
+            muscleGroups: ["shoulders", "chest", "triceps", "core"],
+          };
         case 4:
-          return { code: 'pull', focus: 'Pull B', muscleGroups: ['back', 'biceps', 'rear_shoulders'] };
+          return {
+            code: "pull",
+            focus: "Pull B",
+            muscleGroups: ["back", "biceps", "rear_shoulders"],
+          };
         default:
-          return { code: 'legs', focus: 'Legs B', muscleGroups: ['hamstrings', 'glutes', 'quads', 'calves'] };
+          return {
+            code: "legs",
+            focus: "Legs B",
+            muscleGroups: ["hamstrings", "glutes", "quads", "calves"],
+          };
       }
   }
 }
@@ -262,16 +810,23 @@ const _volumeGrid: Record<string, Record<string, _Vol>> = {
   },
 };
 
-function _volumeFor(goal: string, experienceLevel: string | null | undefined): _Vol {
-  const exp = (!experienceLevel) ? 'intermediate' : experienceLevel;
+function _volumeFor(
+  goal: string,
+  experienceLevel: string | null | undefined,
+): _Vol {
+  const exp = (!experienceLevel) ? "intermediate" : experienceLevel;
   const byGoal = _volumeGrid[goal];
   if (byGoal && byGoal[exp]) return byGoal[exp];
   return _defaultVol;
 }
 
-function _normalizedExp(experienceLevel: string | null | undefined): string | null {
-  if (experienceLevel === null || experienceLevel === undefined) return 'intermediate';
-  return experienceLevel.length === 0 ? 'intermediate' : experienceLevel;
+function _normalizedExp(
+  experienceLevel: string | null | undefined,
+): string | null {
+  if (experienceLevel === null || experienceLevel === undefined) {
+    return "intermediate";
+  }
+  return experienceLevel.length === 0 ? "intermediate" : experienceLevel;
 }
 
 function _targetExercisesPerDay(trainingDaysPerWeek: number): number {
@@ -280,9 +835,12 @@ function _targetExercisesPerDay(trainingDaysPerWeek: number): number {
   return 4;
 }
 
-function _restSeconds(isCompound: boolean, experienceLevel: string | null | undefined): number {
+function _restSeconds(
+  isCompound: boolean,
+  experienceLevel: string | null | undefined,
+): number {
   const base = isCompound ? 120 : 60;
-  return experienceLevel === 'beginner' ? base + 30 : base;
+  return experienceLevel === "beginner" ? base + 30 : base;
 }
 
 // ---------------------------------------------------------------------------
@@ -291,13 +849,13 @@ function _restSeconds(isCompound: boolean, experienceLevel: string | null | unde
 
 export function generatePlan(intake: PlanIntake): GeneratedPlan {
   // Effective equipment: user + "bodyweight" (base human equipment).
-  const eff = new Set<string>(['bodyweight', ...(intake.equipment ?? [])]);
-  eff.delete('');
+  const eff = new Set<string>(["bodyweight", ...(intake.equipment ?? [])]);
+  eff.delete("");
 
   // Canonical contraindications: strip 'none'/empty.
   const contras: string[] = [];
   for (const l of intake.limitations ?? []) {
-    if (l && l !== 'none') contras.push(l);
+    if (l && l !== "none") contras.push(l);
   }
 
   // Filtered, deterministic catalog.
@@ -324,7 +882,11 @@ export function generatePlan(intake: PlanIntake): GeneratedPlan {
     const exercises: PlanExercise[] = [];
     const seen = new Set<string>();
     const mgOrder = split.muscleGroups;
-    for (let round = 0; exercises.length < target && round < mgOrder.length * 8; round++) {
+    for (
+      let round = 0;
+      exercises.length < target && round < mgOrder.length * 8;
+      round++
+    ) {
       for (const mg of mgOrder) {
         if (exercises.length >= target) break;
         const candidates = byGroup.get(mg);
@@ -351,7 +913,12 @@ export function generatePlan(intake: PlanIntake): GeneratedPlan {
       }
     }
 
-    days.push({ dayNumber: d + 1, focus: split.focus, split: split.code, exercises });
+    days.push({
+      dayNumber: d + 1,
+      focus: split.focus,
+      split: split.code,
+      exercises,
+    });
   }
 
   const effList = Array.from(eff).sort();

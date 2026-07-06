@@ -174,14 +174,22 @@ function hasAudience(payload: JwtPayload, expected: string): boolean {
  * rejection (missing / malformed / undecodable JWT, or no `sub` claim).
  */
 export async function resolveUser(req: Request): Promise<ResolveResult> {
-  const authHeader =
-    req.headers.get("authorization") ?? req.headers.get("Authorization");
+  const authHeader = req.headers.get("authorization") ??
+    req.headers.get("Authorization");
   if (!authHeader) {
-    return { user: null, response: unauthorized("Missing Authorization header.") };
+    return {
+      user: null,
+      response: unauthorized("Missing Authorization header."),
+    };
   }
   const match = /^Bearer\s+(.+)$/i.exec(authHeader.trim());
   if (!match) {
-    return { user: null, response: unauthorized("Invalid Authorization header; expected 'Bearer <jwt>'.") };
+    return {
+      user: null,
+      response: unauthorized(
+        "Invalid Authorization header; expected 'Bearer <jwt>'.",
+      ),
+    };
   }
   const token = match[1].trim();
   if (token.length === 0) {
@@ -193,14 +201,20 @@ export async function resolveUser(req: Request): Promise<ResolveResult> {
   }
   const secret = Deno.env.get("SUPABASE_JWT_SECRET")?.trim();
   if (!secret) {
-    return { user: null, response: unauthorized("JWT verification is not configured.") };
+    return {
+      user: null,
+      response: unauthorized("JWT verification is not configured."),
+    };
   }
   if (!(await verifyHs256(token, secret))) {
     return { user: null, response: unauthorized("Invalid JWT signature.") };
   }
   const now = Math.floor(Date.now() / 1000);
   if (typeof payload.exp !== "number" || payload.exp <= now) {
-    return { user: null, response: unauthorized("JWT is expired or missing exp.") };
+    return {
+      user: null,
+      response: unauthorized("JWT is expired or missing exp."),
+    };
   }
   if (payload.iss !== expectedIssuer()) {
     return { user: null, response: unauthorized("JWT issuer is invalid.") };
@@ -208,8 +222,13 @@ export async function resolveUser(req: Request): Promise<ResolveResult> {
   if (!hasAudience(payload, expectedAudience())) {
     return { user: null, response: unauthorized("JWT audience is invalid.") };
   }
-  if (!payload.sub || typeof payload.sub !== "string" || payload.sub.length === 0) {
-    return { user: null, response: unauthorized("JWT has no subject (sub) claim.") };
+  if (
+    !payload.sub || typeof payload.sub !== "string" || payload.sub.length === 0
+  ) {
+    return {
+      user: null,
+      response: unauthorized("JWT has no subject (sub) claim."),
+    };
   }
   return {
     user: {

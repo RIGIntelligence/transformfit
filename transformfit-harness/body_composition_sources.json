@@ -1,0 +1,73 @@
+{
+  "schema": "transformfit.body_composition_sources.v1",
+  "retrieved_at": "2026-07-02T00:00:00-04:00",
+  "purpose": "Official-source posture for the Composition trust surface: measurement context, strength/recovery/adherence interpretation, device-estimate caveats, privacy, and non-appearance copy.",
+  "sources": [
+    {
+      "id": "src_cdc_bmi_individual_context_2025",
+      "title": "CDC: About Body Mass Index (BMI)",
+      "source_url": "https://www.cdc.gov/bmi/about/index.html",
+      "publisher": "Centers for Disease Control and Prevention",
+      "retrieved_at": "2026-07-02T00:00:00-04:00",
+      "product_use": "BMI and related body measures are treated as partial screening context, not direct composition truth or identity judgment."
+    },
+    {
+      "id": "src_cdc_physical_activity_strength_2025",
+      "title": "CDC: Adding Physical Activity as an Adult",
+      "source_url": "https://www.cdc.gov/physical-activity-basics/adding-adults/index.html",
+      "publisher": "Centers for Disease Control and Prevention",
+      "retrieved_at": "2026-07-02T00:00:00-04:00",
+      "product_use": "The screen connects interpretation to strength work, recovery, and consistent activity instead of appearance pressure."
+    },
+    {
+      "id": "src_fda_bia_home_device_estimate_k130311",
+      "title": "FDA 510(k): Transtek Body Fat Analyzer K130311",
+      "source_url": "https://www.accessdata.fda.gov/cdrh_docs/pdf13/K130311.pdf",
+      "publisher": "U.S. Food and Drug Administration",
+      "retrieved_at": "2026-07-02T00:00:00-04:00",
+      "product_use": "BIA-style device outputs are handled as estimates for generally healthy adults and not as diagnostic coaching commands."
+    },
+    {
+      "id": "src_nap_weight_context_complexity",
+      "title": "NCBI Bookshelf: Factors That Influence Body Weight",
+      "source_url": "https://www.ncbi.nlm.nih.gov/books/NBK221834/",
+      "publisher": "National Library of Medicine / National Academies Press",
+      "retrieved_at": "2026-07-02T00:00:00-04:00",
+      "product_use": "Interpretation must account for personal, training, diet, sleep, physiology, and environmental context before suggesting changes."
+    },
+    {
+      "id": "src_transformfit_composition_trust_protocol",
+      "title": "TransformFitAI Composition Trust Protocol",
+      "source_url": "local://transformfit/body-composition-trust-protocol",
+      "publisher": "TransformFitAI harness",
+      "retrieved_at": "2026-07-02T00:00:00-04:00",
+      "product_use": "Every composition-facing surface must say signals are imperfect, stay private by default, avoid appearance-pressure copy, and connect trends to strength, recovery, adherence, and scoped nutrition."
+    }
+  ],
+  "safety_rules": [
+    "Frame measurements as signals, not verdicts.",
+    "Do not diagnose, prescribe, or rank appearance.",
+    "Require strength, recovery, adherence, and nutrition context before changing a plan.",
+    "Keep composition surfaces private by default unless a future explicit opt-in share flow exists.",
+    "Block appearance-pressure and shame-framed terms from app copy."
+  ],
+  "blocked_app_terms": [
+    "before and after",
+    "bikini",
+    "burn fat",
+    "cheat meal",
+    "clean eating",
+    "detox",
+    "dream body",
+    "fat loss",
+    "guilt",
+    "no excuses",
+    "punish",
+    "shame",
+    "shred",
+    "skinny",
+    "summer body",
+    "transformation photo",
+    "weight loss"
+  ]
+}

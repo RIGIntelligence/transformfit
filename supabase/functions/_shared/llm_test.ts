@@ -16,27 +16,26 @@
 //   - the deterministic fallback is specific to inputs (not a one-size template),
 //   - the deterministic fallback echoes the user phrase (when present),
 //   - the output is always a well-formed PlanNarrative.
-import { assert, assertEquals, assertNotEquals } from "jsr:@std/assert";
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
 import {
-  narratePlan,
-  deterministicNarrative,
-  parseNarrative,
-  sanitizeUserPhrase,
   applyNarrativeGuardrail,
-  applyFieldGuardrail,
-  truncateComposedBlock,
-  wordCount,
+  buildGuardrailContext,
+  detectPacketContradiction,
+  deterministicNarrative,
   emojiCount,
-  questionCount,
   hasBannedPhrase,
   hasDataToken,
+  narratePlan,
+  parseNarrative,
+  type PlanNarrative,
+  questionCount,
+  sanitizeUserPhrase,
+  stripBannedPhrases,
   stripEmoji,
   stripExcessQuestions,
-  stripBannedPhrases,
+  truncateComposedBlock,
   truncateWords,
-  detectPacketContradiction,
-  buildGuardrailContext,
-  type PlanNarrative,
+  wordCount,
 } from "./llm.ts";
 
 // --- helpers ---------------------------------------------------------------
@@ -50,7 +49,11 @@ const SAMPLE_REQUEST = {
 };
 
 /** Set an env var, await fn, then restore. Returns fn's return value. */
-async function withEnv<T>(name: string, value: string | undefined, fn: () => Promise<T>): Promise<T> {
+async function withEnv<T>(
+  name: string,
+  value: string | undefined,
+  fn: () => Promise<T>,
+): Promise<T> {
   const prev = Deno.env.get(name);
   if (value === undefined) Deno.env.delete(name);
   else Deno.env.set(name, value);
@@ -65,7 +68,11 @@ async function withEnv<T>(name: string, value: string | undefined, fn: () => Pro
 // --- fallback contract ------------------------------------------------------
 
 Deno.test("narratePlan: missing OPENROUTER_API_KEY returns a flagged deterministic fallback (no throw)", async () => {
-  const captured = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan(SAMPLE_REQUEST));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    undefined,
+    () => narratePlan(SAMPLE_REQUEST),
+  );
   assertEquals(captured.is_fallback, true);
   assertEquals(captured.model_used, "deterministic");
   assert(captured.headline.length > 0);
@@ -74,13 +81,14 @@ Deno.test("narratePlan: missing OPENROUTER_API_KEY returns a flagged determinist
 });
 
 Deno.test("narratePlan: empty OPENROUTER_API_KEY returns a flagged deterministic fallback", async () => {
-  const captured = await withEnv("OPENROUTER_API_KEY", "", () => narratePlan({
-    goal: "lose_fat",
-    daysPerWeek: 4,
-    experienceLevel: "beginner",
-    effectiveEquipment: ["bodyweight"],
-    days: [],
-  }));
+  const captured = await withEnv("OPENROUTER_API_KEY", "", () =>
+    narratePlan({
+      goal: "lose_fat",
+      daysPerWeek: 4,
+      experienceLevel: "beginner",
+      effectiveEquipment: ["bodyweight"],
+      days: [],
+    }));
   assertEquals(captured.is_fallback, true);
   assertEquals(captured.model_used, "deterministic");
 });
@@ -89,13 +97,18 @@ Deno.test("narratePlan: never throws to the caller even with a bogus key", async
   let threw = false;
   let captured: PlanNarrative | undefined;
   try {
-    captured = await withEnv("OPENROUTER_API_KEY", "sk-or-test-invalid-key", () => narratePlan({
-      goal: "get_fitter",
-      daysPerWeek: 3,
-      experienceLevel: "intermediate",
-      effectiveEquipment: ["bodyweight", "dumbbells"],
-      days: [],
-    }));
+    captured = await withEnv(
+      "OPENROUTER_API_KEY",
+      "sk-or-test-invalid-key",
+      () =>
+        narratePlan({
+          goal: "get_fitter",
+          daysPerWeek: 3,
+          experienceLevel: "intermediate",
+          effectiveEquipment: ["bodyweight", "dumbbells"],
+          days: [],
+        }),
+    );
   } catch {
     threw = true;
   }
@@ -106,36 +119,46 @@ Deno.test("narratePlan: never throws to the caller even with a bogus key", async
 });
 
 Deno.test("narratePlan: deterministic fallback echoes the user phrase when present", async () => {
-  const captured = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan({
-    ...SAMPLE_REQUEST,
-    userPhrase: "I want to feel strong again",
-  }));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    undefined,
+    () =>
+      narratePlan({
+        ...SAMPLE_REQUEST,
+        userPhrase: "I want to feel strong again",
+      }),
+  );
   assertEquals(captured.is_fallback, true);
   // The deterministic fallback references goal / equipment / schedule --
   // it is NOT a silent generic template.
-  const blob = `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`.toLowerCase();
+  const blob =
+    `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`
+      .toLowerCase();
   assert(
-    blob.includes("build_muscle") || blob.includes("muscle") || blob.includes("3") ||
+    blob.includes("build_muscle") || blob.includes("muscle") ||
+      blob.includes("3") ||
       blob.includes("dumbbells") || blob.includes("feel strong again"),
     `deterministic fallback must reference plan inputs, got: ${blob}`,
   );
 });
 
 Deno.test("narratePlan: deterministic fallback is specific to the goal (not a one-size template)", async () => {
-  const a = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan({
-    goal: "build_muscle",
-    daysPerWeek: 3,
-    experienceLevel: "intermediate",
-    effectiveEquipment: ["bodyweight", "dumbbells"],
-    days: [],
-  }));
-  const b = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan({
-    goal: "improve_mobility",
-    daysPerWeek: 3,
-    experienceLevel: "intermediate",
-    effectiveEquipment: ["bodyweight", "dumbbells"],
-    days: [],
-  }));
+  const a = await withEnv("OPENROUTER_API_KEY", undefined, () =>
+    narratePlan({
+      goal: "build_muscle",
+      daysPerWeek: 3,
+      experienceLevel: "intermediate",
+      effectiveEquipment: ["bodyweight", "dumbbells"],
+      days: [],
+    }));
+  const b = await withEnv("OPENROUTER_API_KEY", undefined, () =>
+    narratePlan({
+      goal: "improve_mobility",
+      daysPerWeek: 3,
+      experienceLevel: "intermediate",
+      effectiveEquipment: ["bodyweight", "dumbbells"],
+      days: [],
+    }));
   // Different goals should produce visibly different deterministic copy.
   assertNotEquals(a.headline, b.headline);
 });
@@ -165,19 +188,30 @@ Deno.test("deterministicNarrative: includes days/week and equipment in reasoning
     days: [],
   });
   const blob = n.reasoning.toLowerCase();
-  assert(blob.includes("three days a week") || blob.includes("3 days a week"), `expected days/week, got: ${blob}`);
+  assert(
+    blob.includes("three days a week") || blob.includes("3 days a week"),
+    `expected days/week, got: ${blob}`,
+  );
   // bodyweight-only should render as "just your bodyweight", not "[object Object]"
-  assert(blob.includes("just your bodyweight"), `expected readable equipment list, got: ${blob}`);
+  assert(
+    blob.includes("just your bodyweight"),
+    `expected readable equipment list, got: ${blob}`,
+  );
 });
 
 Deno.test("narratePlan: output is always a well-formed PlanNarrative", async () => {
-  const captured = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan({
-    goal: "build_strength",
-    daysPerWeek: 4,
-    experienceLevel: "advanced",
-    effectiveEquipment: ["bodyweight", "barbell"],
-    days: [],
-  }));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    undefined,
+    () =>
+      narratePlan({
+        goal: "build_strength",
+        daysPerWeek: 4,
+        experienceLevel: "advanced",
+        effectiveEquipment: ["bodyweight", "barbell"],
+        days: [],
+      }),
+  );
   assertEquals(typeof captured.headline, "string");
   assertEquals(typeof captured.reasoning, "string");
   assertEquals(typeof captured.coaching_cue, "string");
@@ -189,14 +223,23 @@ Deno.test("narratePlan: output is always a well-formed PlanNarrative", async () 
 });
 
 Deno.test("narratePlan: user phrase with emoji/markup is sanitized in deterministic echo", async () => {
-  const captured = await withEnv("OPENROUTER_API_KEY", undefined, () => narratePlan({
-    ...SAMPLE_REQUEST,
-    userPhrase: "I want to get <b>strong</b> again 💪🔥!",
-  }));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    undefined,
+    () =>
+      narratePlan({
+        ...SAMPLE_REQUEST,
+        userPhrase: "I want to get <b>strong</b> again 💪🔥!",
+      }),
+  );
   // The echoed phrase must carry zero emoji + no markup
-  const allText = `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
+  const allText =
+    `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
   assert(!/\ud83d/.test(allText), "no emoji should be echoed into coach copy");
-  assert(!/<[a-z][^>]*>/i.test(allText), "no markup should be echoed into coach copy");
+  assert(
+    !/<[a-z][^>]*>/i.test(allText),
+    "no markup should be echoed into coach copy",
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -263,7 +306,8 @@ Deno.test("pure helpers: truncateComposedBlock enforces <=60 words on joined blo
   const r = Array(30).fill("reasoning").join(" ");
   const c = Array(30).fill("cue").join(" ");
   const result = truncateComposedBlock(h, r, c, 60);
-  const composed = [result.headline, result.reasoning, result.coaching_cue].join(" ");
+  const composed = [result.headline, result.reasoning, result.coaching_cue]
+    .join(" ");
   assert(
     wordCount(composed) <= 60,
     `composed block still ${wordCount(composed)} words > 60`,
@@ -289,12 +333,23 @@ Deno.test("pure helpers: detectPacketContradiction", () => {
     days: [],
   });
   // Consistent day counts — should NOT flag.
-  assertEquals(detectPacketContradiction("You are training 3 days a week here", ctx), null);
-  assertEquals(detectPacketContradiction("You are training three days a week here", ctx), null);
+  assertEquals(
+    detectPacketContradiction("You are training 3 days a week here", ctx),
+    null,
+  );
+  assertEquals(
+    detectPacketContradiction("You are training three days a week here", ctx),
+    null,
+  );
   // Contradiction via digit.
-  assert(detectPacketContradiction("You are training 7 days a week here", ctx) !== null);
+  assert(
+    detectPacketContradiction("You are training 7 days a week here", ctx) !==
+      null,
+  );
   // Contradiction via English word.
-  assert(detectPacketContradiction("You train seven days every week", ctx) !== null);
+  assert(
+    detectPacketContradiction("You train seven days every week", ctx) !== null,
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -330,8 +385,14 @@ const MIN_REQUEST = {
     split: "full",
     exercises: [
       {
-        id: "squat", name: "Goblet Squat", muscleGroup: "legs", equipment: "dumbbells",
-        sets: 3, repsMin: 8, repsMax: 12, rpeTarget: 7,
+        id: "squat",
+        name: "Goblet Squat",
+        muscleGroup: "legs",
+        equipment: "dumbbells",
+        sets: 3,
+        repsMin: 8,
+        repsMax: 12,
+        rpeTarget: 7,
       },
     ],
   }],
@@ -344,17 +405,31 @@ const MAX_REQUEST = {
   daysPerWeek: 5,
   experienceLevel: "advanced" as const,
   effectiveEquipment: [
-    "bodyweight", "dumbbells", "barbell", "kettlebells", "cable_machine",
+    "bodyweight",
+    "dumbbells",
+    "barbell",
+    "kettlebells",
+    "cable_machine",
   ],
   days: [{
     dayNumber: 1,
     focus: "Full Body",
     split: "full",
     exercises: [
-      { id: "s", name: "S", muscleGroup: "legs", equipment: "barbell", sets: 4, repsMin: 5, repsMax: 8, rpeTarget: 8 },
+      {
+        id: "s",
+        name: "S",
+        muscleGroup: "legs",
+        equipment: "barbell",
+        sets: 4,
+        repsMin: 5,
+        repsMax: 8,
+        rpeTarget: 8,
+      },
     ],
   }],
-  userPhrase: "I want to feel strong in my own skin again no matter what anyone thinks",
+  userPhrase:
+    "I want to feel strong in my own skin again no matter what anyone thinks",
 };
 
 Deno.test("deterministic fallback: R2 composed-block word-count <=60 for MIN inputs", () => {
@@ -390,7 +465,10 @@ Deno.test("deterministic fallback: R8 <=1 question mark total (ONB-036 fix)", ()
     userPhrase: "Can I get strong this year?",
   });
   const all = `${n.headline} ${n.reasoning} ${n.coaching_cue}`;
-  assert(questionCount(all) <= 1, `too many '?': ${questionCount(all)} in ${all}`);
+  assert(
+    questionCount(all) <= 1,
+    `too many '?': ${questionCount(all)} in ${all}`,
+  );
 });
 
 Deno.test("deterministic fallback: R4 no banned phrases", () => {
@@ -417,7 +495,10 @@ Deno.test("deterministic fallback: user '?' stripped in echo (no excess question
   // the echoed phrase, but at least one significant user word should remain
   // (R1 echo: "strong" is the content-bearing token here).
   const composed = [n.headline, n.reasoning, n.coaching_cue].join(" ");
-  assert(wordCount(composed) <= 60, `composed block ${wordCount(composed)} words > 60`);
+  assert(
+    wordCount(composed) <= 60,
+    `composed block ${wordCount(composed)} words > 60`,
+  );
   assert(
     composed.toLowerCase().includes("strong"),
     `user word "strong" should still be echoed after truncation: ${composed}`,
@@ -443,9 +524,19 @@ Deno.test("mocked LLM-success: strips emoji (R3) from composed narrative", () =>
     is_fallback: false,
   };
   const { narrative: n, corrections } = applyNarrativeGuardrail(raw, makeReq());
-  assert(emojiCount(n.headline) === 0, `headline still has emoji: ${n.headline}`);
-  assert(emojiCount(n.reasoning) === 0, `reasoning still has emoji: ${n.reasoning}`);
-  assert(corrections.some((c) => c.startsWith("headline:") || c.startsWith("reasoning:")));
+  assert(
+    emojiCount(n.headline) === 0,
+    `headline still has emoji: ${n.headline}`,
+  );
+  assert(
+    emojiCount(n.reasoning) === 0,
+    `reasoning still has emoji: ${n.reasoning}`,
+  );
+  assert(
+    corrections.some((c) =>
+      c.startsWith("headline:") || c.startsWith("reasoning:")
+    ),
+  );
 });
 
 Deno.test("mocked LLM-success: R8 <=1 question mark after guardrail", () => {
@@ -459,13 +550,17 @@ Deno.test("mocked LLM-success: R8 <=1 question mark after guardrail", () => {
   };
   const { narrative: n } = applyNarrativeGuardrail(raw, makeReq());
   const all = `${n.headline} ${n.reasoning} ${n.coaching_cue}`;
-  assert(questionCount(all) <= 1, `too many '?': ${questionCount(all)} in ${all}`);
+  assert(
+    questionCount(all) <= 1,
+    `too many '?': ${questionCount(all)} in ${all}`,
+  );
 });
 
 Deno.test("mocked LLM-success: R4 strips banned generic encouragement", () => {
   const raw: PlanNarrative = {
     headline: "Great job — your strong base is ready",
-    reasoning: "You got this. Your plan targets your build_muscle goal across sessions.",
+    reasoning:
+      "You got this. Your plan targets your build_muscle goal across sessions.",
     changes_made: ["x"],
     coaching_cue: "keep it up — show up on time",
     model_used: "z-ai/glm-5.1",
@@ -512,7 +607,10 @@ Deno.test("mocked LLM-success: regenerates R5 when composed block lacks data tok
     makeReq({ goal: "build_muscle", daysPerWeek: 4 }),
   );
   const block = `${n.headline} ${n.reasoning} ${n.coaching_cue}`;
-  assert(hasDataToken(block), `regenerated block still lacks data token: ${block}`);
+  assert(
+    hasDataToken(block),
+    `regenerated block still lacks data token: ${block}`,
+  );
   assert(corrections.some((c) => c.includes("no data token")));
 });
 
@@ -532,7 +630,10 @@ Deno.test("mocked LLM-success: regenerates reasoning that contradicts packet num
     makeReq({ daysPerWeek: 3 }),
   );
   // The regenerated reasoning must NOT contain the contradicting "seven days".
-  assert(!/\bseven\b/.test(n.reasoning.toLowerCase()), `still contradicts: ${n.reasoning}`);
+  assert(
+    !/\bseven\b/.test(n.reasoning.toLowerCase()),
+    `still contradicts: ${n.reasoning}`,
+  );
   assert(corrections.some((c) => c.includes("contradiction")));
 });
 
@@ -546,7 +647,10 @@ Deno.test("mocked LLM-success: consistent day count is NOT flagged", () => {
     model_used: "z-ai/glm-5.1",
     is_fallback: false,
   };
-  const { corrections } = applyNarrativeGuardrail(raw, makeReq({ daysPerWeek: 3 }));
+  const { corrections } = applyNarrativeGuardrail(
+    raw,
+    makeReq({ daysPerWeek: 3 }),
+  );
   assert(!corrections.some((c) => c.includes("contradiction")));
 });
 
@@ -558,32 +662,40 @@ Deno.test("parseNarrative: applies guardrail to LLM JSON output (R3 emoji strip)
   // Simulate an LLM response that includes emoji in the reasoning.
   const llmJson = JSON.stringify({
     headline: "Built to grow 💪",
-    reasoning: "Your plan targets your build_muscle goal across 3 days a week with dumbbells.",
+    reasoning:
+      "Your plan targets your build_muscle goal across 3 days a week with dumbbells.",
     changes_made: ["Plan built"],
     coaching_cue: "Track your sets.",
   });
   const parsed = parseNarrative(llmJson, makeReq());
   assert(parsed !== null);
-  assert(emojiCount(parsed!.headline) === 0, `headline still has emoji: ${parsed!.headline}`);
+  assert(
+    emojiCount(parsed!.headline) === 0,
+    `headline still has emoji: ${parsed!.headline}`,
+  );
 });
 
 Deno.test("parseNarrative: applies R8 to LLM JSON output (strips excess '?')", () => {
   const llmJson = JSON.stringify({
     headline: "Ready?",
-    reasoning: "Can we do it? Should we try? Will it stick? Your plan targets your goal.",
+    reasoning:
+      "Can we do it? Should we try? Will it stick? Your plan targets your goal.",
     changes_made: ["Plan built"],
     coaching_cue: "Yes.",
   });
   const parsed = parseNarrative(llmJson, makeReq());
   assert(parsed !== null);
-  const all = `${parsed!.headline} ${parsed!.reasoning} ${parsed!.coaching_cue}`;
+  const all = `${parsed!.headline} ${parsed!.reasoning} ${
+    parsed!.coaching_cue
+  }`;
   assert(questionCount(all) <= 1, `too many '?': ${questionCount(all)}`);
 });
 
 Deno.test("parseNarrative: applies R4 to LLM JSON output (strips banned phrases)", () => {
   const llmJson = JSON.stringify({
     headline: "Great job — your plan is ready",
-    reasoning: "You got this. Your plan targets your build_muscle goal across 3 days a week.",
+    reasoning:
+      "You got this. Your plan targets your build_muscle goal across 3 days a week.",
     changes_made: ["Plan built"],
     coaching_cue: "Track your sets.",
   });
@@ -594,7 +706,9 @@ Deno.test("parseNarrative: applies R4 to LLM JSON output (strips banned phrases)
 });
 
 Deno.test("parseNarrative: applies R2 to LLM JSON output (composed-block <=60 words)", () => {
-  const longReasoning = Array(100).fill("your training plan is ready").join(" ");
+  const longReasoning = Array(100).fill("your training plan is ready").join(
+    " ",
+  );
   const llmJson = JSON.stringify({
     headline: "Here is your plan",
     reasoning: longReasoning,
@@ -603,7 +717,8 @@ Deno.test("parseNarrative: applies R2 to LLM JSON output (composed-block <=60 wo
   });
   const parsed = parseNarrative(llmJson, makeReq());
   assert(parsed !== null);
-  const composed = [parsed!.headline, parsed!.reasoning, parsed!.coaching_cue].join(" ");
+  const composed = [parsed!.headline, parsed!.reasoning, parsed!.coaching_cue]
+    .join(" ");
   assert(
     wordCount(composed) <= 60,
     `composed block word-count ${wordCount(composed)} > 60: ${composed}`,
@@ -617,10 +732,18 @@ Deno.test("parseNarrative: regenerates R5 when LLM output lacks data token", () 
     changes_made: ["Plan built"],
     coaching_cue: "Let us begin.",
   });
-  const parsed = parseNarrative(llmJson, makeReq({ goal: "build_muscle", daysPerWeek: 4 }));
+  const parsed = parseNarrative(
+    llmJson,
+    makeReq({ goal: "build_muscle", daysPerWeek: 4 }),
+  );
   assert(parsed !== null);
-  const block = `${parsed!.headline} ${parsed!.reasoning} ${parsed!.coaching_cue}`;
-  assert(hasDataToken(block), `regenerated block still lacks data token: ${block}`);
+  const block = `${parsed!.headline} ${parsed!.reasoning} ${
+    parsed!.coaching_cue
+  }`;
+  assert(
+    hasDataToken(block),
+    `regenerated block still lacks data token: ${block}`,
+  );
 });
 
 Deno.test("parseNarrative: regenerates reasoning contradicting packet numbers", () => {
@@ -633,7 +756,10 @@ Deno.test("parseNarrative: regenerates reasoning contradicting packet numbers", 
   });
   const parsed = parseNarrative(llmJson, makeReq({ daysPerWeek: 3 }));
   assert(parsed !== null);
-  assert(!/\bseven\b/.test(parsed!.reasoning.toLowerCase()), `still contradicts: ${parsed!.reasoning}`);
+  assert(
+    !/\bseven\b/.test(parsed!.reasoning.toLowerCase()),
+    `still contradicts: ${parsed!.reasoning}`,
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -641,10 +767,13 @@ Deno.test("parseNarrative: regenerates reasoning contradicting packet numbers", 
 // ---------------------------------------------------------------------------
 
 /** Install a global fetch mock that returns a fixed LLM JSON body. */
-async function withMockLlm<T>(llmJson: string, req: typeof MIN_REQUEST, fn: () => Promise<T>): Promise<T> {
+async function withMockLlm<T>(
+  llmJson: string,
+  _req: typeof MIN_REQUEST,
+  fn: () => Promise<T>,
+): Promise<T> {
   const origFetch = globalThis.fetch;
-  const encoder = new TextEncoder();
-  globalThis.fetch = (_input: string | URL | Request, init?: RequestInit) =>
+  globalThis.fetch = (_input: string | URL | Request, _init?: RequestInit) =>
     Promise.resolve(
       new Response(
         JSON.stringify({
@@ -668,19 +797,32 @@ Deno.test("narratePlan (mocked LLM): applies R3/R4/R8/R2 guardrail to LLM output
     changes_made: ["Plan built"],
     coaching_cue: "keep it up — track your sets.",
   });
-  const captured = await withEnv("OPENROUTER_API_KEY", "sk-or-test-mock", () =>
-    withMockLlm(llmJson, MIN_REQUEST, () => narratePlan(MIN_REQUEST)));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    "sk-or-test-mock",
+    () => withMockLlm(llmJson, MIN_REQUEST, () => narratePlan(MIN_REQUEST)),
+  );
   assertEquals(captured.is_fallback, false);
   assertEquals(captured.model_used, "z-ai/glm-5.1");
-  const all = `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
+  const all =
+    `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
   assert(emojiCount(all) === 0, `emoji leaked: ${all}`);
   assert(questionCount(all) <= 1, `too many '?': ${questionCount(all)}`);
   assert(!hasBannedPhrase(captured.headline), `headline: ${captured.headline}`);
-  assert(!hasBannedPhrase(captured.coaching_cue), `cue: ${captured.coaching_cue}`);
-  const composedLlmr2 = [captured.headline, captured.reasoning, captured.coaching_cue].join(" ");
+  assert(
+    !hasBannedPhrase(captured.coaching_cue),
+    `cue: ${captured.coaching_cue}`,
+  );
+  const composedLlmr2 = [
+    captured.headline,
+    captured.reasoning,
+    captured.coaching_cue,
+  ].join(" ");
   assert(
     wordCount(composedLlmr2) <= 60,
-    `composed block word-count ${wordCount(composedLlmr2)} > 60: ${composedLlmr2}`,
+    `composed block word-count ${
+      wordCount(composedLlmr2)
+    } > 60: ${composedLlmr2}`,
   );
 });
 
@@ -692,10 +834,16 @@ Deno.test("narratePlan (mocked LLM): regenerates reasoning contradicting packet 
     changes_made: ["Plan built"],
     coaching_cue: "Track your sets.",
   });
-  const captured = await withEnv("OPENROUTER_API_KEY", "sk-or-test-mock", () =>
-    withMockLlm(llmJson, MIN_REQUEST, () => narratePlan(MIN_REQUEST)));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    "sk-or-test-mock",
+    () => withMockLlm(llmJson, MIN_REQUEST, () => narratePlan(MIN_REQUEST)),
+  );
   assertEquals(captured.is_fallback, false);
-  assert(!/\bseven\b/.test(captured.reasoning.toLowerCase()), `still contradicts: ${captured.reasoning}`);
+  assert(
+    !/\bseven\b/.test(captured.reasoning.toLowerCase()),
+    `still contradicts: ${captured.reasoning}`,
+  );
 });
 
 Deno.test("narratePlan (mocked LLM): regenerates R5 when LLM output lacks data token", async () => {
@@ -705,13 +853,22 @@ Deno.test("narratePlan (mocked LLM): regenerates R5 when LLM output lacks data t
     changes_made: ["Plan built"],
     coaching_cue: "Let us begin.",
   });
-  const captured = await withEnv("OPENROUTER_API_KEY", "sk-or-test-mock", () =>
-    withMockLlm(llmJson, MIN_REQUEST, () => narratePlan({
-      ...MIN_REQUEST,
-      goal: "build_muscle",
-      daysPerWeek: 4,
-    })));
+  const captured = await withEnv(
+    "OPENROUTER_API_KEY",
+    "sk-or-test-mock",
+    () =>
+      withMockLlm(llmJson, MIN_REQUEST, () =>
+        narratePlan({
+          ...MIN_REQUEST,
+          goal: "build_muscle",
+          daysPerWeek: 4,
+        })),
+  );
   assertEquals(captured.is_fallback, false);
-  const block = `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
-  assert(hasDataToken(block), `regenerated block still lacks data token: ${block}`);
+  const block =
+    `${captured.headline} ${captured.reasoning} ${captured.coaching_cue}`;
+  assert(
+    hasDataToken(block),
+    `regenerated block still lacks data token: ${block}`,
+  );
 });

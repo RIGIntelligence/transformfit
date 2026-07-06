@@ -2,17 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transformfit/features/onboarding/welcome_screen.dart';
+import 'package:transformfit/widgets/transformfit_brand_mark.dart';
 
 Widget _wrap() {
-  return const ProviderScope(
-    child: MaterialApp(
-      home: WelcomeScreen(),
-    ),
-  );
+  return const ProviderScope(child: MaterialApp(home: WelcomeScreen()));
 }
 
 void main() {
-  testWidgets('Welcome screen renders with a heading', (WidgetTester tester) async {
+  testWidgets('Welcome opens with the real TransformFitAI brand mark', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(_wrap());
+    await tester.pumpAndSettle();
+
+    final brandMark = find.bySemanticsLabel(
+      TransformFitBrandMark.defaultSemanticsLabel,
+    );
+    final heading = find.bySemanticsLabel('Welcome heading');
+
+    expect(brandMark, findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName ==
+                TransformFitBrandMark.assetPath,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      tester.getCenter(brandMark).dy,
+      lessThan(tester.getCenter(heading).dy),
+    );
+  });
+
+  testWidgets('Welcome screen renders with a heading', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(_wrap());
     await tester.pumpAndSettle();
 

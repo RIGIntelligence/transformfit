@@ -43,8 +43,8 @@ CoachSignal buildCoachSignal(SessionState state) {
     return _painOrInjuryGuardrail(painDebrief);
   }
 
-  final riskSignal = _coastingOrOverreachingSignal(state);
-  if (riskSignal != null) return riskSignal;
+  final activeRiskSignal = _activeSessionRiskSignal(state);
+  if (activeRiskSignal != null) return activeRiskSignal;
 
   if (readiness != null && _isLowReadiness(readiness)) {
     return _domsOrLowReadiness(readiness);
@@ -53,6 +53,9 @@ CoachSignal buildCoachSignal(SessionState state) {
   if (state.activeSession != null) {
     return _liveSessionGuidance(state);
   }
+
+  final historicalRiskSignal = _historicalRiskSignal(state);
+  if (historicalRiskSignal != null) return historicalRiskSignal;
 
   if (state.history.isNotEmpty || state.lastDebrief != null) {
     return _progressInterpretation(state);
@@ -286,18 +289,78 @@ CoachSignal _progressInterpretation(SessionState state) {
   );
 }
 
-CoachSignal? _coastingOrOverreachingSignal(SessionState state) {
-  final active = state.activeSession;
-  final activeSets = active?.loggedSets ?? const <LoggedSet>[];
-  if (activeSets.length >= 3 && _averageRpe(activeSets) <= 5) {
-    return _coastingSignal(
-      setCount: activeSets.length,
-      observation:
-          '${activeSets.length} live sets average ${_formatRpe(_averageRpe(activeSets))}/10 RPE. Raise intent or close the session cleanly.',
-      nextAction: 'Raise the next set by one RPE',
+enum _EffortRiskKind { none, coasting, overreaching }
+
+class _EffortRiskClassification {
+  const _EffortRiskClassification({
+    required this.kind,
+    required this.setCount,
+    required this.averageRpe,
+    required this.latestVolume,
+    required this.previousVolume,
+  });
+
+  const _EffortRiskClassification.none()
+    : kind = _EffortRiskKind.none,
+      setCount = 0,
+      averageRpe = 10,
+      latestVolume = 0,
+      previousVolume = 0;
+
+  final _EffortRiskKind kind;
+  final int setCount;
+  final double averageRpe;
+  final double latestVolume;
+  final double previousVolume;
+}
+
+_EffortRiskClassification _classifyEffortRisk({
+  required List<LoggedSet> loggedSets,
+  num? latestVolume,
+  num? previousVolume,
+}) {
+  final currentVolume = (latestVolume ?? 0).toDouble();
+  final priorVolume = (previousVolume ?? 0).toDouble();
+  if (priorVolume > 0 && currentVolume > priorVolume * 1.6) {
+    return _EffortRiskClassification(
+      kind: _EffortRiskKind.overreaching,
+      setCount: loggedSets.length,
+      averageRpe: _averageRpe(loggedSets),
+      latestVolume: currentVolume,
+      previousVolume: priorVolume,
     );
   }
 
+  final averageRpe = _averageRpe(loggedSets);
+  if (loggedSets.length >= 3 && averageRpe <= 5) {
+    return _EffortRiskClassification(
+      kind: _EffortRiskKind.coasting,
+      setCount: loggedSets.length,
+      averageRpe: averageRpe,
+      latestVolume: currentVolume,
+      previousVolume: priorVolume,
+    );
+  }
+
+  return const _EffortRiskClassification.none();
+}
+
+CoachSignal? _activeSessionRiskSignal(SessionState state) {
+  final active = state.activeSession;
+  final activeSets = active?.loggedSets ?? const <LoggedSet>[];
+  final classification = _classifyEffortRisk(loggedSets: activeSets);
+  if (classification.kind == _EffortRiskKind.coasting) {
+    return _coastingSignal(
+      setCount: classification.setCount,
+      observation:
+          '${classification.setCount} live sets average ${_formatRpe(classification.averageRpe)}/10 RPE. Raise intent or close the session cleanly.',
+      nextAction: 'Raise the next set by one RPE',
+    );
+  }
+  return null;
+}
+
+CoachSignal? _historicalRiskSignal(SessionState state) {
   final completed = state.history
       .where(
         (session) => session.endedAt != null && session.loggedSets.isNotEmpty,
@@ -306,26 +369,28 @@ CoachSignal? _coastingOrOverreachingSignal(SessionState state) {
   if (completed.length < 2) return null;
   final latest = completed.last;
   final previous = completed[completed.length - 2];
-  final latestVolume = latest.totalVolume ?? 0;
-  final previousVolume = previous.totalVolume ?? 0;
-  if (previousVolume > 0 && latestVolume > previousVolume * 1.6) {
-    return _overreachingSignal(
-      observation:
-          'Volume jumped from ${previousVolume.round()} kg to ${latestVolume.round()} kg. Keep the next increase bounded.',
-      nextAction: 'Hold volume steady next time',
-    );
+  final classification = _classifyEffortRisk(
+    loggedSets: latest.loggedSets,
+    latestVolume: latest.totalVolume,
+    previousVolume: previous.totalVolume,
+  );
+  switch (classification.kind) {
+    case _EffortRiskKind.overreaching:
+      return _overreachingSignal(
+        observation:
+            'Volume jumped from ${classification.previousVolume.round()} kg to ${classification.latestVolume.round()} kg. Keep the next increase bounded.',
+        nextAction: 'Hold volume steady next time',
+      );
+    case _EffortRiskKind.coasting:
+      return _coastingSignal(
+        setCount: classification.setCount,
+        observation:
+            'Last session averaged ${_formatRpe(classification.averageRpe)}/10 RPE across ${classification.setCount} sets.',
+        nextAction: 'Make the first working set honest',
+      );
+    case _EffortRiskKind.none:
+      return null;
   }
-
-  final latestAverageRpe = _averageRpe(latest.loggedSets);
-  if (latest.loggedSets.length >= 3 && latestAverageRpe <= 5) {
-    return _coastingSignal(
-      setCount: latest.loggedSets.length,
-      observation:
-          'Last session averaged ${_formatRpe(latestAverageRpe)}/10 RPE across ${latest.loggedSets.length} sets.',
-      nextAction: 'Make the first working set honest',
-    );
-  }
-  return null;
 }
 
 CoachSignal _coastingSignal({

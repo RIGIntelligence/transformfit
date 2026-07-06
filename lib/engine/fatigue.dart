@@ -8,14 +8,9 @@
 /// narrate. A surfaced deterministic fallback is used on LLM failure.
 library;
 
-import 'dart:math' as math hide Point, Random;
-
 /// A daily volume entry for ACWR computation.
 class DailyVolume {
-  const DailyVolume({
-    required this.date,
-    required this.volumeKg,
-  });
+  const DailyVolume({required this.date, required this.volumeKg});
 
   final DateTime date;
   final double volumeKg;
@@ -38,12 +33,12 @@ class FatigueResult {
   final double volumeMultiplier;
 
   Map<String, Object?> toJson() => {
-        'acwr': acwr,
-        'state': state,
-        'acuteLoad': acuteLoad,
-        'chronicLoad': chronicLoad,
-        'volumeMultiplier': volumeMultiplier,
-      };
+    'acwr': acwr,
+    'state': state,
+    'acuteLoad': acuteLoad,
+    'chronicLoad': chronicLoad,
+    'volumeMultiplier': volumeMultiplier,
+  };
 }
 
 /// Compute the ACWR and fatigue state from daily volume history.

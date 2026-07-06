@@ -80,6 +80,8 @@ class CoachCommandScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 18),
+                      _CoachClarityBrief(center: center),
+                      const SizedBox(height: 18),
                       _ActionRail(center: center),
                       const SizedBox(height: 24),
                       if (wide)
@@ -134,8 +136,6 @@ class _FiveStarExperiencePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Semantics(
       container: true,
       excludeSemantics: true,
@@ -144,38 +144,16 @@ class _FiveStarExperiencePanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  moment.isStoreReviewEligible
-                      ? Icons.rate_review_outlined
-                      : Icons.verified_outlined,
-                  color: theme.colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Trust milestone',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(moment.headline, style: theme.textTheme.titleMedium),
-                    ],
-                  ),
-                ),
-                _TracePill(
-                  icon: Icons.source_outlined,
-                  label: moment.sourceTraceLabel,
-                ),
-              ],
+            _CoachPanelHeader(
+              icon: moment.isStoreReviewEligible
+                  ? Icons.rate_review_outlined
+                  : Icons.verified_outlined,
+              label: 'Trust milestone',
+              headline: moment.headline,
+              trailing: _TracePill(
+                icon: Icons.source_outlined,
+                label: moment.sourceTraceLabel,
+              ),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -217,8 +195,6 @@ class _EmotionalMapPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Semantics(
       container: true,
       excludeSemantics: true,
@@ -227,39 +203,14 @@ class _EmotionalMapPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.auto_awesome_outlined,
-                  color: theme.colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Emotional map',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        emotion.headline,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                    ],
-                  ),
-                ),
-                _TracePill(
-                  icon: Icons.verified_outlined,
-                  label: emotion.confidenceLabel,
-                ),
-              ],
+            _CoachPanelHeader(
+              icon: Icons.auto_awesome_outlined,
+              label: 'Emotional map',
+              headline: emotion.headline,
+              trailing: _TracePill(
+                icon: Icons.verified_outlined,
+                label: emotion.confidenceLabel,
+              ),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -357,8 +308,6 @@ class _BehaviorRepairPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Semantics(
       container: true,
       excludeSemantics: true,
@@ -367,36 +316,14 @@ class _BehaviorRepairPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.psychology_outlined,
-                  color: theme.colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Behavior repair',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(repair.headline, style: theme.textTheme.titleMedium),
-                    ],
-                  ),
-                ),
-                _TracePill(
-                  icon: Icons.verified_outlined,
-                  label: repair.confidenceLabel,
-                ),
-              ],
+            _CoachPanelHeader(
+              icon: Icons.psychology_outlined,
+              label: 'Behavior repair',
+              headline: repair.headline,
+              trailing: _TracePill(
+                icon: Icons.verified_outlined,
+                label: repair.confidenceLabel,
+              ),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -526,39 +453,14 @@ class _RigSystemsPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.account_tree_outlined,
-                  color: theme.colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'RIG systems',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        systems.selectedArchetype.label,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                    ],
-                  ),
-                ),
-                _TracePill(
-                  icon: Icons.speed_outlined,
-                  label: 'BMS ${systems.bmsLabel}',
-                ),
-              ],
+            _CoachPanelHeader(
+              icon: Icons.account_tree_outlined,
+              label: 'RIG systems',
+              headline: systems.selectedArchetype.label,
+              trailing: _TracePill(
+                icon: Icons.speed_outlined,
+                label: 'BMS ${systems.bmsLabel}',
+              ),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -753,6 +655,148 @@ class _ActionRail extends StatelessWidget {
   }
 }
 
+class _CoachClarityBrief extends StatelessWidget {
+  const _CoachClarityBrief({required this.center});
+
+  final CoachCommandCenter center;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      label:
+          'Coach clarity brief. Today call: ${center.primaryAction}. '
+          'Why it changed: ${center.commandReason}. '
+          'What to do next: ${center.next24Hours.first}.',
+      child: _CoachPanel(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Coach clarity brief',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 12),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final wide = constraints.maxWidth >= 780;
+                return Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    _ClarityCell(
+                      width: wide
+                          ? (constraints.maxWidth - 24) / 3
+                          : constraints.maxWidth,
+                      icon: Icons.flag_outlined,
+                      label: "Today's call",
+                      value: center.primaryAction,
+                    ),
+                    _ClarityCell(
+                      width: wide
+                          ? (constraints.maxWidth - 24) / 3
+                          : constraints.maxWidth,
+                      icon: Icons.insights_outlined,
+                      label: 'Why it changed',
+                      value: center.commandReason,
+                    ),
+                    _ClarityCell(
+                      width: wide
+                          ? (constraints.maxWidth - 24) / 3
+                          : constraints.maxWidth,
+                      icon: Icons.route_outlined,
+                      label: 'What to do next',
+                      value: center.next24Hours.first,
+                    ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _TracePill(
+                  icon: Icons.shield_outlined,
+                  label: center.riskLabel,
+                ),
+                _TracePill(
+                  icon: Icons.verified_outlined,
+                  label: center.confidenceLabel,
+                ),
+                _TracePill(
+                  icon: Icons.source_outlined,
+                  label: center.sourceTraceLabel,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ClarityCell extends StatelessWidget {
+  const _ClarityCell({
+    required this.width,
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final double width;
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      width: width,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 136),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF151515),
+          border: Border.all(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+          ),
+          borderRadius: BorderRadius.circular(
+            DigitalAtelierTokens.cornerRadius,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(value, style: theme.textTheme.bodyMedium),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _CommandButton extends StatelessWidget {
   const _CommandButton({
     required this.label,
@@ -796,8 +840,6 @@ class _CommandPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Semantics(
       container: true,
       excludeSemantics: true,
@@ -807,37 +849,12 @@ class _CommandPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.psychology_alt_outlined,
-                  color: theme.colorScheme.primary,
-                  size: 28,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Daily command',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        center.primaryAction,
-                        style: theme.textTheme.headlineMedium?.copyWith(
-                          fontSize: 34,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            _CoachPanelHeader(
+              icon: Icons.psychology_alt_outlined,
+              label: 'Daily command',
+              headline: center.primaryAction,
+              iconSize: 28,
+              prominent: true,
             ),
             const SizedBox(height: 18),
             _SignalLine(label: 'Reason', value: center.commandReason),
@@ -976,6 +993,57 @@ class _LaneCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CoachPanelHeader extends StatelessWidget {
+  const _CoachPanelHeader({
+    required this.icon,
+    required this.label,
+    required this.headline,
+    this.trailing,
+    this.iconSize = 24,
+    this.prominent = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final String headline;
+  final Widget? trailing;
+  final double iconSize;
+  final bool prominent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final headlineStyle = prominent
+        ? theme.textTheme.headlineMedium?.copyWith(fontSize: 34)
+        : theme.textTheme.titleMedium;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: theme.colorScheme.primary, size: iconSize),
+        SizedBox(width: prominent ? 12 : 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              SizedBox(height: prominent ? 6 : 4),
+              Text(headline, style: headlineStyle),
+            ],
+          ),
+        ),
+        if (trailing != null) ...[const SizedBox(width: 10), trailing!],
+      ],
     );
   }
 }

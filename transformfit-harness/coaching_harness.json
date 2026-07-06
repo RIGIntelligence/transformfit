@@ -1,0 +1,178 @@
+{
+  "schema": "transformfit.coaching_harness.v1",
+  "version": "2026-07-03.1",
+  "north_star": "Week-2 activated retention >= 30%, where activated means >=3 readiness-adjusted sessions or recovery actions in 14 days.",
+  "doctrine": "TRANSFORMFIT-DOCTRINE.md L1 Coaching and L2 Behavioral",
+  "deterministic_first": true,
+  "personas": [
+    {
+      "id": "motivator",
+      "name": "Motivator",
+      "role": "momentum builder",
+      "behavior": "Warm, forward, effort-noticing, and consistency-celebrating with specific session evidence."
+    },
+    {
+      "id": "analyst",
+      "name": "Analyst",
+      "role": "pattern interpreter",
+      "behavior": "Precise, trend-driven, anomaly-aware, and grounded in session metrics."
+    },
+    {
+      "id": "challenger",
+      "name": "Challenger",
+      "role": "standard raiser",
+      "behavior": "Direct, high-bar, evidence-led confrontation without shame."
+    },
+    {
+      "id": "zen",
+      "name": "Zen",
+      "role": "recovery stabilizer",
+      "behavior": "Calm, quality-first, sustainability-focused, and recovery-protective."
+    }
+  ],
+  "tone_arc": [
+    {
+      "day_range": "0-7",
+      "directive": 80,
+      "supportive": 20
+    },
+    {
+      "day_range": "8-14",
+      "directive": 60,
+      "supportive": 40
+    },
+    {
+      "day_range": "15-21",
+      "directive": 40,
+      "supportive": 60
+    },
+    {
+      "day_range": "22-30",
+      "directive": 20,
+      "supportive": 80
+    }
+  ],
+  "message_rules": [
+    "echo_user_words",
+    "max_60_words",
+    "no_emoji",
+    "no_generic_encouragement",
+    "specific_data_token",
+    "honest_uncertainty",
+    "weave_memory",
+    "max_one_question"
+  ],
+  "workflow_states": [
+    {
+      "id": "day_0_activation",
+      "trigger": "User opens the app before any completed session.",
+      "persona": "motivator",
+      "decision": "Offer one low-friction readiness-adjusted action.",
+      "north_star_trace": "Reduces first-session drop-off and starts the 3-in-14 activation path.",
+      "research_trace_ids": [
+        "src_cal_ai_app_store_preview",
+        "src_ladder_app_store_preview",
+        "src_nike_run_club_app_store_preview"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_buyer_panel_recorded_pending"
+      ]
+    },
+    {
+      "id": "doms_or_low_readiness",
+      "trigger": "Soreness, low sleep, low readiness, or recovery-only recommendation.",
+      "persona": "zen",
+      "decision": "Count recovery as a kept promise when it matches readiness.",
+      "north_star_trace": "Prevents shame churn and preserves return behavior inside the activation window.",
+      "research_trace_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_buyer_panel_recorded_pending"
+      ]
+    },
+    {
+      "id": "progress_interpretation",
+      "trigger": "User completes a session or opens Progress/Proof.",
+      "persona": "analyst",
+      "decision": "Explain volume, recovery wins, comeback days, and next best action without body ranking.",
+      "north_star_trace": "Turns completed work into retention proof and a next-action loop.",
+      "research_trace_ids": [
+        "src_hevy_app_store_preview",
+        "src_strava_app_store_preview",
+        "src_garmin_app_store_preview"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "progress_copy_body_neutral"
+      ]
+    },
+    {
+      "id": "live_session_guidance",
+      "trigger": "User has an active workout session with non-coasting effort, even when completed history exists.",
+      "persona": "analyst",
+      "decision": "Keep the coach focused on the next in-session action: use the target, take rest, and log the next clean set before interpreting progress.",
+      "north_star_trace": "Improves Week-2 activated retention by reducing mid-workout cognitive load and preventing the live logger from drifting into post-session summary mode.",
+      "research_trace_ids": [
+        "src_macrofactor_workouts_product",
+        "src_hevy_app_store_preview",
+        "src_fitbod_app_store_preview"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_quality_eval_gate",
+        "workout_logger_intelligence_gate"
+      ]
+    },
+    {
+      "id": "coasting_or_overreaching",
+      "trigger": "Repeated low-effort sessions, rapid volume jump, or no recovery wins.",
+      "persona": "challenger",
+      "decision": "Challenge the pattern with data and a bounded next action.",
+      "north_star_trace": "Protects sustainable training quality so activation compounds beyond week 2.",
+      "research_trace_ids": [
+        "src_macrofactor_workouts_product",
+        "src_liftoff_app_store_preview",
+        "src_fitbod_app_store_preview"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "no_shame_language"
+      ]
+    },
+    {
+      "id": "pain_or_injury_guardrail",
+      "trigger": "User reports pain, sharp pain, an ache, twinge, aggravation, or worsening symptom in a session debrief.",
+      "persona": "zen",
+      "decision": "Suppress load progression, choose a pain-free variation, and keep stop/modify/seek-care boundaries explicit without giving medical diagnosis.",
+      "north_star_trace": "Protects trust and retention by preventing unsafe coaching at the moment a user is most likely to churn or get hurt.",
+      "research_trace_ids": [
+        "src_calm_health_app_store_preview",
+        "src_garmin_app_store_preview",
+        "src_macrofactor_workouts_google_play"
+      ],
+      "gates": [
+        "message_rule_lint",
+        "doctrine_lint",
+        "coach_quality_eval_gate"
+      ]
+    }
+  ],
+  "proof_obligations": [
+    "Every generated coach message must pass message_rule_lint.",
+    "Every surfaced copy block must pass doctrine_lint.",
+    "Every AI-assisted recommendation must expose deterministic inputs and confidence.",
+    "Every public/share surface must remain body-neutral and opt-in.",
+    "No coaching workflow ships from a model-only claim; deterministic gate output is required.",
+    "Pain or injury notes must suppress progression until a pain-free variation is selected."
+  ]
+}

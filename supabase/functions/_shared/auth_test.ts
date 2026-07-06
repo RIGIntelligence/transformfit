@@ -1,6 +1,6 @@
 // Unit tests for the shared JWT-resolution helper.
 // Run: deno test --allow-all supabase/functions/_shared/auth_test.ts
-import { assert, assertEquals, assertNotEquals } from "jsr:@std/assert";
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
 import {
   base64urlDecode,
   decodeJwtPayload,
@@ -13,7 +13,9 @@ Deno.env.set("SUPABASE_JWT_SECRET", TEST_JWT_SECRET);
 Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
 Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
 
-function withJwtDefaults(payload: Record<string, unknown>): Record<string, unknown> {
+function withJwtDefaults(
+  payload: Record<string, unknown>,
+): Record<string, unknown> {
   return {
     exp: Math.floor(Date.now() / 1000) + 3600,
     iss: "supabase",
@@ -31,7 +33,10 @@ function enc(obj: unknown): string {
 function encBytes(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
+    /=+$/,
+    "",
+  );
 }
 
 /** Build a signed HS256 JWT with the given payload. */
@@ -45,26 +50,33 @@ async function makeJwt(payload: Record<string, unknown>): Promise<string> {
     false,
     ["sign"],
   );
-  const sig = new Uint8Array(await crypto.subtle.sign(
-    "HMAC",
-    key,
-    new TextEncoder().encode(signingInput),
-  ));
+  const sig = new Uint8Array(
+    await crypto.subtle.sign(
+      "HMAC",
+      key,
+      new TextEncoder().encode(signingInput),
+    ),
+  );
   return `${signingInput}.${encBytes(sig)}`;
 }
 
 function makeForgedJwt(payload: Record<string, unknown>): string {
-  return `${enc({ alg: "HS256", typ: "JWT" })}.${enc(withJwtDefaults(payload))}.signature`;
+  return `${enc({ alg: "HS256", typ: "JWT" })}.${
+    enc(withJwtDefaults(payload))
+  }.signature`;
 }
 
 function reqWithAuth(token: string | null): Request {
   const headers = new Headers();
   if (token) headers.set("authorization", `Bearer ${token}`);
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/whoami", {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ user_id: "body-b" }),
-  });
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/whoami",
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ user_id: "body-b" }),
+    },
+  );
 }
 
 // --- base64urlDecode ---
@@ -74,12 +86,29 @@ function b64url(input: string): string {
   const bytes = new TextEncoder().encode(input);
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
+    /=+$/,
+    "",
+  );
 }
 
 Deno.test("base64urlDecode: round-trips arbitrary UTF-8 (uses - and _)", () => {
-  for (const s of ["hello world", "?>--", "a", "aa", "aaa", "\u00e9clair", "multi byte \u2603"]) {
-    assertEquals(base64urlDecode(b64url(s)), s, `round-trip failed for ${JSON.stringify(s)}`);
+  for (
+    const s of [
+      "hello world",
+      "?>--",
+      "a",
+      "aa",
+      "aaa",
+      "\u00e9clair",
+      "multi byte \u2603",
+    ]
+  ) {
+    assertEquals(
+      base64urlDecode(b64url(s)),
+      s,
+      `round-trip failed for ${JSON.stringify(s)}`,
+    );
   }
 });
 
@@ -97,7 +126,11 @@ Deno.test("base64urlDecode: returns null on a length that is 1 mod 4 (invalid ba
 // --- decodeJwtPayload ---
 
 Deno.test("decodeJwtPayload: decodes a well-formed token payload", async () => {
-  const jwt = await makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
+  const jwt = await makeJwt({
+    sub: "user-a",
+    email: "a@transformfit.test",
+    role: "authenticated",
+  });
   const p = decodeJwtPayload(jwt);
   assert(p !== null);
   assertEquals(p?.sub, "user-a");
@@ -111,7 +144,8 @@ Deno.test("decodeJwtPayload: returns null for wrong segment count", () => {
 });
 
 Deno.test("decodeJwtPayload: returns null for non-JSON payload", () => {
-  const enc = (s: string) => btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const enc = (s: string) =>
+    btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   const bad = `header.${enc("not-json{")}.sig`;
   assertEquals(decodeJwtPayload(bad), null);
 });
@@ -129,7 +163,11 @@ Deno.test("unauthorized: returns 401 with JSON error body, no mutation", () => {
 // --- resolveUser: JWT-only resolution, body user_id ignored ---
 
 Deno.test("resolveUser: valid JWT -> user from sub, ignores body (body is not read)", async () => {
-  const jwt = await makeJwt({ sub: "jwt-user-a", email: "a@transformfit.test", role: "authenticated" });
+  const jwt = await makeJwt({
+    sub: "jwt-user-a",
+    email: "a@transformfit.test",
+    role: "authenticated",
+  });
   const { user, response } = await resolveUser(reqWithAuth(jwt));
   assertEquals(response, null);
   assert(user !== null);
@@ -208,7 +246,10 @@ Deno.test("resolveUser: rejects forged JWT signatures", async () => {
 });
 
 Deno.test("resolveUser: rejects expired JWTs", async () => {
-  const jwt = await makeJwt({ sub: "user-a", exp: Math.floor(Date.now() / 1000) - 10 });
+  const jwt = await makeJwt({
+    sub: "user-a",
+    exp: Math.floor(Date.now() / 1000) - 10,
+  });
   const { user, response } = await resolveUser(reqWithAuth(jwt));
   assertEquals(user, null);
   assert(response !== null);

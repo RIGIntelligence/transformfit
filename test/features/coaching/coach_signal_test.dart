@@ -189,6 +189,88 @@ void main() {
       expect(coachSignalCopyIsGateSafe(signal), isTrue);
     });
 
+    test('active session ignores historical overreach and stays live', () {
+      final readiness = ReadinessEntry(
+        id: 'readiness-live-overreach',
+        date: DateTime(2026, 7, 2),
+        score: 82,
+        zone: 'push',
+        energyLevel: 8,
+        sleepQuality: 8,
+        sorenessMap: const [],
+      );
+      final signal = buildCoachSignal(
+        SessionState(
+          readinessEntry: readiness,
+          activeSession: WorkoutSession(
+            id: 'session-live-overreach',
+            startedAt: DateTime(2026, 7, 2, 8),
+            readinessEntryId: readiness.id,
+            loggedSets: const [
+              LoggedSet(
+                id: 'set-live-1',
+                exerciseName: 'Goblet squat',
+                setNumber: 1,
+                weightKg: 40,
+                reps: 8,
+                rpe: 7,
+              ),
+            ],
+          ),
+          history: [
+            WorkoutSession(
+              id: 'session-previous',
+              startedAt: DateTime(2026, 6, 30, 8),
+              endedAt: DateTime(2026, 6, 30, 8, 35),
+              readinessEntryId: 'readiness-previous',
+              loggedSets: const [
+                LoggedSet(
+                  id: 'set-previous-1',
+                  exerciseName: 'Deadlift',
+                  setNumber: 1,
+                  weightKg: 40,
+                  reps: 8,
+                  rpe: 8,
+                ),
+              ],
+            ),
+            WorkoutSession(
+              id: 'session-latest',
+              startedAt: DateTime(2026, 7, 1, 8),
+              endedAt: DateTime(2026, 7, 1, 8, 40),
+              readinessEntryId: 'readiness-latest',
+              loggedSets: const [
+                LoggedSet(
+                  id: 'set-latest-1',
+                  exerciseName: 'Deadlift',
+                  setNumber: 1,
+                  weightKg: 90,
+                  reps: 10,
+                  rpe: 8,
+                ),
+              ],
+            ),
+          ],
+          lastDebrief: SessionDebrief(
+            id: 'debrief-latest',
+            sessionId: 'session-latest',
+            createdAt: DateTime(2026, 7, 1, 9),
+            perceivedExertion: 8,
+            satisfaction: 4,
+            nextSessionFocus: 'Hold deadlift volume steady.',
+          ),
+        ),
+      );
+
+      expect(signal.workflowId, 'live_session_guidance');
+      expect(signal.observationLabel, 'Live set target');
+      expect(signal.observation, contains('inside the workout'));
+      expect(signal.nextAction, 'Log the next clean set');
+      expect(signal.observation, isNot(contains('Volume jumped')));
+      expect(signal.nextAction, isNot('Hold volume steady next time'));
+      expect(coachSignalCopyIsGateSafe(signal), isTrue);
+    });
+
     test('soft live effort routes to challenger workflow', () {
       final readiness = ReadinessEntry(
         id: 'readiness-live',
@@ -242,5 +324,113 @@ void main() {
       expect(signal.nextAction, 'Raise the next set by one RPE');
       expect(coachSignalCopyIsGateSafe(signal), isTrue);
     });
+
+    test(
+      'shared effort classifier keeps live and historical coasting thresholds aligned',
+      () {
+        final liveSignal = buildCoachSignal(
+          SessionState(
+            activeSession: WorkoutSession(
+              id: 'session-live-coasting',
+              startedAt: DateTime(2026, 7, 2, 8),
+              readinessEntryId: 'readiness-live-coasting',
+              loggedSets: const [
+                LoggedSet(
+                  id: 'live-set-1',
+                  exerciseName: 'Goblet squat',
+                  setNumber: 1,
+                  weightKg: 40,
+                  reps: 8,
+                  rpe: 5,
+                ),
+                LoggedSet(
+                  id: 'live-set-2',
+                  exerciseName: 'Goblet squat',
+                  setNumber: 2,
+                  weightKg: 40,
+                  reps: 8,
+                  rpe: 5,
+                ),
+                LoggedSet(
+                  id: 'live-set-3',
+                  exerciseName: 'Goblet squat',
+                  setNumber: 3,
+                  weightKg: 40,
+                  reps: 8,
+                  rpe: 5,
+                ),
+              ],
+            ),
+          ),
+        );
+
+        final historicalSignal = buildCoachSignal(
+          SessionState(
+            history: [
+              WorkoutSession(
+                id: 'session-previous-honest',
+                startedAt: DateTime(2026, 7, 1, 8),
+                endedAt: DateTime(2026, 7, 1, 8, 45),
+                readinessEntryId: 'readiness-previous-honest',
+                loggedSets: const [
+                  LoggedSet(
+                    id: 'previous-set-1',
+                    exerciseName: 'Deadlift',
+                    setNumber: 1,
+                    weightKg: 125,
+                    reps: 8,
+                    rpe: 8,
+                  ),
+                ],
+              ),
+              WorkoutSession(
+                id: 'session-latest-coasting',
+                startedAt: DateTime(2026, 7, 2, 8),
+                endedAt: DateTime(2026, 7, 2, 8, 45),
+                readinessEntryId: 'readiness-latest-coasting',
+                loggedSets: const [
+                  LoggedSet(
+                    id: 'latest-set-1',
+                    exerciseName: 'Goblet squat',
+                    setNumber: 1,
+                    weightKg: 40,
+                    reps: 8,
+                    rpe: 5,
+                  ),
+                  LoggedSet(
+                    id: 'latest-set-2',
+                    exerciseName: 'Goblet squat',
+                    setNumber: 2,
+                    weightKg: 40,
+                    reps: 8,
+                    rpe: 5,
+                  ),
+                  LoggedSet(
+                    id: 'latest-set-3',
+                    exerciseName: 'Goblet squat',
+                    setNumber: 3,
+                    weightKg: 40,
+                    reps: 8,
+                    rpe: 5,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+
+        expect(liveSignal.workflowId, 'coasting_or_overreaching');
+        expect(historicalSignal.workflowId, 'coasting_or_overreaching');
+        expect(liveSignal.observation, contains('5/10 RPE'));
+        expect(historicalSignal.observation, contains('5/10 RPE'));
+        expect(liveSignal.nextAction, 'Raise the next set by one RPE');
+        expect(
+          historicalSignal.nextAction,
+          'Make the first working set honest',
+        );
+        expect(coachSignalCopyIsGateSafe(liveSignal), isTrue);
+        expect(coachSignalCopyIsGateSafe(historicalSignal), isTrue);
+      },
+    );
   });
 }

@@ -1,0 +1,141 @@
+{
+  "schema": "transformfit.testsprite_full_user_testing.v1",
+  "version": "1.0.0",
+  "created_at": "2026-07-02",
+  "truth_status": {
+    "real_recruited_user_testing_complete": false,
+    "live_testsprite_cloud_run_complete": false,
+    "local_deterministic_user_testing_complete": true,
+    "reason": "Direct outreach, paid recruiting, public posting, deploys, and credential changes remain out of scope. TestSprite CLI is installed, but the active API key is invalid/revoked or the provider auth endpoint may be unavailable, so this harness proves the TestSprite command contract plus deterministic local coverage without claiming a cloud run."
+  },
+  "testsprite": {
+    "cli": "testsprite",
+    "mode": "cli_contract_plus_dry_run",
+    "cloud_run_status": "blocked_auth_invalid_or_no_public_url",
+    "required_commands": [
+      "testsprite --version",
+      "testsprite --dry-run --output json project list",
+      "testsprite --dry-run --output json test create-batch --plans <generated-jsonl>",
+      "testsprite --output json auth status"
+    ],
+    "docs": [
+      {
+        "id": "testsprite-command-reference",
+        "url": "https://docs.testsprite.com/cli/reference/command-reference",
+        "lesson": "Use --output json as the stable agent/CI contract; --dry-run skips network and credentials while returning OpenAPI-shaped samples."
+      },
+      {
+        "id": "testsprite-creating-tests",
+        "url": "https://docs.testsprite.com/cli/core/creating-tests",
+        "lesson": "Frontend TestSprite tests are plan files with projectId, type, name, and planSteps; create-batch supports up to 50 plan specs."
+      },
+      {
+        "id": "testsprite-localhost-boundary",
+        "url": "https://docs.testsprite.com/cli/getting-started/quickstart",
+        "lesson": "The CLI requires a public http/https target URL for cloud runs; localhost targets require the TestSprite MCP tunnel."
+      }
+    ]
+  },
+  "expert_panel": [
+    {"id": "expert-01-repo-cartographer", "discipline": "repo architecture", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "repo map, platform gaps, build/test commands"},
+    {"id": "expert-02-runtime-architect", "discipline": "runtime architecture", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "bootstrap, auth, Today god-screen risk, safest slice"},
+    {"id": "expert-03-ux-2026", "discipline": "mobile UX", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "auth-after-value, Today hierarchy, active workout split"},
+    {"id": "expert-04-market-patterns", "discipline": "fitness market research", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "adaptive planning, recovery-aware progression, nutrition friction"},
+    {"id": "expert-05-behavioral-science", "discipline": "behavioral science", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "identity proof, tiny starts, no-shame repair loops"},
+    {"id": "expert-06-ai-coach-workflow", "discipline": "AI coach workflow", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "deterministic decisions, source trace, fallback transparency"},
+    {"id": "expert-07-strength-coach", "discipline": "strength coaching", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "progression, RPE/RIR, pain blocks progression, rest timing"},
+    {"id": "expert-08-verification-strategy", "discipline": "verification", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "1000-scenario strategy, golden/integration/a11y/perf gaps"},
+    {"id": "expert-09-product-ux-criteria", "discipline": "product UX criteria", "source": "codex subagent", "status": "completed_sidecar", "coverage_output": "10 criteria, red flags, activation counter"},
+    {"id": "expert-10-qa", "discipline": "QA", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "E2E flows, negative cases, pass/fail criteria"},
+    {"id": "expert-11-ui-ux-tester", "discipline": "UI/UX testing", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "click-through flows and mobile viewport assertions"},
+    {"id": "expert-12-accessibility", "discipline": "accessibility", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "semantics, text scale, contrast, touch targets"},
+    {"id": "expert-13-performance", "discipline": "performance", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "cold start, tap latency, jank, offline restore"},
+    {"id": "expert-14-security-privacy", "discipline": "security and privacy", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "auth, local data, health data, proof privacy"},
+    {"id": "expert-15-flutter-mobile", "discipline": "Flutter/mobile", "source": "attempted live subagent plus local deterministic lane", "status": "usage_limit_blocked_compensated_locally", "coverage_output": "widget, integration, semantics, native release checks"},
+    {"id": "expert-16-nutritionist", "discipline": "nutrition safety", "source": "local deterministic expert lane", "status": "local_deterministic", "coverage_output": "safe nutrition target, non-diet-culture copy, activation target"},
+    {"id": "expert-17-body-composition", "discipline": "body composition trust", "source": "local deterministic expert lane", "status": "local_deterministic", "coverage_output": "trend context, privacy, no appearance-pressure framing"},
+    {"id": "expert-18-visual-brand", "discipline": "artist and photographer", "source": "local deterministic expert lane", "status": "local_deterministic", "coverage_output": "brand mark use, app icon/launcher surfaces, non-generic imagery criteria"},
+    {"id": "expert-19-gtm-conversion", "discipline": "GTM and conversion", "source": "local deterministic expert lane", "status": "local_deterministic", "coverage_output": "activation, conversion, viral proof-card loop, public-action boundary"},
+    {"id": "expert-20-workflow-architect", "discipline": "workflow architecture", "source": "local deterministic expert lane", "status": "local_deterministic", "coverage_output": "happy paths, branch conditions, failure/recovery handoffs"}
+  ],
+  "user_panel": [
+    {"id": "user-01", "segment": "beginner strength", "primary_job": "finish first workout without intimidation", "risk_to_test": "auth wall before value", "scenario": "opens app, sees plan value, starts first session"},
+    {"id": "user-02", "segment": "intermediate lifter", "primary_job": "log heavy sets fast", "risk_to_test": "set controls too slow", "scenario": "logs top set, sees previous reference, adjusts rest"},
+    {"id": "user-03", "segment": "returning after injury", "primary_job": "train without unsafe pressure", "risk_to_test": "pain ignored", "scenario": "reports pain and expects progression to stop"},
+    {"id": "user-04", "segment": "busy parent", "primary_job": "complete short plan", "risk_to_test": "long scroll hides next action", "scenario": "uses 12-minute fallback on low time"},
+    {"id": "user-05", "segment": "body recomposition", "primary_job": "understand trends without shame", "risk_to_test": "appearance-pressure copy", "scenario": "checks body composition context"},
+    {"id": "user-06", "segment": "nutrition novice", "primary_job": "choose one safe nutrition target", "risk_to_test": "diet-culture framing", "scenario": "sets hydration/protein target"},
+    {"id": "user-07", "segment": "power user", "primary_job": "inspect source-backed coaching", "risk_to_test": "coach hand-waves data", "scenario": "opens trace and verifies why plan changed"},
+    {"id": "user-08", "segment": "accessibility user", "primary_job": "navigate by screen reader", "risk_to_test": "unlabeled controls", "scenario": "starts workout and logs set by semantics"},
+    {"id": "user-09", "segment": "low-end Android", "primary_job": "avoid lag during logging", "risk_to_test": "jank after set logging", "scenario": "logs multiple sets on constrained device"},
+    {"id": "user-10", "segment": "iPhone small screen", "primary_job": "reach primary actions", "risk_to_test": "safe-area/button overlap", "scenario": "uses active workout bottom rail"},
+    {"id": "user-11", "segment": "privacy-sensitive", "primary_job": "share proof without private notes", "risk_to_test": "private health data exposed", "scenario": "generates proof card"},
+    {"id": "user-12", "segment": "offline commuter", "primary_job": "keep session when network fails", "risk_to_test": "lost workout state", "scenario": "starts offline, restores session"},
+    {"id": "user-13", "segment": "fatigued user", "primary_job": "adapt workout to readiness", "risk_to_test": "low readiness still pushes load", "scenario": "yellow/red readiness routes recovery"},
+    {"id": "user-14", "segment": "coach skeptic", "primary_job": "trust the AI coach", "risk_to_test": "hallucinated claims", "scenario": "coach explains with exact data source"},
+    {"id": "user-15", "segment": "habit breaker", "primary_job": "restart after missed day", "risk_to_test": "streak shame", "scenario": "uses comeback flow"},
+    {"id": "user-16", "segment": "new gym user", "primary_job": "understand exercise target", "risk_to_test": "no form/swap support", "scenario": "inspects workout guidance"},
+    {"id": "user-17", "segment": "wearable-adjacent", "primary_job": "understand imperfect readiness signals", "risk_to_test": "false precision", "scenario": "checks readiness caveat"},
+    {"id": "user-18", "segment": "subscription evaluator", "primary_job": "see value before paywall", "risk_to_test": "paywall before activation", "scenario": "completes first meaningful session"},
+    {"id": "user-19", "segment": "social sharer", "primary_job": "share identity-safe progress", "risk_to_test": "body-comparison viral loop", "scenario": "shares kept-promise proof"},
+    {"id": "user-20", "segment": "data quality edge case", "primary_job": "recover from malformed local state", "risk_to_test": "crash or blank state", "scenario": "opens after corrupted snapshot"}
+  ],
+  "scenario_generation": {
+    "required_total": 1000,
+    "personas_axis": "user_panel",
+    "entry_states": [
+      "landing_to_welcome",
+      "intake_to_plan_reveal",
+      "auth_and_profile_guard",
+      "today_readiness",
+      "active_workout_logger",
+      "ai_coach_runtime",
+      "nutrition_target",
+      "body_composition_trust",
+      "progress_and_proof",
+      "offline_restore"
+    ],
+    "risk_modes": [
+      "happy_path",
+      "low_readiness",
+      "pain_or_safety",
+      "offline_or_malformed_state",
+      "privacy_or_auth_boundary"
+    ]
+  },
+  "critical_flows": [
+    {"id": "flow-01-first-open-value", "route": "/", "priority": "p0", "screen": "landing/welcome", "assertions": ["value before account", "single primary CTA", "no body-shame"], "risk_modes": ["happy_path", "privacy_or_auth_boundary"]},
+    {"id": "flow-02-intake-plan-fit", "route": "/onboarding/intake", "priority": "p0", "screen": "intake", "assertions": ["plan-impact explanation", "local persistence", "safe limitations copy"], "risk_modes": ["happy_path", "pain_or_safety"]},
+    {"id": "flow-03-plan-reveal-first-session", "route": "/onboarding/plan-reveal", "priority": "p0", "screen": "plan reveal", "assertions": ["start first session visible", "why plan fits", "no paywall before value"], "risk_modes": ["happy_path"]},
+    {"id": "flow-04-auth-guard", "route": "/auth", "priority": "p0", "screen": "auth", "assertions": ["auth errors recover", "no secret leakage", "profile guard deterministic"], "risk_modes": ["privacy_or_auth_boundary"]},
+    {"id": "flow-05-today-next-action", "route": "/", "priority": "p0", "screen": "Today", "assertions": ["one dominant next action", "why changed visible", "readiness adjusts plan"], "risk_modes": ["happy_path", "low_readiness"]},
+    {"id": "flow-06-active-workout-log-set", "route": "/workout", "priority": "p0", "screen": "active workout", "assertions": ["log set works", "undo works", "previous reference visible"], "risk_modes": ["happy_path"]},
+    {"id": "flow-07-rest-and-set-intelligence", "route": "/workout", "priority": "p0", "screen": "active workout", "assertions": ["rest countdown starts", "selected vs prescribed rest visible", "progression intent explicit"], "risk_modes": ["happy_path", "low_readiness"]},
+    {"id": "flow-08-pain-blocks-progression", "route": "/workout", "priority": "p0", "screen": "active workout", "assertions": ["pain suppresses progression", "safe modify/stop copy", "no push language"], "risk_modes": ["pain_or_safety"]},
+    {"id": "flow-09-ai-coach-trace", "route": "/", "priority": "p0", "screen": "coach surfaces", "assertions": ["source ids visible", "deterministic decision", "fallback transparent"], "risk_modes": ["happy_path", "offline_or_malformed_state"]},
+    {"id": "flow-10-nutrition-target", "route": "/", "priority": "p1", "screen": "Today nutrition", "assertions": ["one target", "safe copy", "proof row updates"], "risk_modes": ["happy_path"]},
+    {"id": "flow-11-body-composition", "route": "/composition", "priority": "p1", "screen": "composition", "assertions": ["trend context", "privacy by default", "imperfect signal caveat"], "risk_modes": ["happy_path", "privacy_or_auth_boundary"]},
+    {"id": "flow-12-progress-recommit", "route": "/progress", "priority": "p1", "screen": "progress", "assertions": ["kept promises lead", "next focus visible", "no ranking"], "risk_modes": ["happy_path"]},
+    {"id": "flow-13-proof-card", "route": "/proof", "priority": "p1", "screen": "proof", "assertions": ["private notes omitted", "identity-safe copy", "share requires explicit action"], "risk_modes": ["privacy_or_auth_boundary"]},
+    {"id": "flow-14-offline-restore", "route": "/", "priority": "p0", "screen": "session restore", "assertions": ["malformed state clears", "active workout persists", "fallback is labeled"], "risk_modes": ["offline_or_malformed_state"]},
+    {"id": "flow-15-accessibility-core", "route": "/", "priority": "p0", "screen": "all primary flows", "assertions": ["semantic labels", "44 point targets", "text scale survives"], "risk_modes": ["happy_path", "low_readiness"]},
+    {"id": "flow-16-low-end-device", "route": "/workout", "priority": "p1", "screen": "active workout", "assertions": ["tap latency budget", "no layout overlap", "scroll stable"], "risk_modes": ["offline_or_malformed_state"]},
+    {"id": "flow-17-comeback-flow", "route": "/", "priority": "p1", "screen": "Today/progress", "assertions": ["missed day repair", "no streak shame", "small restart CTA"], "risk_modes": ["low_readiness"]},
+    {"id": "flow-18-profile-settings", "route": "/profile", "priority": "p2", "screen": "profile", "assertions": ["sign out cleanup", "data status visible", "native app identity visible"], "risk_modes": ["privacy_or_auth_boundary"]},
+    {"id": "flow-19-native-first-open", "route": "native shell", "priority": "p1", "screen": "iOS/Android shell", "assertions": ["app icon present", "safe areas respected", "launch name consistent"], "risk_modes": ["happy_path"]},
+    {"id": "flow-20-real-testing-boundary", "route": "harness", "priority": "p0", "screen": "proof", "assertions": ["real user testing gap explicit", "TestSprite auth gap explicit", "no fake green"], "risk_modes": ["privacy_or_auth_boundary"]}
+  ],
+  "quality_bar": {
+    "minimum_expert_lanes": 20,
+    "minimum_completed_sidecars": 9,
+    "minimum_user_personas": 20,
+    "minimum_critical_flows": 20,
+    "minimum_generated_scenarios": 1000,
+    "minimum_testsprite_plan_specs": 20,
+    "no_source_no_number": true,
+    "no_mechanism_no_claim": true,
+    "no_fake_real_user_testing_claim": true,
+    "no_fake_testsprite_cloud_claim": true,
+    "builder_does_not_grade_final_release": true
+  }
+}

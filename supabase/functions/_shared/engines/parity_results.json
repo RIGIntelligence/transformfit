@@ -1,1 +1,1960 @@
-[{"name":"strength-barbell-adv","intake":{"goal":"build_strength","trainingDaysPerWeek":4,"equipment":["barbell","dumbbells","machines"],"experienceLevel":"advanced","limitations":[]},"result":{"goal":"build_strength","experienceLevel":"advanced","effectiveEquipment":["barbell","bodyweight","dumbbells","machines"],"daysPerWeek":4,"contraindications":[],"days":[{"dayNumber":1,"focus":"Upper A","split":"upper","exercises":[{"id":"barbell_bench_press","name":"Barbell Bench Press","muscleGroup":"chest","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_row","name":"Barbell Row","muscleGroup":"back","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"overhead_press_barbell","name":"Barbell Overhead Press","muscleGroup":"shoulders","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"barbell_curl","name":"Barbell Curl","muscleGroup":"biceps","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":4}]},{"dayNumber":2,"focus":"Lower A","split":"lower","exercises":[{"id":"barbell_back_squat","name":"Barbell Back Squat","muscleGroup":"quads","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":4}]},{"dayNumber":3,"focus":"Upper B","split":"upper","exercises":[{"id":"barbell_row","name":"Barbell Row","muscleGroup":"back","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_bench_press","name":"Barbell Bench Press","muscleGroup":"chest","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"overhead_press_barbell","name":"Barbell Overhead Press","muscleGroup":"shoulders","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":3},{"id":"barbell_curl","name":"Barbell Curl","muscleGroup":"biceps","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":4}]},{"dayNumber":4,"focus":"Lower B","split":"lower","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_back_squat","name":"Barbell Back Squat","muscleGroup":"quads","equipment":"barbell","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":5,"repsMin":3,"repsMax":5,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":4}]}]}},{"name":"bodyweight-mobility-beginner","intake":{"goal":"improve_mobility","trainingDaysPerWeek":3,"equipment":[],"experienceLevel":"beginner","limitations":["none"]},"result":{"goal":"improve_mobility","experienceLevel":"beginner","effectiveEquipment":["bodyweight"],"daysPerWeek":3,"contraindications":[],"days":[{"dayNumber":1,"focus":"Full Body A","split":"full","exercises":[{"id":"pushup","name":"Push-Up","muscleGroup":"chest","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":0},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":1},{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":2},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":3},{"id":"pike_pushup","name":"Pike Push-Up","muscleGroup":"shoulders","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":4},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":90,"isCompound":false,"sortOrder":5}]},{"dayNumber":2,"focus":"Full Body B","split":"full","exercises":[{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":1},{"id":"pushup","name":"Push-Up","muscleGroup":"chest","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":2},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":3},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":4},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":90,"isCompound":false,"sortOrder":5}]},{"dayNumber":3,"focus":"Full Body C","split":"full","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":0},{"id":"pike_pushup","name":"Pike Push-Up","muscleGroup":"shoulders","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":1},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":2},{"id":"pushup","name":"Push-Up","muscleGroup":"chest","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":150,"isCompound":true,"sortOrder":3},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":90,"isCompound":false,"sortOrder":4},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":2,"repsMin":8,"repsMax":12,"rpeTarget":6,"restSeconds":90,"isCompound":false,"sortOrder":5}]}]}},{"name":"get-fitter-dumbbells-intermediate-knee","intake":{"goal":"get_fitter","trainingDaysPerWeek":5,"equipment":["dumbbells","resistance_bands","pull_up_bar"],"experienceLevel":"intermediate","limitations":["knee","shoulder"]},"result":{"goal":"get_fitter","experienceLevel":"intermediate","effectiveEquipment":["bodyweight","dumbbells","pull_up_bar","resistance_bands"],"daysPerWeek":5,"contraindications":["knee","shoulder"],"days":[{"dayNumber":1,"focus":"Push","split":"push","exercises":[{"id":"band_pushdown","name":"Band Pushdown","muscleGroup":"triceps","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":0},{"id":"dumbbell_skull_crusher","name":"Dumbbell Skull Crusher","muscleGroup":"triceps","equipment":"dumbbells","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":1}]},{"dayNumber":2,"focus":"Pull","split":"pull","exercises":[{"id":"dumbbell_row","name":"Dumbbell Row","muscleGroup":"back","equipment":"dumbbells","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"resistance_band_row","name":"Resistance Band Row","muscleGroup":"back","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":3,"focus":"Legs","split":"legs","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"dumbbell_rdl","name":"Dumbbell RDL","muscleGroup":"hamstrings","equipment":"dumbbells","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":4,"focus":"Upper","split":"upper","exercises":[{"id":"dumbbell_row","name":"Dumbbell Row","muscleGroup":"back","equipment":"dumbbells","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"band_pushdown","name":"Band Pushdown","muscleGroup":"triceps","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"resistance_band_row","name":"Resistance Band Row","muscleGroup":"back","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":5,"focus":"Lower","split":"lower","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":3}]}]}},{"name":"lose-fat-kettlebells-2d-wrist","intake":{"goal":"lose_fat","trainingDaysPerWeek":2,"equipment":["kettlebells","dumbbells"],"experienceLevel":"beginner","limitations":["wrist"]},"result":{"goal":"lose_fat","experienceLevel":"beginner","effectiveEquipment":["bodyweight","dumbbells","kettlebells"],"daysPerWeek":2,"contraindications":["wrist"],"days":[{"dayNumber":1,"focus":"Full Body A","split":"full","exercises":[{"id":"dumbbell_bench_press","name":"Dumbbell Bench Press","muscleGroup":"chest","equipment":"dumbbells","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":0},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":1},{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":2},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":3},{"id":"overhead_press_dumbbell","name":"Dumbbell Overhead Press","muscleGroup":"shoulders","equipment":"dumbbells","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":4},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":90,"isCompound":false,"sortOrder":5}]},{"dayNumber":2,"focus":"Full Body B","split":"full","exercises":[{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":1},{"id":"dumbbell_bench_press","name":"Dumbbell Bench Press","muscleGroup":"chest","equipment":"dumbbells","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":2},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":3},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":90,"isCompound":false,"sortOrder":4},{"id":"bodyweight_squat","name":"Air Squat","muscleGroup":"quads","equipment":"bodyweight","sets":3,"repsMin":10,"repsMax":15,"rpeTarget":7,"restSeconds":150,"isCompound":true,"sortOrder":5}]}]}},{"name":"train-for-sport-bands-3d-null-exp","intake":{"goal":"train_for_sport","trainingDaysPerWeek":3,"equipment":["resistance_bands"],"experienceLevel":null,"limitations":["back"]},"result":{"goal":"train_for_sport","experienceLevel":"intermediate","effectiveEquipment":["bodyweight","resistance_bands"],"daysPerWeek":3,"contraindications":["back"],"days":[{"dayNumber":1,"focus":"Full Body A","split":"full","exercises":[{"id":"banded_chest_press","name":"Banded Chest Press","muscleGroup":"chest","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"band_squat","name":"Band Squat","muscleGroup":"quads","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"pike_pushup","name":"Pike Push-Up","muscleGroup":"shoulders","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"pushup","name":"Push-Up","muscleGroup":"chest","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":4},{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":5}]},{"dayNumber":2,"focus":"Full Body B","split":"full","exercises":[{"id":"band_squat","name":"Band Squat","muscleGroup":"quads","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"banded_chest_press","name":"Banded Chest Press","muscleGroup":"chest","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3},{"id":"bodyweight_crunch","name":"Crunch","muscleGroup":"core","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":4},{"id":"bodyweight_lunge","name":"Bodyweight Lunge","muscleGroup":"quads","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":5}]},{"dayNumber":3,"focus":"Full Body C","split":"full","exercises":[{"id":"pike_pushup","name":"Pike Push-Up","muscleGroup":"shoulders","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"banded_chest_press","name":"Banded Chest Press","muscleGroup":"chest","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"bodyweight_crunch","name":"Crunch","muscleGroup":"core","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"lateral_raise_band","name":"Band Lateral Raise","muscleGroup":"shoulders","equipment":"resistance_bands","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":4},{"id":"pushup","name":"Push-Up","muscleGroup":"chest","equipment":"bodyweight","sets":3,"repsMin":8,"repsMax":10,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":5}]}]}},{"name":"muscle-gym-6d-adv-none","intake":{"goal":"build_muscle","trainingDaysPerWeek":6,"equipment":["barbell","dumbbells","machines","cables","pull_up_bar"],"experienceLevel":"advanced","limitations":[]},"result":{"goal":"build_muscle","experienceLevel":"advanced","effectiveEquipment":["barbell","bodyweight","cables","dumbbells","machines","pull_up_bar"],"daysPerWeek":6,"contraindications":[],"days":[{"dayNumber":1,"focus":"Push A","split":"push","exercises":[{"id":"barbell_bench_press","name":"Barbell Bench Press","muscleGroup":"chest","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"overhead_press_barbell","name":"Barbell Overhead Press","muscleGroup":"shoulders","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"barbell_back_squat","name":"Barbell Back Squat","muscleGroup":"quads","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":2,"focus":"Pull A","split":"pull","exercises":[{"id":"barbell_row","name":"Barbell Row","muscleGroup":"back","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_curl","name":"Barbell Curl","muscleGroup":"biceps","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":3,"focus":"Legs A","split":"legs","exercises":[{"id":"barbell_back_squat","name":"Barbell Back Squat","muscleGroup":"quads","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3}]},{"dayNumber":4,"focus":"Push B","split":"push","exercises":[{"id":"overhead_press_barbell","name":"Barbell Overhead Press","muscleGroup":"shoulders","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_bench_press","name":"Barbell Bench Press","muscleGroup":"chest","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"tricep_dip","name":"Tricep Dip","muscleGroup":"triceps","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3}]},{"dayNumber":5,"focus":"Pull B","split":"pull","exercises":[{"id":"barbell_row","name":"Barbell Row","muscleGroup":"back","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"barbell_curl","name":"Barbell Curl","muscleGroup":"biceps","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"bodyweight_row","name":"Bodyweight Inverted Row","muscleGroup":"back","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3}]},{"dayNumber":6,"focus":"Legs B","split":"legs","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"barbell_back_squat","name":"Barbell Back Squat","muscleGroup":"quads","equipment":"barbell","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":120,"isCompound":true,"sortOrder":2},{"id":"bodyweight_calf_raise","name":"Bodyweight Calf Raise","muscleGroup":"calves","equipment":"bodyweight","sets":4,"repsMin":6,"repsMax":10,"rpeTarget":9,"restSeconds":60,"isCompound":false,"sortOrder":3}]}]}},{"name":"strength-bodyweight-shoulderkneeankle","intake":{"goal":"build_strength","trainingDaysPerWeek":3,"equipment":["bodyweight"],"experienceLevel":"intermediate","limitations":["shoulder","knee","ankle"]},"result":{"goal":"build_strength","experienceLevel":"intermediate","effectiveEquipment":["bodyweight"],"daysPerWeek":3,"contraindications":["shoulder","knee","ankle"],"days":[{"dayNumber":1,"focus":"Full Body A","split":"full","exercises":[{"id":"superman","name":"Superman Hold","muscleGroup":"back","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":0},{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":1},{"id":"bodyweight_curl_iso","name":"Isometric Arm Curl","muscleGroup":"biceps","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"glute_bridge","name":"Glute Bridge","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3}]},{"dayNumber":2,"focus":"Full Body B","split":"full","exercises":[{"id":"bodyweight_glute_bridge_walkout","name":"Glute Bridge Walkout","muscleGroup":"glutes","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"superman","name":"Superman Hold","muscleGroup":"back","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"bodyweight_crunch","name":"Crunch","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":3},{"id":"dead_bug","name":"Dead Bug","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":4}]},{"dayNumber":3,"focus":"Full Body C","split":"full","exercises":[{"id":"bodyweight_romanian_deadlift","name":"Bodyweight Single-Leg RDL","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":0},{"id":"superman","name":"Superman Hold","muscleGroup":"back","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":1},{"id":"bird_dog","name":"Bird Dog","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":2},{"id":"glute_bridge","name":"Glute Bridge","muscleGroup":"hamstrings","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":120,"isCompound":true,"sortOrder":3},{"id":"bodyweight_crunch","name":"Crunch","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":4},{"id":"dead_bug","name":"Dead Bug","muscleGroup":"core","equipment":"bodyweight","sets":4,"repsMin":4,"repsMax":6,"rpeTarget":8,"restSeconds":60,"isCompound":false,"sortOrder":5}]}]}}]
+[
+  {
+    "name": "strength-barbell-adv",
+    "intake": {
+      "goal": "build_strength",
+      "trainingDaysPerWeek": 4,
+      "equipment": ["barbell", "dumbbells", "machines"],
+      "experienceLevel": "advanced",
+      "limitations": []
+    },
+    "result": {
+      "goal": "build_strength",
+      "experienceLevel": "advanced",
+      "effectiveEquipment": ["barbell", "bodyweight", "dumbbells", "machines"],
+      "daysPerWeek": 4,
+      "contraindications": [],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Upper A",
+          "split": "upper",
+          "exercises": [
+            {
+              "id": "barbell_bench_press",
+              "name": "Barbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_row",
+              "name": "Barbell Row",
+              "muscleGroup": "back",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "overhead_press_barbell",
+              "name": "Barbell Overhead Press",
+              "muscleGroup": "shoulders",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "barbell_curl",
+              "name": "Barbell Curl",
+              "muscleGroup": "biceps",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Lower A",
+          "split": "lower",
+          "exercises": [
+            {
+              "id": "barbell_back_squat",
+              "name": "Barbell Back Squat",
+              "muscleGroup": "quads",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Upper B",
+          "split": "upper",
+          "exercises": [
+            {
+              "id": "barbell_row",
+              "name": "Barbell Row",
+              "muscleGroup": "back",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_bench_press",
+              "name": "Barbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "overhead_press_barbell",
+              "name": "Barbell Overhead Press",
+              "muscleGroup": "shoulders",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "barbell_curl",
+              "name": "Barbell Curl",
+              "muscleGroup": "biceps",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "focus": "Lower B",
+          "split": "lower",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_back_squat",
+              "name": "Barbell Back Squat",
+              "muscleGroup": "quads",
+              "equipment": "barbell",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 5,
+              "repsMin": 3,
+              "repsMax": 5,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "bodyweight-mobility-beginner",
+    "intake": {
+      "goal": "improve_mobility",
+      "trainingDaysPerWeek": 3,
+      "equipment": [],
+      "experienceLevel": "beginner",
+      "limitations": ["none"]
+    },
+    "result": {
+      "goal": "improve_mobility",
+      "experienceLevel": "beginner",
+      "effectiveEquipment": ["bodyweight"],
+      "daysPerWeek": 3,
+      "contraindications": [],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Full Body A",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "pushup",
+              "name": "Push-Up",
+              "muscleGroup": "chest",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "pike_pushup",
+              "name": "Pike Push-Up",
+              "muscleGroup": "shoulders",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Full Body B",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "pushup",
+              "name": "Push-Up",
+              "muscleGroup": "chest",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Full Body C",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "pike_pushup",
+              "name": "Pike Push-Up",
+              "muscleGroup": "shoulders",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "pushup",
+              "name": "Push-Up",
+              "muscleGroup": "chest",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 4
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 2,
+              "repsMin": 8,
+              "repsMax": 12,
+              "rpeTarget": 6,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "get-fitter-dumbbells-intermediate-knee",
+    "intake": {
+      "goal": "get_fitter",
+      "trainingDaysPerWeek": 5,
+      "equipment": ["dumbbells", "resistance_bands", "pull_up_bar"],
+      "experienceLevel": "intermediate",
+      "limitations": ["knee", "shoulder"]
+    },
+    "result": {
+      "goal": "get_fitter",
+      "experienceLevel": "intermediate",
+      "effectiveEquipment": [
+        "bodyweight",
+        "dumbbells",
+        "pull_up_bar",
+        "resistance_bands"
+      ],
+      "daysPerWeek": 5,
+      "contraindications": ["knee", "shoulder"],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Push",
+          "split": "push",
+          "exercises": [
+            {
+              "id": "band_pushdown",
+              "name": "Band Pushdown",
+              "muscleGroup": "triceps",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 0
+            },
+            {
+              "id": "dumbbell_skull_crusher",
+              "name": "Dumbbell Skull Crusher",
+              "muscleGroup": "triceps",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Pull",
+          "split": "pull",
+          "exercises": [
+            {
+              "id": "dumbbell_row",
+              "name": "Dumbbell Row",
+              "muscleGroup": "back",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "resistance_band_row",
+              "name": "Resistance Band Row",
+              "muscleGroup": "back",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Legs",
+          "split": "legs",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "dumbbell_rdl",
+              "name": "Dumbbell RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "focus": "Upper",
+          "split": "upper",
+          "exercises": [
+            {
+              "id": "dumbbell_row",
+              "name": "Dumbbell Row",
+              "muscleGroup": "back",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "band_pushdown",
+              "name": "Band Pushdown",
+              "muscleGroup": "triceps",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "resistance_band_row",
+              "name": "Resistance Band Row",
+              "muscleGroup": "back",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "focus": "Lower",
+          "split": "lower",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "lose-fat-kettlebells-2d-wrist",
+    "intake": {
+      "goal": "lose_fat",
+      "trainingDaysPerWeek": 2,
+      "equipment": ["kettlebells", "dumbbells"],
+      "experienceLevel": "beginner",
+      "limitations": ["wrist"]
+    },
+    "result": {
+      "goal": "lose_fat",
+      "experienceLevel": "beginner",
+      "effectiveEquipment": ["bodyweight", "dumbbells", "kettlebells"],
+      "daysPerWeek": 2,
+      "contraindications": ["wrist"],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Full Body A",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "dumbbell_bench_press",
+              "name": "Dumbbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "overhead_press_dumbbell",
+              "name": "Dumbbell Overhead Press",
+              "muscleGroup": "shoulders",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Full Body B",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "dumbbell_bench_press",
+              "name": "Dumbbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "dumbbells",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 90,
+              "isCompound": false,
+              "sortOrder": 4
+            },
+            {
+              "id": "bodyweight_squat",
+              "name": "Air Squat",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 10,
+              "repsMax": 15,
+              "rpeTarget": 7,
+              "restSeconds": 150,
+              "isCompound": true,
+              "sortOrder": 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "train-for-sport-bands-3d-null-exp",
+    "intake": {
+      "goal": "train_for_sport",
+      "trainingDaysPerWeek": 3,
+      "equipment": ["resistance_bands"],
+      "experienceLevel": null,
+      "limitations": ["back"]
+    },
+    "result": {
+      "goal": "train_for_sport",
+      "experienceLevel": "intermediate",
+      "effectiveEquipment": ["bodyweight", "resistance_bands"],
+      "daysPerWeek": 3,
+      "contraindications": ["back"],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Full Body A",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "banded_chest_press",
+              "name": "Banded Chest Press",
+              "muscleGroup": "chest",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "band_squat",
+              "name": "Band Squat",
+              "muscleGroup": "quads",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "pike_pushup",
+              "name": "Pike Push-Up",
+              "muscleGroup": "shoulders",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "pushup",
+              "name": "Push-Up",
+              "muscleGroup": "chest",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 4
+            },
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Full Body B",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "band_squat",
+              "name": "Band Squat",
+              "muscleGroup": "quads",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "banded_chest_press",
+              "name": "Banded Chest Press",
+              "muscleGroup": "chest",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "bodyweight_crunch",
+              "name": "Crunch",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            },
+            {
+              "id": "bodyweight_lunge",
+              "name": "Bodyweight Lunge",
+              "muscleGroup": "quads",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 5
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Full Body C",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "pike_pushup",
+              "name": "Pike Push-Up",
+              "muscleGroup": "shoulders",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "banded_chest_press",
+              "name": "Banded Chest Press",
+              "muscleGroup": "chest",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_crunch",
+              "name": "Crunch",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "lateral_raise_band",
+              "name": "Band Lateral Raise",
+              "muscleGroup": "shoulders",
+              "equipment": "resistance_bands",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            },
+            {
+              "id": "pushup",
+              "name": "Push-Up",
+              "muscleGroup": "chest",
+              "equipment": "bodyweight",
+              "sets": 3,
+              "repsMin": 8,
+              "repsMax": 10,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "muscle-gym-6d-adv-none",
+    "intake": {
+      "goal": "build_muscle",
+      "trainingDaysPerWeek": 6,
+      "equipment": [
+        "barbell",
+        "dumbbells",
+        "machines",
+        "cables",
+        "pull_up_bar"
+      ],
+      "experienceLevel": "advanced",
+      "limitations": []
+    },
+    "result": {
+      "goal": "build_muscle",
+      "experienceLevel": "advanced",
+      "effectiveEquipment": [
+        "barbell",
+        "bodyweight",
+        "cables",
+        "dumbbells",
+        "machines",
+        "pull_up_bar"
+      ],
+      "daysPerWeek": 6,
+      "contraindications": [],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Push A",
+          "split": "push",
+          "exercises": [
+            {
+              "id": "barbell_bench_press",
+              "name": "Barbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "overhead_press_barbell",
+              "name": "Barbell Overhead Press",
+              "muscleGroup": "shoulders",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "barbell_back_squat",
+              "name": "Barbell Back Squat",
+              "muscleGroup": "quads",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Pull A",
+          "split": "pull",
+          "exercises": [
+            {
+              "id": "barbell_row",
+              "name": "Barbell Row",
+              "muscleGroup": "back",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_curl",
+              "name": "Barbell Curl",
+              "muscleGroup": "biceps",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Legs A",
+          "split": "legs",
+          "exercises": [
+            {
+              "id": "barbell_back_squat",
+              "name": "Barbell Back Squat",
+              "muscleGroup": "quads",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "focus": "Push B",
+          "split": "push",
+          "exercises": [
+            {
+              "id": "overhead_press_barbell",
+              "name": "Barbell Overhead Press",
+              "muscleGroup": "shoulders",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_bench_press",
+              "name": "Barbell Bench Press",
+              "muscleGroup": "chest",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "tricep_dip",
+              "name": "Tricep Dip",
+              "muscleGroup": "triceps",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "focus": "Pull B",
+          "split": "pull",
+          "exercises": [
+            {
+              "id": "barbell_row",
+              "name": "Barbell Row",
+              "muscleGroup": "back",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "barbell_curl",
+              "name": "Barbell Curl",
+              "muscleGroup": "biceps",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_row",
+              "name": "Bodyweight Inverted Row",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 6,
+          "focus": "Legs B",
+          "split": "legs",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "barbell_back_squat",
+              "name": "Barbell Back Squat",
+              "muscleGroup": "quads",
+              "equipment": "barbell",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_calf_raise",
+              "name": "Bodyweight Calf Raise",
+              "muscleGroup": "calves",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 6,
+              "repsMax": 10,
+              "rpeTarget": 9,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "strength-bodyweight-shoulderkneeankle",
+    "intake": {
+      "goal": "build_strength",
+      "trainingDaysPerWeek": 3,
+      "equipment": ["bodyweight"],
+      "experienceLevel": "intermediate",
+      "limitations": ["shoulder", "knee", "ankle"]
+    },
+    "result": {
+      "goal": "build_strength",
+      "experienceLevel": "intermediate",
+      "effectiveEquipment": ["bodyweight"],
+      "daysPerWeek": 3,
+      "contraindications": ["shoulder", "knee", "ankle"],
+      "days": [
+        {
+          "dayNumber": 1,
+          "focus": "Full Body A",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "superman",
+              "name": "Superman Hold",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 0
+            },
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 1
+            },
+            {
+              "id": "bodyweight_curl_iso",
+              "name": "Isometric Arm Curl",
+              "muscleGroup": "biceps",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "glute_bridge",
+              "name": "Glute Bridge",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "focus": "Full Body B",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "bodyweight_glute_bridge_walkout",
+              "name": "Glute Bridge Walkout",
+              "muscleGroup": "glutes",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "superman",
+              "name": "Superman Hold",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "bodyweight_crunch",
+              "name": "Crunch",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 3
+            },
+            {
+              "id": "dead_bug",
+              "name": "Dead Bug",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "focus": "Full Body C",
+          "split": "full",
+          "exercises": [
+            {
+              "id": "bodyweight_romanian_deadlift",
+              "name": "Bodyweight Single-Leg RDL",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "superman",
+              "name": "Superman Hold",
+              "muscleGroup": "back",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "bird_dog",
+              "name": "Bird Dog",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "glute_bridge",
+              "name": "Glute Bridge",
+              "muscleGroup": "hamstrings",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 120,
+              "isCompound": true,
+              "sortOrder": 3
+            },
+            {
+              "id": "bodyweight_crunch",
+              "name": "Crunch",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 4
+            },
+            {
+              "id": "dead_bug",
+              "name": "Dead Bug",
+              "muscleGroup": "core",
+              "equipment": "bodyweight",
+              "sets": 4,
+              "repsMin": 4,
+              "repsMax": 6,
+              "rpeTarget": 8,
+              "restSeconds": 60,
+              "isCompound": false,
+              "sortOrder": 5
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

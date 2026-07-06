@@ -2,6 +2,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:transformfit/engine/plan_generation.dart';
 
+typedef PlanRevealRemoteInvoker =
+    Future<Object?> Function(Map<String, Object?> body);
+
+final planRevealRemoteInvokerProvider = Provider<PlanRevealRemoteInvoker>((
+  ref,
+) {
+  return (body) async {
+    final response = await Supabase.instance.client.functions.invoke(
+      'generate-plan',
+      body: body,
+    );
+    return response.data;
+  };
+});
+
 /// Holds the intake the user actually entered, seeded by the intake screen
 /// just before navigating to `/onboarding/plan-reveal`. The plan-reveal
 /// controller reads its real [PlanIntake] from here instead of hardcoding a
@@ -22,6 +37,12 @@ class PendingIntake extends Notifier<PlanIntake?> {
   void setIntake(PlanIntake? intake) {
     state = intake;
   }
+
+  /// Clear the transient onboarding intake after the first-session handoff
+  /// starts the workout, so a later onboarding visit cannot reuse stale state.
+  void clear() {
+    state = null;
+  }
 }
 
 final pendingIntakeProvider = NotifierProvider<PendingIntake, PlanIntake?>(
@@ -40,6 +61,11 @@ class UserWhyNow extends Notifier<String?> {
 
   void setPhrase(String? phrase) {
     state = phrase;
+  }
+
+  /// Clear the transient identity-anchor phrase after first-session handoff.
+  void clear() {
+    state = null;
   }
 }
 
@@ -67,12 +93,14 @@ class PlanRevealState {
   final List<String> changesMade;
   final bool isFallback;
   final String modelUsed;
+
   /// The user's echoed phrase, sanitized (emoji/markup stripped).
   final String? echoedPhrase;
 
   /// Total word count across headline + reasoning + coaching cue.
   int get wordCount {
-    int count(String s) => s.trim().isEmpty ? 0 : s.trim().split(RegExp(r'\s+')).length;
+    int count(String s) =>
+        s.trim().isEmpty ? 0 : s.trim().split(RegExp(r'\s+')).length;
     return count(headline) + count(reasoning) + count(coachingCue);
   }
 
@@ -80,14 +108,12 @@ class PlanRevealState {
   /// intake to the first-session handoff so it can deterministically render
   /// session 1 without a network round-trip (offline-first).
   PlanIntake get intake => PlanIntake(
-        goal: plan.goal,
-        trainingDaysPerWeek: plan.daysPerWeek,
-        equipment: plan.effectiveEquipment
-            .where((e) => e != 'bodyweight')
-            .toList(),
-        experienceLevel: plan.experienceLevel,
-        limitations: plan.contraindications,
-      );
+    goal: plan.goal,
+    trainingDaysPerWeek: plan.daysPerWeek,
+    equipment: plan.effectiveEquipment.where((e) => e != 'bodyweight').toList(),
+    experienceLevel: plan.experienceLevel,
+    limitations: plan.contraindications,
+  );
 }
 
 /// Controller that calls the `generate-plan` edge function and surfaces the
@@ -103,7 +129,8 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
     // Controller & Test Authenticity). A null value only occurs on a deep
     // link straight to plan-reveal with no prior intake; in that case we
     // fall back to a deterministic default and flag the result as a fallback.
-    final intake = ref.read(pendingIntakeProvider) ??
+    final intake =
+        ref.read(pendingIntakeProvider) ??
         const PlanIntake(
           goal: 'get_fitter',
           trainingDaysPerWeek: 3,
@@ -126,26 +153,22 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
     final fallbackIntake = intake;
 
     try {
-      final client = Supabase.instance.client;
-      final response = await client.functions.invoke(
-        'generate-plan',
-        body: {
-          'goal': intake.goal,
-          'daysPerWeek': intake.trainingDaysPerWeek,
-          'equipment': intake.equipment,
-          'experienceLevel': intake.experienceLevel,
-          'limitations': intake.limitations,
-          // R1 echo: the real user phrase so the LLM can echo the user's
-          // words back (VAL-ONB-031). The edge function reads it from the
-          // body only — it does NOT read the profile server-side.
-          'userPhrase': userPhrase,
-        },
-      );
-      if (response.data == null) {
+      final responseData = await ref.read(planRevealRemoteInvokerProvider)({
+        'goal': intake.goal,
+        'daysPerWeek': intake.trainingDaysPerWeek,
+        'equipment': intake.equipment,
+        'experienceLevel': intake.experienceLevel,
+        'limitations': intake.limitations,
+        // R1 echo: the real user phrase so the LLM can echo the user's
+        // words back (VAL-ONB-031). The edge function reads it from the
+        // body only — it does NOT read the profile server-side.
+        'userPhrase': userPhrase,
+      });
+      if (responseData == null) {
         throw Exception('Empty response from generate-plan');
       }
-      final data = response.data as Map<String, dynamic>;
-      final planJson = data['plan'] as Map<String, dynamic>;
+      final data = _requiredPlanObject(responseData, 'generate-plan response');
+      final planJson = _requiredPlanObject(data['plan'], 'generate-plan plan');
       final plan = _planFromJson(planJson);
       return PlanRevealState(
         plan: plan,
@@ -171,7 +194,10 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
             'Built ${plan.daysPerWeek} days of training around your inputs. '
             'The full plan is below.',
         coachingCue: 'Start with session one and show up consistently.',
-        changesMade: ['Plan built for ${plan.goal} goal', '${plan.daysPerWeek} sessions/week'],
+        changesMade: [
+          'Plan built for ${plan.goal} goal',
+          '${plan.daysPerWeek} sessions/week',
+        ],
         isFallback: true,
         modelUsed: 'deterministic',
         echoedPhrase: echoed,
@@ -189,43 +215,189 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
   static List<String> _list(dynamic v) =>
       (v is List) ? v.whereType<String>().toList() : const [];
 
-  static GeneratedPlan _planFromJson(Map<String, dynamic> json) {
-    final days = (json['days'] as List? ?? [])
-        .whereType<Map<String, dynamic>>()
-        .map((d) => PlanDay(
-              dayNumber: (d['dayNumber'] as num?)?.toInt() ?? 1,
-              focus: (d['focus'] as String?) ?? '',
-              split: (d['split'] as String?) ?? '',
-              exercises: (d['exercises'] as List? ?? [])
-                  .whereType<Map<String, dynamic>>()
-                  .map((e) => PlanExercise(
-                        id: (e['id'] as String?) ?? '',
-                        name: (e['name'] as String?) ?? '',
-                        muscleGroup: (e['muscleGroup'] as String?) ?? '',
-                        equipment: (e['equipment'] as String?) ?? '',
-                        sets: (e['sets'] as num?)?.toInt() ?? 3,
-                        repsMin: (e['repsMin'] as num?)?.toInt() ?? 8,
-                        repsMax: (e['repsMax'] as num?)?.toInt() ?? 12,
-                        rpeTarget: (e['rpeTarget'] as num?)?.toInt() ?? 8,
-                        restSeconds: (e['restSeconds'] as num?)?.toInt() ?? 90,
-                        isCompound: (e['isCompound'] as bool?) ?? false,
-                        sortOrder: (e['sortOrder'] as num?)?.toInt() ?? 0,
-                      ))
-                    .toList(),
-            ))
-        .toList();
+  static GeneratedPlan _planFromJson(Map<String, Object?> json) {
+    final dayValues = _requiredPlanList(json['days'], 'plan.days');
+    if (dayValues.isEmpty) {
+      throw const FormatException('plan.days must include at least one day');
+    }
+    final days = <PlanDay>[];
+    for (var dayIndex = 0; dayIndex < dayValues.length; dayIndex++) {
+      final dayPath = 'plan.days[$dayIndex]';
+      final d = _requiredPlanObject(dayValues[dayIndex], dayPath);
+      final exerciseValues = _requiredPlanList(
+        d['exercises'],
+        '$dayPath.exercises',
+      );
+      if (exerciseValues.isEmpty) {
+        throw FormatException('$dayPath.exercises must include exercises');
+      }
+      final exercises = <PlanExercise>[];
+      for (
+        var exerciseIndex = 0;
+        exerciseIndex < exerciseValues.length;
+        exerciseIndex++
+      ) {
+        final exercisePath = '$dayPath.exercises[$exerciseIndex]';
+        final e = _requiredPlanObject(
+          exerciseValues[exerciseIndex],
+          exercisePath,
+        );
+        final repsMin = _requiredPlanInt(
+          e['repsMin'],
+          '$exercisePath.repsMin',
+          min: 1,
+        );
+        final repsMax = _requiredPlanInt(
+          e['repsMax'],
+          '$exercisePath.repsMax',
+          min: repsMin,
+        );
+        exercises.add(
+          PlanExercise(
+            id: _requiredPlanString(e['id'], '$exercisePath.id'),
+            name: _requiredPlanString(e['name'], '$exercisePath.name'),
+            muscleGroup: _requiredPlanString(
+              e['muscleGroup'],
+              '$exercisePath.muscleGroup',
+            ),
+            equipment: _requiredPlanString(
+              e['equipment'],
+              '$exercisePath.equipment',
+            ),
+            sets: _requiredPlanInt(e['sets'], '$exercisePath.sets', min: 1),
+            repsMin: repsMin,
+            repsMax: repsMax,
+            rpeTarget: _requiredPlanInt(
+              e['rpeTarget'],
+              '$exercisePath.rpeTarget',
+              min: 1,
+              max: 10,
+            ),
+            restSeconds: _requiredPlanInt(
+              e['restSeconds'],
+              '$exercisePath.restSeconds',
+              min: 1,
+            ),
+            isCompound: _requiredPlanBool(
+              e['isCompound'],
+              '$exercisePath.isCompound',
+            ),
+            sortOrder: _requiredPlanInt(
+              e['sortOrder'],
+              '$exercisePath.sortOrder',
+              min: 0,
+            ),
+          ),
+        );
+      }
+      days.add(
+        PlanDay(
+          dayNumber: _requiredPlanInt(
+            d['dayNumber'],
+            '$dayPath.dayNumber',
+            min: 1,
+          ),
+          focus: _requiredPlanString(d['focus'], '$dayPath.focus'),
+          split: _requiredPlanString(d['split'], '$dayPath.split'),
+          exercises: exercises,
+        ),
+      );
+    }
+    final rawExperienceLevel = json['experienceLevel'];
+    if (rawExperienceLevel != null && rawExperienceLevel is! String) {
+      throw const FormatException('plan.experienceLevel must be a string');
+    }
+    final experienceLevel = rawExperienceLevel as String?;
     return GeneratedPlan(
-      goal: (json['goal'] as String?) ?? '',
-      experienceLevel: json['experienceLevel'] as String?,
-      effectiveEquipment: _list(json['effectiveEquipment']),
-      daysPerWeek: (json['daysPerWeek'] as num?)?.toInt() ?? 3,
-      contraindications: _list(json['contraindications']),
+      goal: _requiredPlanString(json['goal'], 'plan.goal'),
+      experienceLevel: experienceLevel,
+      effectiveEquipment: _requiredPlanStringList(
+        json['effectiveEquipment'],
+        'plan.effectiveEquipment',
+        requireNonEmpty: true,
+      ),
+      daysPerWeek: _requiredPlanInt(
+        json['daysPerWeek'],
+        'plan.daysPerWeek',
+        min: 1,
+        max: 7,
+      ),
+      contraindications: _optionalPlanStringList(
+        json['contraindications'],
+        'plan.contraindications',
+      ),
       days: days,
     );
   }
 
-  /// Strip emoji + markup from a user phrase before echoing it into coach
-  /// copy. Mirrors the server-side sanitizeUserPhrase.
+  static Map<String, Object?> _requiredPlanObject(Object? value, String path) {
+    if (value is! Map) {
+      throw FormatException('$path must be an object');
+    }
+    return Map<String, Object?>.from(value);
+  }
+
+  static List<Object?> _requiredPlanList(Object? value, String path) {
+    if (value is! List) {
+      throw FormatException('$path must be a list');
+    }
+    return value.cast<Object?>();
+  }
+
+  static String _requiredPlanString(Object? value, String path) {
+    if (value is! String || value.trim().isEmpty) {
+      throw FormatException('$path must be a non-empty string');
+    }
+    return value.trim();
+  }
+
+  static int _requiredPlanInt(
+    Object? value,
+    String path, {
+    required int min,
+    int? max,
+  }) {
+    if (value is! num || value.isNaN || value.isInfinite) {
+      throw FormatException('$path must be a finite number');
+    }
+    final parsed = value.toInt();
+    if (parsed != value || parsed < min || (max != null && parsed > max)) {
+      final ceiling = max == null ? '' : ' and <= $max';
+      throw FormatException('$path must be >= $min$ceiling');
+    }
+    return parsed;
+  }
+
+  static bool _requiredPlanBool(Object? value, String path) {
+    if (value is! bool) {
+      throw FormatException('$path must be a boolean');
+    }
+    return value;
+  }
+
+  static List<String> _requiredPlanStringList(
+    Object? value,
+    String path, {
+    bool requireNonEmpty = false,
+  }) {
+    final items = _optionalPlanStringList(value, path);
+    if (requireNonEmpty && items.isEmpty) {
+      throw FormatException('$path must include at least one value');
+    }
+    return items;
+  }
+
+  static List<String> _optionalPlanStringList(Object? value, String path) {
+    if (value == null) return const [];
+    final values = _requiredPlanList(value, path);
+    return [
+      for (var index = 0; index < values.length; index++)
+        _requiredPlanString(values[index], '$path[$index]'),
+    ];
+  }
+
+  /// Strip emoji + markup + question marks from a user phrase before echoing it
+  /// into coach copy. Mirrors the server-side sanitizeUserPhrase.
   static String _sanitizeUserPhrase(String raw) {
     final noEmoji = raw
         .replaceAll(RegExp(r'[\u{1F600}-\u{1F64F}]', unicode: true), '')
@@ -238,11 +410,14 @@ class PlanRevealController extends AsyncNotifier<PlanRevealState> {
         .replaceAll(RegExp(r'[\u{1F900}-\u{1F9FF}]', unicode: true), '')
         .replaceAll(RegExp(r'[\u{200D}\u{20E3}\u{FE0F}]', unicode: true), '')
         .replaceAll(RegExp(r'<[^>]*>'), '');
-    return noEmoji.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return noEmoji
+        .replaceAll(RegExp(r'\?'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
   }
 }
 
 final planRevealControllerProvider =
     AsyncNotifierProvider<PlanRevealController, PlanRevealState>(
-  PlanRevealController.new,
-);
+      PlanRevealController.new,
+    );

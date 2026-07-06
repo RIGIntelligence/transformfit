@@ -1,0 +1,674 @@
+{
+  "schema": "transformfit.two_day_war_room.v1",
+  "version": "1.25.0",
+  "mission": "Make TransformFitAI materially better every two hours for the next two days by combining product design, fitness coaching, nutrition, body-composition trust, behavioral science, visual craft, AI engineering, GTM strategy, influencer-pattern research, and 20-user scenario testing.",
+  "duration_hours": 48,
+  "cadence": {
+    "heartbeat_automation_id": "transformfit-two-day-1000x-improvement-loop",
+    "interval_hours": 2,
+    "planned_heartbeats": 24,
+    "per_heartbeat_done_contract": [
+      "choose one highest-leverage improvement or verification target",
+      "inspect current repo state before editing",
+      "make a concrete local product, harness, research, or test improvement",
+      "run the narrowest relevant deterministic gate",
+      "record proof artifact and honest residual risk"
+    ]
+  },
+  "external_action_boundary": {
+    "direct_outreach_authorized": false,
+    "paid_recruiting_authorized": false,
+    "public_posting_authorized": false,
+    "endorsement_claims_allowed": false,
+    "rule": "Do not contact influencers, users, coaches, nutritionists, photographers, or designers; do not imply endorsement; use public-pattern research and simulated panels until Mike gives explicit current-task approval for outreach or spend."
+  },
+  "team": {
+    "designers": [
+      {
+        "id": "design-01",
+        "role": "Mobile UX lead",
+        "job": "Reduce time-to-first-logged-set and make workout logging feel obvious under fatigue."
+      },
+      {
+        "id": "design-02",
+        "role": "UI systems designer",
+        "job": "Keep TransformFitAI visually premium, restrained, accessible, and consistent across all screens."
+      },
+      {
+        "id": "design-03",
+        "role": "Motion and interaction designer",
+        "job": "Shape low-friction transitions, rest timer feedback, haptics, and error recovery without novelty clutter."
+      },
+      {
+        "id": "design-04",
+        "role": "Accessibility designer",
+        "job": "Check touch targets, semantic labels, focus order, contrast, dynamic text, and one-handed use."
+      }
+    ],
+    "fitness_coaches": [
+      {
+        "id": "coach-01",
+        "role": "Evidence-based hypertrophy coach",
+        "job": "Audit progressive overload, RPE/RIR language, set targets, and deload decisions."
+      },
+      {
+        "id": "coach-02",
+        "role": "Beginner strength coach",
+        "job": "Make first workouts safe, confidence-building, and free of jargon traps."
+      },
+      {
+        "id": "coach-03",
+        "role": "Powerlifting and barbell coach",
+        "job": "Protect serious lifters' trust: previous set reference, warm-up ramp, rest timing, and PR context."
+      },
+      {
+        "id": "coach-04",
+        "role": "Recovery and readiness coach",
+        "job": "Handle soreness, low sleep, missed sessions, and regressions without shame or unsafe pressure."
+      }
+    ],
+    "influencer_pattern_board": [
+      {
+        "id": "influencer-pattern-01",
+        "archetype": "Evidence-based strength educator",
+        "public_research_target": "Jeff Nippard / Stronger By Science ecosystem",
+        "product_lesson": "Explain the why behind the set while keeping the logger fast."
+      },
+      {
+        "id": "influencer-pattern-02",
+        "archetype": "Hypertrophy science educator",
+        "public_research_target": "Renaissance Periodization style public education",
+        "product_lesson": "Expose volume, proximity to failure, and fatigue tradeoffs without overwhelming beginners."
+      },
+      {
+        "id": "influencer-pattern-03",
+        "archetype": "Form-correction and injury-aware educator",
+        "public_research_target": "physical-therapy-informed fitness creators",
+        "product_lesson": "Coach cues must include safety boundaries and technique reminders at the point of action."
+      },
+      {
+        "id": "influencer-pattern-04",
+        "archetype": "Relatable transformation storyteller",
+        "public_research_target": "mainstream fitness vlog creators",
+        "product_lesson": "Make progress emotionally legible through small wins, not before/after pressure."
+      },
+      {
+        "id": "influencer-pattern-05",
+        "archetype": "Strength community builder",
+        "public_research_target": "barbell and strength creators",
+        "product_lesson": "Advanced users need precision, history, and editable logs more than cheerleading."
+      },
+      {
+        "id": "influencer-pattern-06",
+        "archetype": "Beginner-friendly habit coach",
+        "public_research_target": "bodyweight and starter-fitness creators",
+        "product_lesson": "The app should normalize tiny starts and restarts."
+      },
+      {
+        "id": "influencer-pattern-07",
+        "archetype": "Nutrition science communicator",
+        "public_research_target": "registered-dietitian and macro-education creators",
+        "product_lesson": "Nutrition support should be practical, non-moralizing, and clear about uncertainty."
+      },
+      {
+        "id": "influencer-pattern-08",
+        "archetype": "Athletic performance creator",
+        "public_research_target": "hybrid athlete and conditioning creators",
+        "product_lesson": "Let users see strength, conditioning, recovery, and readiness as one system."
+      },
+      {
+        "id": "influencer-pattern-09",
+        "archetype": "Aesthetic visual fitness brand",
+        "public_research_target": "premium fitness content studios",
+        "product_lesson": "Photography and visual rhythm should make the app aspirational without stock-photo fakery."
+      },
+      {
+        "id": "influencer-pattern-10",
+        "archetype": "No-BS accountability creator",
+        "public_research_target": "plainspoken coaching creators",
+        "product_lesson": "Coach voice can be direct while staying safe, specific, and user-controlled."
+      }
+    ],
+    "artists_photographers": [
+      {
+        "id": "visual-01",
+        "role": "Fitness documentary photographer",
+        "job": "Prefer real training moments, equipment, hands, plates, sweat, and context over generic stock imagery."
+      },
+      {
+        "id": "visual-02",
+        "role": "Product art director",
+        "job": "Build the black/gold/orange TransformFitAI visual system around the provided logo without one-note color overuse."
+      },
+      {
+        "id": "visual-03",
+        "role": "Icon and illustration artist",
+        "job": "Create iconography and empty states that clarify action, never decorative filler."
+      },
+      {
+        "id": "visual-04",
+        "role": "App store screenshot photographer",
+        "job": "Define screenshot storyboards that show the real workout logger, coach, progress, and proof surfaces."
+      }
+    ],
+    "ai_engineers": [
+      {
+        "id": "ai-01",
+        "role": "Coach workflow engineer",
+        "job": "Keep CoachSignal deterministic, source-traced, and visible in the primary user workflows."
+      },
+      {
+        "id": "ai-02",
+        "role": "AI eval engineer",
+        "job": "Turn every coach-quality claim into test cases, golden examples, and red-team prompts."
+      },
+      {
+        "id": "ai-03",
+        "role": "Privacy and safety engineer",
+        "job": "Prevent unsafe medical/nutrition claims, body-shame, hidden data use, and unbounded personalization."
+      },
+      {
+        "id": "ai-04",
+        "role": "Mobile AI systems engineer",
+        "job": "Plan offline-safe fallback, observability, local snapshots, and low-latency coach surfaces."
+      }
+    ],
+    "nutritionists": [
+      {
+        "id": "nutrition-01",
+        "role": "Sports nutrition advisor",
+        "job": "Keep macro and recovery suggestions practical, performance-oriented, and scoped."
+      },
+      {
+        "id": "nutrition-02",
+        "role": "Behavioral nutrition advisor",
+        "job": "Avoid moralized food language and support adherence through planning, defaults, and repair."
+      },
+      {
+        "id": "nutrition-03",
+        "role": "Dietary-safety advisor",
+        "job": "Flag eating-disorder risk, medical conditions, supplement claims, and cases that need professional care."
+      }
+    ],
+    "behavioral_science_specialists": [
+      {
+        "id": "behavior-01",
+        "role": "Self-determination specialist",
+        "job": "Protect autonomy, competence, and relatedness in every coach intervention."
+      },
+      {
+        "id": "behavior-02",
+        "role": "Habit-loop designer",
+        "job": "Reduce activation friction and make the next healthy action obvious."
+      },
+      {
+        "id": "behavior-03",
+        "role": "Relapse-recovery specialist",
+        "job": "Design restart flows that convert missed days into plan adjustments, not shame."
+      },
+      {
+        "id": "behavior-04",
+        "role": "Motivation and identity researcher",
+        "job": "Tie progress to identity evidence and lived constraints without hype or false promises."
+      }
+    ],
+    "gtm_strategists": [
+      {
+        "id": "gtm-01",
+        "role": "Activation and conversion strategist",
+        "job": "Turn the first-open, onboarding, and first-session path into a measurable install-to-activated-user funnel."
+      },
+      {
+        "id": "gtm-02",
+        "role": "Creator and referral growth strategist",
+        "job": "Design privacy-safe proof loops and creator-pattern launch motions without endorsement claims or public posting."
+      },
+      {
+        "id": "gtm-03",
+        "role": "App store and paywall strategist",
+        "job": "Shape screenshot story, subscription/coaching conversion, objection handling, and value proof for Apple and Android."
+      }
+    ]
+  },
+  "user_panel": [
+    {
+      "id": "user-01",
+      "segment": "first-time gym beginner",
+      "primary_job": "log a first machine workout without embarrassment",
+      "risk_to_test": "jargon overload",
+      "scenario": "starts workout from Today and logs three assisted machine sets"
+    },
+    {
+      "id": "user-02",
+      "segment": "busy parent returning after months off",
+      "primary_job": "restart safely with 25 minutes",
+      "risk_to_test": "shame after lapse",
+      "scenario": "chooses low-readiness path and completes shortened session"
+    },
+    {
+      "id": "user-03",
+      "segment": "intermediate hypertrophy lifter",
+      "primary_job": "track progressive overload precisely",
+      "risk_to_test": "missing previous-set context",
+      "scenario": "uses last set reference, RIR, rest timer, and PR context"
+    },
+    {
+      "id": "user-04",
+      "segment": "barbell strength athlete",
+      "primary_job": "warm up and log working sets quickly",
+      "risk_to_test": "logger too slow under heavy training",
+      "scenario": "applies warm-up ramp and edits duplicate exercise names"
+    },
+    {
+      "id": "user-05",
+      "segment": "traveler with hotel gym",
+      "primary_job": "adapt plan to limited equipment",
+      "risk_to_test": "plan rigidity",
+      "scenario": "swaps unavailable equipment and keeps progression note"
+    },
+    {
+      "id": "user-06",
+      "segment": "older adult beginner",
+      "primary_job": "feel safe starting strength training",
+      "risk_to_test": "unsafe progression or tiny text",
+      "scenario": "uses large text, safe rest cues, and conservative load guidance"
+    },
+    {
+      "id": "user-07",
+      "segment": "weight-loss focused user",
+      "primary_job": "train consistently without body shame",
+      "risk_to_test": "appearance-based motivation",
+      "scenario": "receives progress note framed around consistency and capacity"
+    },
+    {
+      "id": "user-08",
+      "segment": "macro tracker crossover user",
+      "primary_job": "connect nutrition and lifting without duplicate work",
+      "risk_to_test": "nutrition advice overreach",
+      "scenario": "sees scoped recovery fueling suggestion after hard session"
+    },
+    {
+      "id": "user-09",
+      "segment": "home dumbbell user",
+      "primary_job": "build progression from limited weights",
+      "risk_to_test": "plate-loaded assumptions",
+      "scenario": "logs rep progression and tempo cues instead of load jumps"
+    },
+    {
+      "id": "user-10",
+      "segment": "competitive professional with low time",
+      "primary_job": "know exactly what to do now",
+      "risk_to_test": "too much explanation",
+      "scenario": "opens app and starts the planned first set within 30 seconds"
+    },
+    {
+      "id": "user-11",
+      "segment": "neurodivergent user",
+      "primary_job": "avoid cognitive overload",
+      "risk_to_test": "too many simultaneous choices",
+      "scenario": "uses single primary action, stable layout, and predictable feedback"
+    },
+    {
+      "id": "user-12",
+      "segment": "injury-history user",
+      "primary_job": "avoid risky pain-driven decisions",
+      "risk_to_test": "coach gives medical advice",
+      "scenario": "reports pain and receives conservative stop/seek-care boundary"
+    },
+    {
+      "id": "user-13",
+      "segment": "advanced bodybuilder",
+      "primary_job": "see volume and fatigue trends",
+      "risk_to_test": "app feels toy-like",
+      "scenario": "checks weekly volume, PRs, and readiness-adjusted recommendation"
+    },
+    {
+      "id": "user-14",
+      "segment": "socially anxious gym user",
+      "primary_job": "log without drawing attention",
+      "risk_to_test": "slow or flashy interface",
+      "scenario": "uses one-handed logging with quiet visual feedback"
+    },
+    {
+      "id": "user-15",
+      "segment": "iPhone power user",
+      "primary_job": "experience premium first-open quality",
+      "risk_to_test": "native shell feels unfinished",
+      "scenario": "opens from app icon through launch screen into Today"
+    },
+    {
+      "id": "user-16",
+      "segment": "Android budget-phone user",
+      "primary_job": "smooth logging on smaller screen",
+      "risk_to_test": "layout overflow and slow interactions",
+      "scenario": "logs session at 360px width with no clipped text"
+    },
+    {
+      "id": "user-17",
+      "segment": "former app churner",
+      "primary_job": "understand why this app is worth returning to",
+      "risk_to_test": "generic onboarding",
+      "scenario": "finishes onboarding and sees a credible first session"
+    },
+    {
+      "id": "user-18",
+      "segment": "coach-assisted client",
+      "primary_job": "trust app guidance between human-coach sessions",
+      "risk_to_test": "coach voice conflicts with human coach",
+      "scenario": "reviews source-traced rationale and editable recommendation"
+    },
+    {
+      "id": "user-19",
+      "segment": "screen-reader user",
+      "primary_job": "complete core workout logging non-visually",
+      "risk_to_test": "missing semantics",
+      "scenario": "navigates Today and active workout controls by labels"
+    },
+    {
+      "id": "user-20",
+      "segment": "high-skeptic evidence user",
+      "primary_job": "see proof instead of hype",
+      "risk_to_test": "unsupported claims",
+      "scenario": "checks coach source trace, proof card, and progress explanation"
+    }
+  ],
+  "north_star_kpis": [
+    {
+      "id": "kpi-activation-week-2",
+      "metric": "Week-2 activated retention",
+      "target": ">=30% of new users complete at least 3 readiness-adjusted sessions within 14 days"
+    },
+    {
+      "id": "kpi-activation-24h",
+      "metric": "24-hour activation",
+      "target": ">=70% of account-created users reach first coach signal, first plan handoff, one logged training action, and one nutrition target within 24 hours"
+    },
+    {
+      "id": "kpi-retention",
+      "metric": "activated-user retention",
+      "target": ">=55% D7, >=35% D30, and >=20% D90 retention among activated users"
+    },
+    {
+      "id": "kpi-conversion",
+      "metric": "client and coaching conversion",
+      "target": ">=12% visitor-to-install, >=60% install-to-account, and >=15% trial-to-paid or coaching-intent conversion"
+    },
+    {
+      "id": "kpi-viral-loop",
+      "metric": "privacy-safe product-led sharing",
+      "target": "K-factor >=0.4 in beta path with a stretch target of 1.0 by June 30, 2027, using explicit-review, privacy-redacted, opt-in proof sharing only; local copy/share affordance is implemented but live K-factor remains unproven"
+    },
+    {
+      "id": "kpi-time-to-first-set",
+      "metric": "time to first logged set",
+      "target": "<=30 seconds from Today on an already-onboarded user"
+    },
+    {
+      "id": "kpi-log-friction",
+      "metric": "set logging interaction cost",
+      "target": "<=2 taps after load/reps are prepared"
+    },
+    {
+      "id": "kpi-coach-trust",
+      "metric": "coach trust",
+      "target": "every coach cue contains observation, reason, next action, confidence, and source trace"
+    },
+    {
+      "id": "kpi-safety",
+      "metric": "coaching safety",
+      "target": "0 body-shame, false promise, medical overreach, or streak-shame violations"
+    },
+    {
+      "id": "kpi-body-composition-trust",
+      "metric": "body-composition trust",
+      "target": "100% of body-composition screens frame trends as imperfect signals, avoid appearance-pressure copy, and connect changes to strength, recovery, and adherence context"
+    },
+    {
+      "id": "kpi-set-intelligence",
+      "metric": "active workout set intelligence",
+      "target": "100% of active logger sessions show progression intent, previous-set date, readiness context, rest pace, selected-versus-prescribed post-set countdown before logging, an auto-started rest countdown immediately after logging, persisted prescribed-versus-actual rest timing on the set ledger, low-readiness active target caps for load/RPE/planned sets, pain-safety progression blocking when the user flags pain, and technique substitution support with a visible cue plus plan-counting identity"
+    },
+    {
+      "id": "kpi-wearable-dai-interface",
+      "metric": "wearable-informed Daily Adaptive Intelligence",
+      "target": "wearable_dai_interface_gate GREEN with persisted wearable state, HealthKit/Health Connect adapter seam, adapter provider use-case reaching Today session state, adapter conversion tests for automatic points and empty-data fail-closed behavior, DAI command surface, native permission setup, permission-pending/unavailable fail-closed zero modifiers, source trace, Today click path, and 1000 deterministic wearable scenarios; live hardware sync is not claimed until device proof exists"
+    },
+    {
+      "id": "kpi-coach-command-center",
+      "metric": "coach command center task success",
+      "target": "coach_command_center_gate GREEN; /coach route shows DAI command, wearable readiness, readiness, training ledger, nutrition, safety, next 24 hours, and coach handoff in one source-traced surface"
+    },
+    {
+      "id": "kpi-rig-systems-engineering",
+      "metric": "RIG systems engineering coverage",
+      "target": "rig_systems_engineering_gate GREEN; /coach shows A1, A2, A3, A4, BMS, D1, D2, D3, and Triple Double Diamond IQRSQPI cells with deterministic tests and ship-gate wiring"
+    },
+    {
+      "id": "kpi-behavioral-repair-loop",
+      "metric": "behavioral repair loop coverage",
+      "target": "behavioral_repair_loop_gate GREEN; Today and /coach show deterministic repair states for day-zero activation, stale check-in, low readiness, pain safety, missed-day comeback, live-session closure, nutrition bridge, and proof recommitment without shame, guilt, diagnosis, or catch-up-volume pressure"
+    },
+    {
+      "id": "kpi-emotional-experience-map",
+      "metric": "emotional experience map coverage",
+      "target": "emotional_experience_map_gate GREEN; Progress and /coach show deterministic emotional stages for orientation, agency, safety, comeback, momentum, and proof identity with explicit promise, next experience, risk-to-avoid, source trace, and no shame, guilt, diagnosis, body ranking, or unsupported outcome claims"
+    },
+    {
+      "id": "kpi-testsprite-user-testing",
+      "metric": "TestSprite-aware comprehensive user-testing coverage",
+      "target": "testsprite_full_user_testing_gate GREEN with 20 expert lanes, 20 user personas, 1000 deterministic scenarios, 20 TestSprite frontend plan specs, and explicit non-claim of real recruited/cloud testing until valid evidence exists"
+    },
+    {
+      "id": "kpi-fitness-agent-review-swarm",
+      "metric": "fitness agent review swarm coverage",
+      "target": "fitness_agent_review_swarm_gate GREEN with required local Codex/Agency/VoltAgent/RIG roles, GitHub fitness-agent repo inputs, 20 Apple/Android app benchmarks, 20 improvement items, 20 code-review findings, next UI/native harnesses, honest sidecar caveats, and route-contract parity with app_router.dart"
+    },
+    {
+      "id": "kpi-five-star-experience",
+      "metric": "five-star experience review readiness",
+      "target": "five_star_experience_gate GREEN; review readiness is only eligible after real training proof, completed activation context, positive debrief, no active task interruption, no pain/safety signal, source trace to Apple/Google review guidance, and no manipulative rating copy or public review action"
+    },
+    {
+      "id": "kpi-value-before-auth",
+      "metric": "value-before-auth first-open activation",
+      "target": "value_before_auth_gate GREEN; unauthenticated first-open traffic reaches onboarding value before auth, public onboarding remains reachable, protected routes still redirect to auth, landing keeps a deliberate sign-in path, and no payment, pricing, body-shame, or unsupported transformation claim appears before first value"
+    },
+    {
+      "id": "kpi-first-session-handoff",
+      "metric": "first-session handoff activation",
+      "target": "first_session_handoff_gate GREEN; authenticated final onboarding CTA seeds readiness, active session, and plan queue locally, promotes the guard safely, enters the workout before remote onboarding completion resolves, and keeps protected-route auth boundaries intact"
+    },
+    {
+      "id": "kpi-accessibility-low-end-device",
+      "metric": "accessibility and low-end-device readiness",
+      "target": "accessibility_low_end_device_gate GREEN; Today, active workout, proof card, progress, auth, onboarding, and route tests prove named semantics, 44px touch targets, compact-phone layouts, and a narrow large-text proof-card sharing path before release evidence is trusted"
+    },
+    {
+      "id": "kpi-performance-reliability",
+      "metric": "local route performance and reliability budget",
+      "target": "perf_frame_budget_gate GREEN; core protected routes have a deterministic widget-frame budget test proving local p95 route-settle frames map to <=800ms at 16ms/frame across Today, workout, proof, progress, composition, coach, and profile. Physical device p95 and crash-free-session proof remain separate release evidence."
+    },
+    {
+      "id": "kpi-ship-gate-non-vacuity",
+      "metric": "ship gate non-vacuity proof",
+      "target": "ship_gate_non_vacuity_gate GREEN; representative Tier-1 gates pass clean copied fixtures and turn RED under planted temporary failures for five-star experience, coach command routing, workout logger set intelligence, value-before-auth, first-session handoff, accessibility large-text proof sharing, performance frame budget, wearable adapter provider wiring, and war-room required-gate coverage without mutating the real repo"
+    },
+    {
+      "id": "kpi-native-readiness",
+      "metric": "Apple/Android static setup",
+      "target": "native_mobile_setup_gate GREEN; strict toolchain mode separately proven before release claim"
+    },
+    {
+      "id": "kpi-proof",
+      "metric": "proof discipline",
+      "target": "each two-hour loop leaves a local artifact, command evidence, and memory checkpoint"
+    }
+  ],
+  "iteration_lanes": [
+    "workout_logger_speed",
+    "coach_workflow_embedding",
+    "onboarding_to_first_session",
+    "progress_and_proof",
+    "native_mobile_shell",
+    "visual_assets_and_app_store_story",
+    "nutrition_recovery_boundaries",
+    "body_composition_trust",
+    "set_intelligence",
+    "wearable_dai_interface",
+    "coach_command_center",
+    "rig_systems_engineering",
+    "emotional_experience_map",
+    "gtm_conversion_loop",
+    "behavioral_repair_flows",
+    "accessibility_and_low_end_device",
+    "1000_scenario_matrix",
+    "testsprite_comprehensive_user_testing",
+    "fitness_agent_review_swarm",
+    "five_star_experience",
+    "value_before_auth",
+    "first_session_handoff",
+    "performance_reliability_budget",
+    "ship_gate_non_vacuity"
+  ],
+  "sidecar_inputs": [
+    {
+      "id": "market-pattern-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "adaptive plan generation with user feedback loops",
+        "recovery-aware scheduling and deloads",
+        "progressive overload as explicit system state",
+        "movement intelligence with video, substitutions, and exact targets",
+        "fast nutrition capture with low-friction entry",
+        "depth-selective nutrition tracking",
+        "habit scaffolding and coaching cadence",
+        "privacy controls as trust features"
+      ],
+      "caveat": "Use as public-pattern research input only; not direct endorsement, not private user evidence."
+    },
+    {
+      "id": "behavioral-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "Today resolves to exactly one dominant next action per state",
+        "readiness-adjusted changes explain the specific driver",
+        "DOMS and low-readiness states offer recovery-safe actions that still count as kept promises",
+        "pain and injury notes suppress loaded progression and route to safe stop/modify/seek-care copy",
+        "active logging must support plan target, previous set, warm-up, one-tap log, undo, rest context, and autosaved state",
+        "missed-day flows frame return as a comeback, not a broken streak"
+      ],
+      "caveat": "Read-only sidecar criteria; each item still needs local implementation and deterministic tests before being claimed complete."
+    },
+    {
+      "id": "ai-coach-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "coach decisions must remain deterministic and model narration-only",
+        "active workout coach cues should surface observation and nextAction at the action point",
+        "fallback transparency should log model/fallback/reason for QA",
+        "local, server, fallback, and LLM-success paths need shared message-rule guardrails",
+        "source IDs and UX principle IDs should resolve to ledger evidence",
+        "add coach_quality_eval fixtures for day-zero, low-readiness, coasting, overreach-with-pain, and bad local-adapter output"
+      ],
+      "caveat": "Read-only sidecar criteria; current runtime quality is not yet complete until eval harness and UI action-point wiring are added."
+    },
+    {
+      "id": "ux-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "first open should sell the coaching loop before auth friction",
+        "Today needs one readiness-adjusted next action above the fold",
+        "readiness plan changes need plain causal why-changed sentences",
+        "onboarding questions should show their plan impact before asking",
+        "plan reveal should convert directly into session 1 with minimal scroll",
+        "active workout needs one thumb-safe cockpit for previous set, controls, rest, log, undo, and finish",
+        "rest timing should auto-start after Log set and pace the workout",
+        "active logger needs technique/media/substitution support",
+        "progress should be a recommitment surface with trend and next action",
+        "proof sharing must be opt-in, privacy-safe, accessible, and mobile robust"
+      ],
+    "caveat": "Read-only sidecar criteria; opt-in privacy-redacted proof sharing is now implemented with focused model/widget tests, but other visual/mobile robustness items still require continued local and device verification."
+    },
+    {
+      "id": "strength-coach-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "progressive overload must choose add rep, add load, hold, reduce, swap, or stop with a reason",
+        "RPE/RIR must be first-class and missing RPE means unknown, not permission to progress",
+        "rest timing must record prescribed rest, actual rest, early/late rest, and post-set countdown",
+        "previous-set reference should include exact prior set, date, readiness context, and progression intent",
+        "deload language must become behavior: cap load/RPE, reduce set volume, block PR chasing, and define return-to-progress",
+        "pain checks must be explicit rather than defaulting to no sharp pain",
+        "low-readiness should alter active workout targets, not only Today copy",
+        "coach messages must cite the exact data used: prior set, readiness, soreness, RPE/RIR, rest, volume jump, or debrief",
+        "recovery can count as success while still requiring a concrete training-safe behavior",
+        "coach-quality gates must test scenarios such as pain blocks progression and deload never says push"
+      ],
+      "caveat": "Read-only sidecar criteria; constrained set-intelligence logic, persisted actual-rest duration, low-readiness active target caps, pain-safety progression blocking, and deterministic technique substitutions now exist. Live clinical or physical-therapy review is not claimed."
+    },
+    {
+      "id": "wearable-platform-sidecar-2026-07-02",
+      "status": "received",
+      "usable_lessons": [
+        "use HealthKit on Apple platforms and Health Connect on Android rather than deprecated Google Fit paths",
+        "wearable data must be permission-bound, opt-in, and source-traced",
+        "sleep, HRV, resting heart rate, steps, active energy, and workout minutes should influence readiness as explicit context rather than hidden scoring",
+        "DAI should expose command, rationale, boundary, confidence, source trace, and readiness modifier",
+        "live wearable sync needs separate device authorization and hardware proof before release claims"
+      ],
+      "caveat": "Platform-research and implementation-readiness input only; permission-pending and unavailable wearable snapshots now fail closed locally, but live HealthKit/Health Connect device sync is not proven by this sidecar."
+    },
+    {
+      "id": "evidence-collector-sidecar-2026-07-02",
+      "status": "blocked",
+      "usable_lessons": [],
+      "caveat": "Evidence collector did not inspect the repo because its own meta-harness startup returned RED; it is recorded as blocked and is not counted as product evidence."
+    }
+  ],
+  "required_gates": [
+    "doctrine_lint",
+    "message_rule_lint",
+    "design_lint",
+    "build_test_gate",
+    "coaching_harness_gate",
+    "competitive_reverse_engineering_gate",
+    "ux_ui_research_ingestion_gate",
+    "coaching_runtime_gate",
+    "coach_quality_eval_gate",
+    "nutrition_target_gate",
+    "body_composition_trust_gate",
+    "workout_logger_intelligence_gate",
+    "wearable_dai_interface_gate",
+    "coach_command_center_gate",
+    "behavioral_repair_loop_gate",
+    "emotional_experience_map_gate",
+    "rig_systems_engineering_gate",
+    "testsprite_full_user_testing_gate",
+    "fitness_agent_review_swarm_gate",
+    "native_mobile_setup_gate",
+    "two_day_war_room_gate",
+    "five_star_experience_gate",
+    "value_before_auth_gate",
+    "first_session_handoff_gate",
+    "accessibility_low_end_device_gate",
+    "perf_frame_budget_gate",
+    "ship_gate_non_vacuity_gate"
+  ],
+  "quality_bar": {
+    "anti_generic_force_minimum": 85,
+    "no_source_no_number": true,
+    "no_mechanism_no_claim": true,
+    "proofpacket_required": true,
+    "builder_does_not_grade_final_release": true
+  },
+  "open_gaps": [
+    "real recruited user testing is not complete",
+    "direct influencer/coach/nutritionist input is not obtained",
+    "native strict toolchain build proof is blocked by incomplete Xcode",
+    "GTM conversion and viral-loop metrics are defined but not yet proven with live traffic",
+    "live wearable device authorization and HealthKit/Health Connect hardware sync are scaffolded but not proven on device",
+    "physical device p95 transition profiling and crash-free-session telemetry are not yet proven",
+    "real two-hour live user-testing campaign is not complete; deterministic 1000-scenario local user-testing coverage is complete",
+    "TestSprite cloud execution is blocked by invalid or revoked active API key and no approved public staging URL; CLI dry-run contract is proven locally"
+  ]
+}

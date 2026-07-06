@@ -15,6 +15,10 @@ void main() {
 
     expect(find.text('Coach command'), findsOneWidget);
     expect(find.text('First command is ready'), findsOneWidget);
+    expect(find.text('Coach clarity brief'), findsOneWidget);
+    expect(find.text("Today's call"), findsOneWidget);
+    expect(find.text('Why it changed'), findsOneWidget);
+    expect(find.text('What to do next'), findsOneWidget);
     expect(find.text('Daily command'), findsOneWidget);
     expect(find.text('Connect wearable context'), findsWidgets);
     expect(find.text('Coach handoff'), findsOneWidget);
@@ -42,6 +46,24 @@ void main() {
     expect(find.textContaining('BMS'), findsWidgets);
     expect(find.bySemanticsLabel('TransformFitAI coach logo'), findsOneWidget);
   });
+
+  testWidgets(
+    'coach command screen shared panel header keeps labels and headlines visible',
+    (tester) async {
+      await _pump(tester, const SessionState());
+
+      expect(find.text('Daily command'), findsOneWidget);
+      expect(find.text('First command is ready'), findsOneWidget);
+      expect(find.text('Behavior repair'), findsWidgets);
+      expect(find.text('Make starting feel safe'), findsOneWidget);
+      expect(find.text('Emotional map'), findsOneWidget);
+      expect(find.text('Feel safe to begin'), findsOneWidget);
+      expect(find.text('Trust milestone'), findsOneWidget);
+      expect(find.text('Earn two proof-backed sessions'), findsOneWidget);
+      expect(find.text('RIG systems'), findsOneWidget);
+      expect(find.text('A1 deterministic'), findsOneWidget);
+    },
+  );
 
   testWidgets('coach command screen renders wearable and training context', (
     tester,

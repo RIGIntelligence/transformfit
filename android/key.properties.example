@@ -1,0 +1,6 @@
+# Copy to android/key.properties for local release signing.
+# Never commit android/key.properties or keystore files.
+storePassword=REPLACE_WITH_KEYSTORE_PASSWORD
+keyPassword=REPLACE_WITH_KEY_PASSWORD
+keyAlias=transformfitai-release
+storeFile=../release-keystores/transformfitai-release.jks

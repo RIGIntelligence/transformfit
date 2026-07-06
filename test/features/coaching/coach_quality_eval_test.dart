@@ -108,6 +108,51 @@ void main() {
       expect(verdict.passed, isTrue);
     });
 
+    test('active_session_with_historical_overreach still routes live', () {
+      final readiness = _readiness(id: 'readiness-live-overreach');
+      final state = SessionState(
+        readinessEntry: readiness,
+        activeSession: WorkoutSession(
+          id: 'session-live-overreach',
+          startedAt: DateTime(2026, 7, 2, 8),
+          readinessEntryId: readiness.id,
+          loggedSets: const [
+            LoggedSet(
+              id: 'set-live-1',
+              exerciseName: 'Goblet squat',
+              setNumber: 1,
+              weightKg: 40,
+              reps: 8,
+              rpe: 7,
+            ),
+          ],
+        ),
+        history: [
+          _completedSession(
+            id: 'session-previous',
+            startedAt: DateTime(2026, 6, 30, 8),
+            endedAt: DateTime(2026, 6, 30, 8, 30),
+            weightKg: 40,
+            reps: 8,
+          ),
+          _completedSession(
+            id: 'session-latest',
+            startedAt: DateTime(2026, 7, 1, 8),
+            endedAt: DateTime(2026, 7, 1, 8, 35),
+            weightKg: 90,
+            reps: 10,
+          ),
+        ],
+      );
+
+      final signal = buildCoachSignal(state);
+      final verdict = evaluateCoachSignal(state: state, signal: signal);
+
+      expect(signal.workflowId, 'live_session_guidance');
+      expect(signal.nextAction, 'Log the next clean set');
+      expect(verdict.passed, isTrue);
+    });
+
     test('rapid_volume_jump routes to hold-volume challenger signal', () {
       final verdict = buildCoachQualityVerdict(
         SessionState(

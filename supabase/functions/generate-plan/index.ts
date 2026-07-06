@@ -16,8 +16,12 @@
 //   - LLM writes narrative only; deterministic fallback if the LLM fails.
 //   - Never 501; never silent; always surfaced.
 
-import { resolveUser, type AuthUser } from "../_shared/auth.ts";
-import { generatePlan, type PlanIntake, type GeneratedPlan } from "../_shared/engines/plan_generation.ts";
+import { type AuthUser, resolveUser } from "../_shared/auth.ts";
+import {
+  type GeneratedPlan,
+  generatePlan,
+  type PlanIntake,
+} from "../_shared/engines/plan_generation.ts";
 import { narratePlan, type PlanNarrative } from "../_shared/llm.ts";
 
 // ---------------------------------------------------------------------------
@@ -75,18 +79,25 @@ function validateIntake(body: GeneratePlanIntake): PlanIntake {
   }
   const goal = typeof body.goal === "string" ? body.goal.trim() : "";
   if (!VALID_GOALS.has(goal)) {
-    throw new Error(`Invalid goal "${goal}". Valid goals: ${[...VALID_GOALS].join(", ")}.`);
+    throw new Error(
+      `Invalid goal "${goal}". Valid goals: ${[...VALID_GOALS].join(", ")}.`,
+    );
   }
   const days = Number(body.daysPerWeek);
   if (!Number.isInteger(days) || days < 1 || days > 6) {
     throw new Error("daysPerWeek must be an integer from 1 to 6.");
   }
-  const eq = Array.isArray(body.equipment) ? body.equipment.filter((e): e is string => typeof e === "string") : [];
-  const exp = typeof body.experienceLevel === "string" && VALID_EXPERIENCE.has(body.experienceLevel.trim())
+  const eq = Array.isArray(body.equipment)
+    ? body.equipment.filter((e): e is string => typeof e === "string")
+    : [];
+  const exp = typeof body.experienceLevel === "string" &&
+      VALID_EXPERIENCE.has(body.experienceLevel.trim())
     ? body.experienceLevel.trim()
     : null;
   const limits = Array.isArray(body.limitations)
-    ? body.limitations.filter((l): l is string => typeof l === "string").map((l) => l.trim()).filter((l) => l.length > 0)
+    ? body.limitations.filter((l): l is string => typeof l === "string").map((
+      l,
+    ) => l.trim()).filter((l) => l.length > 0)
     : [];
   return {
     goal,
@@ -107,10 +118,11 @@ export async function handler(req: Request): Promise<Response> {
   // 1. Resolve the user from the JWT ONLY.
   const { user, response } = await resolveUser(req);
   if (response !== null || user === null) {
-    return response ?? new Response(JSON.stringify({ error: "Unauthorized." }), {
-      status: 401,
-      headers: jsonHeaders,
-    });
+    return response ??
+      new Response(JSON.stringify({ error: "Unauthorized." }), {
+        status: 401,
+        headers: jsonHeaders,
+      });
   }
 
   // 2. Parse the body (ignoring any caller-supplied user_id).
@@ -132,17 +144,24 @@ export async function handler(req: Request): Promise<Response> {
   try {
     intake = validateIntake(body);
   } catch (e) {
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Invalid intake." }), {
-      status: 400,
-      headers: jsonHeaders,
-    });
+    return new Response(
+      JSON.stringify({
+        error: e instanceof Error ? e.message : "Invalid intake.",
+      }),
+      {
+        status: 400,
+        headers: jsonHeaders,
+      },
+    );
   }
 
   // 4. Run the deterministic engine.
   const plan: GeneratedPlan = generatePlan(intake);
 
   // 5. Narrate (LLM or deterministic fallback).
-  const userPhrase = typeof body.userPhrase === "string" ? body.userPhrase : null;
+  const userPhrase = typeof body.userPhrase === "string"
+    ? body.userPhrase
+    : null;
   const narrative: PlanNarrative = await narratePlan({
     goal: plan.goal,
     daysPerWeek: plan.daysPerWeek,

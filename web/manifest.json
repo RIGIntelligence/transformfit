@@ -1,11 +1,11 @@
 {
-    "name": "transformfit",
-    "short_name": "transformfit",
+    "name": "TransformFitAI",
+    "short_name": "TransformFit",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0A0A0A",
+    "theme_color": "#F97316",
+    "description": "Readiness-adjusted AI workout coaching that adapts the daily training plan.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

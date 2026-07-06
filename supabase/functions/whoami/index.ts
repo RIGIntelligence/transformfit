@@ -16,7 +16,7 @@
 // minimal surface for VAL-AUTH-022 (JWT-only, body user_id ignored) and
 // VAL-AUTH-023 (no/invalid JWT -> 401, no mutation).
 
-import { resolveUser, type AuthUser } from "../_shared/auth.ts";
+import { type AuthUser, resolveUser } from "../_shared/auth.ts";
 
 interface WhoamiResponse {
   user: AuthUser;
@@ -39,7 +39,9 @@ export async function handler(req: Request): Promise<Response> {
   // user_id. We never use a body user_id as the acting identity.
   let bodyUserId: string | null = null;
   try {
-    if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
+    if (
+      req.method === "POST" || req.method === "PUT" || req.method === "PATCH"
+    ) {
       const text = await req.text();
       if (text.length > 0) {
         const parsed: unknown = JSON.parse(text);
@@ -51,15 +53,14 @@ export async function handler(req: Request): Promise<Response> {
     }
   } catch {
     // Malformed body is irrelevant for whoami; the JWT-derived user stands.
-    bodyUserId = bodyUserId; // keep whatever (likely null) we have
+    // Keep whatever value was already parsed, which is normally null.
   }
 
   const result: WhoamiResponse = {
     user,
     body_user_id_ignored: bodyUserId,
     source: "jwt",
-    impersonation_attempt:
-      bodyUserId !== null && bodyUserId !== user.id,
+    impersonation_attempt: bodyUserId !== null && bodyUserId !== user.id,
   };
 
   return new Response(JSON.stringify(result), {

@@ -6,16 +6,24 @@
 # (VAL-HAR-018, VAL-HAR-019, VAL-CROSS-002). Fail-closed, deterministic,
 # GREEN/RED only.
 #
-# The Flutter SDK is not on the default PATH on this machine, so the gate
-# exports it internally. The repo root is the parent of the harness dir.
+# The gate prefers an already configured Flutter on PATH, then falls back to
+# known local installs. FLUTTER_SDK may override discovery when needed.
 #
 # Usage:
 #   bash build_test_gate.sh [repo-root]
 #   bash build_test_gate.sh            # repo-root auto-detected (..)
 set -u
 
-FLUTTER_SDK="/Users/rig128gb/Developer/flutter-sdk"
-export PATH="${FLUTTER_SDK}/bin:${PATH}"
+FLUTTER_SDK="${FLUTTER_SDK:-}"
+if [ -n "${FLUTTER_SDK}" ] && [ -x "${FLUTTER_SDK}/bin/flutter" ]; then
+  export PATH="${FLUTTER_SDK}/bin:${PATH}"
+fi
+if ! command -v flutter >/dev/null 2>&1 && [ -x "/Users/rig128gb/.homebrew/share/flutter/bin/flutter" ]; then
+  export PATH="/Users/rig128gb/.homebrew/share/flutter/bin:${PATH}"
+fi
+if ! command -v flutter >/dev/null 2>&1 && [ -x "/Users/rig128gb/Developer/flutter-sdk/bin/flutter" ]; then
+  export PATH="/Users/rig128gb/Developer/flutter-sdk/bin:${PATH}"
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${1:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
@@ -31,11 +39,28 @@ if [ ! -f "${REPO_ROOT}/pubspec.yaml" ]; then
   exit 2
 fi
 if ! command -v flutter >/dev/null 2>&1; then
-  echo "ERROR: flutter not on PATH (expected ${FLUTTER_SDK}/bin)" >&2
+  echo "ERROR: flutter not on PATH; set FLUTTER_SDK or install Flutter" >&2
   exit 2
 fi
 
 cd "${REPO_ROOT}" || { echo "ERROR: cannot cd to ${REPO_ROOT}" >&2; exit 2; }
+
+echo "[BUILD-TEST-GATE] flutter: $(command -v flutter)"
+flutter --version | sed -n '1p'
+
+echo "[BUILD-TEST-GATE] socket preflight:"
+python3 - <<'PY'
+import socket
+for host, family in [("127.0.0.1", socket.AF_INET), ("0.0.0.0", socket.AF_INET), ("::1", socket.AF_INET6), ("::", socket.AF_INET6)]:
+    s = socket.socket(family, socket.SOCK_STREAM)
+    try:
+        s.bind((host, 0))
+        print(f"  GREEN bind {host}")
+    except OSError as exc:
+        print(f"  RED   bind {host}: {exc}")
+    finally:
+        s.close()
+PY
 
 # Stage 1 — flutter analyze.
 echo

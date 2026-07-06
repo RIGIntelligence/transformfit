@@ -61,3 +61,4 @@ transformfit-harness/packets/
 
 # Factory/browser validation traces can include request metadata and test users.
 validation/
+.vercel

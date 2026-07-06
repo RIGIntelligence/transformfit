@@ -96,6 +96,7 @@ void main() {
               satisfaction: 4,
             ),
           ),
+          now: DateTime(2026, 7, 2, 8),
         );
 
         expect(center.headline, 'Review then progress');
@@ -159,6 +160,7 @@ void main() {
             painNotes: 'Sharp knee pain.',
           ),
         ),
+        now: DateTime(2026, 7, 3, 10),
       );
 
       expect(center.headline, 'Safety leads today');

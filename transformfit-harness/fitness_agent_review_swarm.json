@@ -1,0 +1,962 @@
+{
+  "schema": "transformfit.fitness_agent_review_swarm.v1",
+  "version": "1.0.0",
+  "created_at": "2026-07-02T22:45:00-04:00",
+  "status": "local_review_swarm_built",
+  "mission": "Bring in the strongest local agent roles plus source-backed fitness app and GitHub fitness-agent inputs to drive TransformFitAI code review, refactoring, agent testing, and UI testing.",
+  "truth_status": {
+    "real_external_agents_contacted": false,
+    "external_repos_cloned_or_executed": false,
+    "public_actions_taken": false,
+    "paid_actions_taken": false,
+    "local_deterministic_review_swarm_complete": true,
+    "reason": "This artifact records local agent-role assignment, public GitHub/App Store benchmark research, and deterministic review tasks. It does not claim human outreach, endorsement, production execution of third-party repositories, or live App Store / Play Store user testing."
+  },
+  "sidecar_inputs": [
+    {
+      "id": "fitness-agent-roster-sidecar-2026-07-02",
+      "agent_id": "019f25d7-cc74-78b0-bb1f-d9677f9e4950",
+      "status": "received",
+      "usable_lessons": [
+        "Use a 20-role swarm spanning Flutter, mobile, backend/auth, security, model QA, privacy, behavioral science, UI/UX, accessibility, performance, workflow, and verification.",
+        "Create custom domain agents for release parity, wearable data integrity, strength programming, nutrition/body-composition safety, and AI health coach safety."
+      ],
+      "caveat": "Sidecar produced role guidance only; no external outreach, execution, push, deploy, or dependency adoption occurred."
+    },
+    {
+      "id": "fitness-ui-testing-sidecar-2026-07-02",
+      "agent_id": "019f25d8-1ae4-7e31-93e1-e7574b02410b",
+      "status": "received",
+      "usable_lessons": [
+        "Current widget/unit coverage is strong, but integration_test, Patrol, golden screenshot, and real-device Apple/Android interaction harnesses are missing.",
+        "TestSprite critical-flow routes drifted from the actual router and must be contract-checked."
+      ],
+      "caveat": "Sidecar was read-only; it did not execute real-device tests or cloud TestSprite runs."
+    },
+    {
+      "id": "fitness-flutter-review-sidecar-2026-07-02",
+      "agent_id": "019f25d8-04ad-7122-9ad4-caf501d163be",
+      "status": "received",
+      "usable_lessons": [
+        "Wearable adapter wiring, active-session coach branching, onboarding seed handling, sanitizer parity, stale week anchoring, and fabricated debrief data are current high-value review targets.",
+        "Direct adapter tests and route/state parity tests should precede deeper refactors."
+      ],
+      "caveat": "Sidecar was read-only; findings are not fixed until a later implementation slice proves them."
+    },
+    {
+      "id": "fitness-market-research-sidecar-2026-07-02",
+      "agent_id": "019f25d7-eb3b-7331-b528-ef56138559fc",
+      "status": "blocked_context_limit",
+      "usable_lessons": [],
+      "caveat": "Subagent exceeded context. Public benchmark research was completed locally and source-backed in top_app_build_benchmarks."
+    }
+  ],
+  "local_review_agents": [
+    {
+      "slug": "voltagent-multi-agent-coordinator",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-multi-agent-coordinator.toml",
+      "lane": "swarm planning, lane ownership, dependencies, handoffs, and stop/go gates",
+      "output": "swarm roster, dependency map, and integration contract"
+    },
+    {
+      "slug": "voltagent-flutter-expert",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-flutter-expert.toml",
+      "lane": "Flutter widget, provider, route, and state-management review",
+      "output": "Top Flutter correctness and refactor findings with file/line references"
+    },
+    {
+      "slug": "voltagent-mobile-app-developer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-mobile-app-developer.toml",
+      "lane": "mobile lifecycle, offline, app-shell, and device constraint review",
+      "output": "iOS/Android mobile behavior risk register"
+    },
+    {
+      "slug": "voltagent-mobile-developer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-mobile-developer.toml",
+      "lane": "mobile implementation/debugging across app lifecycle, API integration, permissions, and device-specific UX constraints",
+      "output": "mobile lifecycle risk report with normal and failure-edge cases"
+    },
+    {
+      "slug": "voltagent-swift-expert",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-swift-expert.toml",
+      "lane": "iOS native shell, entitlements, HealthKit, and Apple build readiness",
+      "output": "Apple platform review and build-readiness checklist"
+    },
+    {
+      "slug": "voltagent-kotlin-specialist",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-kotlin-specialist.toml",
+      "lane": "Android native shell, Gradle, Health Connect, and release readiness",
+      "output": "Android platform review and build-readiness checklist"
+    },
+    {
+      "slug": "voltagent-ui-ux-tester",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-ui-ux-tester.toml",
+      "lane": "full mobile UI click-through, frustration testing, and visual defect hunting",
+      "output": "UI defect matrix and scenario coverage map"
+    },
+    {
+      "slug": "voltagent-accessibility-tester",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-accessibility-tester.toml",
+      "lane": "VoiceOver, TalkBack, large text, contrast, semantics, and focus review",
+      "output": "WCAG and mobile assistive-technology gap report"
+    },
+    {
+      "slug": "voltagent-test-automator",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-test-automator.toml",
+      "lane": "unit, widget, golden, scenario, and harness test implementation plan",
+      "output": "Next deterministic tests to add with owner files"
+    },
+    {
+      "slug": "voltagent-qa-expert",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-qa-expert.toml",
+      "lane": "risk-based release QA for fitness, nutrition, coach, wearable, and native flows",
+      "output": "Release QA matrix with P0/P1/P2 coverage"
+    },
+    {
+      "slug": "voltagent-ai-engineer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-ai-engineer.toml",
+      "lane": "AI coach runtime, source trace, deterministic fallback, and eval wiring",
+      "output": "AI coach implementation and eval-risk review"
+    },
+    {
+      "slug": "voltagent-llm-architect",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-llm-architect.toml",
+      "lane": "LLM workflow architecture, prompt contracts, tool boundaries, and hallucination controls",
+      "output": "Coach-agent architecture hardening plan"
+    },
+    {
+      "slug": "voltagent-responsible-ai-reviewer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-responsible-ai-reviewer.toml",
+      "lane": "safety, fairness, unsupported claim, medical boundary, and human oversight review",
+      "output": "Responsible AI risk register and required mitigations"
+    },
+    {
+      "slug": "voltagent-security-auditor",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-security-auditor.toml",
+      "lane": "auth, secrets, health data, Supabase, storage, and privacy-boundary review",
+      "output": "Security findings and privacy-data handling gaps"
+    },
+    {
+      "slug": "voltagent-performance-engineer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-performance-engineer.toml",
+      "lane": "low-end device performance, render cost, startup, and workout-session latency",
+      "output": "Performance hotspots and profiling plan"
+    },
+    {
+      "slug": "voltagent-market-researcher",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-market-researcher.toml",
+      "lane": "fitness app benchmark synthesis and category pattern extraction",
+      "output": "Benchmark-backed opportunity map"
+    },
+    {
+      "slug": "voltagent-growth-loops",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-growth-loops.toml",
+      "lane": "activation, retention, community, referral, and proof-sharing loop review",
+      "output": "Growth-loop test backlog"
+    },
+    {
+      "slug": "voltagent-ux-researcher",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-ux-researcher.toml",
+      "lane": "20-user simulated research, archetype tasks, emotional trust, and drop-off analysis",
+      "output": "UX research findings and test scripts"
+    },
+    {
+      "slug": "voltagent-ui-designer",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-ui-designer.toml",
+      "lane": "implementation-ready UI hierarchy, spacing, component, and interaction review",
+      "output": "screen-by-screen UI guidance"
+    },
+    {
+      "slug": "voltagent-refactoring-specialist",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-refactoring-specialist.toml",
+      "lane": "behavior-preserving refactor planning for duplicated screens and model seams",
+      "output": "low-risk refactor plan with required before/after tests"
+    },
+    {
+      "slug": "codex-repo-cartographer",
+      "source": "RIG",
+      "agent_toml": "/Users/rig128gb/.codex/agents/codex-repo-cartographer.toml",
+      "lane": "repo surface map across lib, supabase functions, iOS, Android, harnesses, and tests",
+      "output": "capability map, risk ledger, and review inventory"
+    },
+    {
+      "slug": "agency-code-reviewer",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-code-reviewer.toml",
+      "lane": "correctness-first review of workout, coaching, session, navigation, and provider code",
+      "output": "severity-ranked findings with file and line references"
+    },
+    {
+      "slug": "rig-backend-architect",
+      "source": "RIG",
+      "agent_toml": "/Users/rig128gb/.codex/agents/rig-backend-architect.toml",
+      "lane": "Supabase bootstrap, JWT auth helpers, edge functions, and offline/online contracts",
+      "output": "backend/API/auth architecture review"
+    },
+    {
+      "slug": "rig-security-engineer",
+      "source": "RIG",
+      "agent_toml": "/Users/rig128gb/.codex/agents/rig-security-engineer.toml",
+      "lane": "auth, secrets, bearer tokens, wearable health data, and trust boundaries",
+      "output": "threat model with ranked exploit paths and remediations"
+    },
+    {
+      "slug": "agency-model-qa-specialist",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-model-qa-specialist.toml",
+      "lane": "coach quality evals, guardrails, calibration assumptions, and drift monitoring",
+      "output": "independent coach-eval audit report"
+    },
+    {
+      "slug": "agency-data-privacy-officer",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-data-privacy-officer.toml",
+      "lane": "consent, minimization, retention, DPIA-lite, and health-data privacy review",
+      "output": "privacy map and consent/retention findings"
+    },
+    {
+      "slug": "voltagent-product-manager",
+      "source": "awesome-codex-subagents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/voltagent-product-manager.toml",
+      "lane": "now/next/later product sequencing for wearable, nutrition, body composition, native build, and proof gaps",
+      "output": "product triage memo and sequencing plan"
+    },
+    {
+      "slug": "agency-behavioral-nudge-engine",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-behavioral-nudge-engine.toml",
+      "lane": "motivation, habit formation, comeback loops, and shame-free behavior design",
+      "output": "Behavioral science improvement recommendations"
+    },
+    {
+      "slug": "agency-mobile-app-builder",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-mobile-app-builder.toml",
+      "lane": "native mobile app completeness across Apple and Android",
+      "output": "Native app setup/refactor/build checklist"
+    },
+    {
+      "slug": "agency-app-store-optimizer",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-app-store-optimizer.toml",
+      "lane": "App Store / Play Store conversion surface, screenshots, privacy copy, and listing tests",
+      "output": "ASO and store-conversion review"
+    },
+    {
+      "slug": "agency-evidence-collector",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-evidence-collector.toml",
+      "lane": "screenshot proof, visual smoke, and fantasy-claim rejection",
+      "output": "Evidence packet list and missing visual proof"
+    },
+    {
+      "slug": "agency-workflow-architect",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-workflow-architect.toml",
+      "lane": "full workflow tree, branch states, failure modes, recovery paths, and handoff contracts",
+      "output": "Workflow and state-machine review"
+    },
+    {
+      "slug": "agency-performance-benchmarker",
+      "source": "agency-agents",
+      "agent_toml": "/Users/rig128gb/.codex/agents/agency-performance-benchmarker.toml",
+      "lane": "startup, render, storage, test/runtime performance, and mobile responsiveness",
+      "output": "baseline and bottleneck hypothesis report"
+    },
+    {
+      "slug": "codex-verification-lab",
+      "source": "RIG",
+      "agent_toml": "/Users/rig128gb/.codex/agents/codex-verification-lab.toml",
+      "lane": "deterministic gates, TestSprite contracts, Playwright, secret scans, and ProofPackets",
+      "output": "Verification plan and proof requirements"
+    },
+    {
+      "slug": "codex-ultrawork-reviewer",
+      "source": "RIG",
+      "agent_toml": "/Users/rig128gb/.codex/agents/codex-ultrawork-reviewer.toml",
+      "lane": "final independent review of diff, goal, and scenario evidence",
+      "output": "GO/NO-GO review after QA evidence"
+    }
+  ],
+  "external_fitness_agent_repos": [
+    {
+      "repo": "zen-apps/ai-fitness-planner",
+      "source_url": "https://github.com/zen-apps/ai-fitness-planner",
+      "agent_pattern": "LangGraph multi-agent planner using workout and meal planning with USDA nutrition data",
+      "what_to_borrow": "separate food-search, meal-plan, and workout-plan nodes behind explicit contracts",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "mossydidar/AI-Fitness-Agent",
+      "source_url": "https://github.com/mossydidar/AI-Fitness-Agent",
+      "agent_pattern": "LangGraph fitness assistant with workout pattern analysis and recommendations",
+      "what_to_borrow": "structured state graph for gathering workout context before advice",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "imanoop7/AI-Agents-as-Personal-Trainers--Customizing-Fitness-Routines-with-LLMs",
+      "source_url": "https://github.com/imanoop7/AI-Agents-as-Personal-Trainers--Customizing-Fitness-Routines-with-LLMs",
+      "agent_pattern": "LangChain/LangGraph multi-agent personal trainer for personalized routines",
+      "what_to_borrow": "clear separation between intake, plan generation, and ongoing support",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "CogitoNTNU/TrainerAI",
+      "source_url": "https://github.com/CogitoNTNU/TrainerAI",
+      "agent_pattern": "personal trainer AI with chat logs, time-series analysis, LLM service, and Node gateway",
+      "what_to_borrow": "time-series analysis service boundary for coaching recommendations",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "pramod-zillella/Agentic-Rag-Chatbot",
+      "source_url": "https://github.com/pramod-zillella/Agentic-Rag-Chatbot",
+      "agent_pattern": "Agentic RAG fitness chatbot with safety guidelines and workout recommendations",
+      "what_to_borrow": "RAG-backed safety/context retrieval before exercise advice",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "UnknownObject777/ai-fitness-agent",
+      "source_url": "https://github.com/UnknownObject777/ai-fitness-agent",
+      "agent_pattern": "FastAPI + LangGraph AI fitness and nutrition assistant with memory, image food logging, and trend analysis",
+      "what_to_borrow": "backend agent module boundaries for chat, nutrition, training analysis, and memory",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "Joe-Heffer/trainer",
+      "source_url": "https://github.com/Joe-Heffer/trainer",
+      "agent_pattern": "open-source agentic personal trainer using ADK, MCP, and Strava integration",
+      "what_to_borrow": "MCP-based integration seam for external fitness platforms without hardwiring vendors",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "nikhilpujari/MultiAgent-AI-Wellness-System",
+      "source_url": "https://github.com/nikhilpujari/MultiAgent-AI-Wellness-System",
+      "agent_pattern": "router agent dispatches to fitness coach, nutrition specialist, doctor avatar, and general agent",
+      "what_to_borrow": "strict router between fitness, nutrition, safety, and out-of-domain queries",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "Ahmet-Taha-B/Fit-AI",
+      "source_url": "https://github.com/Ahmet-Taha-B/Fit-AI",
+      "agent_pattern": "bilingual fitness and nutrition assistant with LangGraph, RAG, and memory",
+      "what_to_borrow": "memory and knowledge retrieval for multilingual coaching context",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "benjaminmcf/LLM-Personal-trainer-streamlit",
+      "source_url": "https://github.com/benjaminmcf/LLM-Personal-trainer-streamlit",
+      "agent_pattern": "Streamlit personal trainer with workout plan generator, fitness Q&A, and workout of the day",
+      "what_to_borrow": "small-surface plan generation and Q&A acceptance tests",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "pannaf/valkyrie",
+      "source_url": "https://github.com/pannaf/valkyrie",
+      "agent_pattern": "virtual personal trainer built for the NVIDIA/LangChain agents contest",
+      "what_to_borrow": "contest-style agent demo decomposition and coaching persona packaging",
+      "caveat": "public README-level research only; repo was not executed"
+    },
+    {
+      "repo": "Dieterbe/awesome-health-fitness-oss",
+      "source_url": "https://github.com/Dieterbe/awesome-health-fitness-oss",
+      "agent_pattern": "curated open-source health and fitness app index, not a single agent",
+      "what_to_borrow": "OSS comparison pool for workout, nutrition, body metric, and mobile architecture patterns",
+      "caveat": "index source only; individual repos require separate audits before code reuse"
+    }
+  ],
+  "top_app_build_benchmarks": [
+    {
+      "rank": 1,
+      "app": "Strong Workout Tracker Gym Log",
+      "platform_focus": ["iOS", "Apple Watch", "Android"],
+      "source_url": "https://apps.apple.com/us/app/strong-workout-tracker-gym-log/id464254577",
+      "benchmark_lesson": "fast, low-friction set logging for users who already know their program",
+      "watch_for": "avoid making advanced users fight coaching before logging"
+    },
+    {
+      "rank": 2,
+      "app": "Hevy",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/hevy-workout-tracker-gym-log/id1458862350",
+      "benchmark_lesson": "simple logging plus routines, stats, and social accountability",
+      "watch_for": "community must never expose private health notes by default"
+    },
+    {
+      "rank": 3,
+      "app": "Fitbod",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/fitbod-gym-fitness-planner/id1041517543",
+      "benchmark_lesson": "AI workout planning adapts to goals, level, equipment, and recovery",
+      "watch_for": "adaptive plans need explainable rationale, not black-box swaps"
+    },
+    {
+      "rank": 4,
+      "app": "MacroFactor",
+      "platform_focus": ["iOS", "Android", "Apple Watch"],
+      "source_url": "https://apps.apple.com/us/app/macrofactor-macro-tracker/id1553503471",
+      "benchmark_lesson": "dynamic nutrition coaching adapts targets from observed metabolism and behavior",
+      "watch_for": "avoid unsupported outcome claims and diet-culture copy"
+    },
+    {
+      "rank": 5,
+      "app": "MyFitnessPal",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/myfitnesspal-calorie-counter/id341232718",
+      "benchmark_lesson": "large food database, quick food logging, recipes, macros, and AI nutrition coach",
+      "watch_for": "food logging must stay fast enough for daily use"
+    },
+    {
+      "rank": 6,
+      "app": "Strava",
+      "platform_focus": ["iOS", "Android", "wearables"],
+      "source_url": "https://apps.apple.com/us/app/strava-run-bike-walk/id426826309",
+      "benchmark_lesson": "low-maintenance activity capture, segments, challenges, and social proof",
+      "watch_for": "competitive surfaces can discourage beginners if not scoped"
+    },
+    {
+      "rank": 7,
+      "app": "Nike Training Club",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/nike-training-club/id301521403",
+      "benchmark_lesson": "trainer-led programming across strength, conditioning, yoga, recovery, and mindfulness",
+      "watch_for": "premium content polish is not a substitute for personalized progress logic"
+    },
+    {
+      "rank": 8,
+      "app": "Garmin Connect",
+      "platform_focus": ["iOS", "Android", "Garmin devices"],
+      "source_url": "https://apps.apple.com/us/app/garmin-connect/id583446403",
+      "benchmark_lesson": "device data hub for activities, health metrics, workouts, courses, and leaderboards",
+      "watch_for": "data density needs hierarchy and source confidence"
+    },
+    {
+      "rank": 9,
+      "app": "Caliber",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/caliber-strength-training/id1482405410",
+      "benchmark_lesson": "science-based strength app combining training, nutrition, habits, and coaching tiers",
+      "watch_for": "coach and self-serve paths need clear boundaries"
+    },
+    {
+      "rank": 10,
+      "app": "JEFIT",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/jefit-workout-plan-gym-tracker/id449810000",
+      "benchmark_lesson": "exercise library, programs, video instruction, and powerful tracking tools",
+      "watch_for": "large libraries require excellent search and filtering"
+    },
+    {
+      "rank": 11,
+      "app": "Freeletics",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/freeletics-workouts-fitness/id654810212",
+      "benchmark_lesson": "personalized coach across bodyweight, gym, running intervals, mobility, and recovery",
+      "watch_for": "home/gym equipment constraints need first-class adaptation"
+    },
+    {
+      "rank": 12,
+      "app": "TrainingPeaks",
+      "platform_focus": ["iOS", "Android", "coach/athlete workflows"],
+      "source_url": "https://apps.apple.com/us/app/trainingpeaks-plan-train-lift/id408047715",
+      "benchmark_lesson": "coach-athlete planning, calendar, endurance training, and lifting integration",
+      "watch_for": "advanced planning can overwhelm non-athletes"
+    },
+    {
+      "rank": 13,
+      "app": "Ladder",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/ladder-strength-training-plans/id1502936453",
+      "benchmark_lesson": "daily coach-built progressive programs, in-ear coaching, journal, timers, and teams",
+      "watch_for": "team chat needs moderation, privacy, and opt-in boundaries"
+    },
+    {
+      "rank": 14,
+      "app": "Peloton",
+      "platform_focus": ["iOS", "Android", "TV", "wearables"],
+      "source_url": "https://apps.apple.com/us/app/peloton-fitness-workouts/id792750948",
+      "benchmark_lesson": "class content, instructor energy, music, and multi-modality motivation",
+      "watch_for": "content library breadth can hide the next best action"
+    },
+    {
+      "rank": 15,
+      "app": "Sweat",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/sweat-fitness-app-for-women/id1049234587",
+      "benchmark_lesson": "community-led programs and achievable progressive workouts for specific audiences",
+      "watch_for": "segmented experiences must avoid stereotypes and body-pressure language"
+    },
+    {
+      "rank": 16,
+      "app": "Gymshark Training and Fitness",
+      "platform_focus": ["iOS", "Android"],
+      "source_url": "https://apps.apple.com/us/app/gymshark-training-and-fitness/id1139151320",
+      "benchmark_lesson": "free workouts, plan personalization, creator/coach filtering, and habit challenges",
+      "watch_for": "brand energy must not crowd the logging workflow"
+    },
+    {
+      "rank": 17,
+      "app": "WHOOP",
+      "platform_focus": ["iOS", "Android", "WHOOP wearable"],
+      "source_url": "https://apps.apple.com/us/app/whoop/id933944389",
+      "benchmark_lesson": "sleep, recovery, strain, stress, and long-term healthspan guidance from a screenless wearable",
+      "watch_for": "readiness recommendations need clear uncertainty and user override"
+    },
+    {
+      "rank": 18,
+      "app": "Oura",
+      "platform_focus": ["iOS", "Android", "Oura Ring"],
+      "source_url": "https://apps.apple.com/us/app/oura/id1043837948",
+      "benchmark_lesson": "Sleep, Activity, and Readiness scores with daily recommendations and habit tags",
+      "watch_for": "wellness insights must not imply medical diagnosis"
+    },
+    {
+      "rank": 19,
+      "app": "Google Health / Fitbit",
+      "platform_focus": ["iOS", "Android", "Fitbit devices"],
+      "source_url": "https://apps.apple.com/us/app/google-health-fitbit/id462638897",
+      "benchmark_lesson": "AI fitness plans, sleep insights, trends, privacy positioning, and cross-device health data",
+      "watch_for": "AI plans need deterministic guardrails and data provenance"
+    },
+    {
+      "rank": 20,
+      "app": "Apple Fitness",
+      "platform_focus": ["iOS", "Apple Watch"],
+      "source_url": "https://apps.apple.com/us/app/apple-fitness/id1208224953",
+      "benchmark_lesson": "native workout metrics, customizable views, alerts, activity rings, and sharing",
+      "watch_for": "TransformFit must respect platform-native expectations instead of fighting them"
+    }
+  ],
+  "review_tracks": [
+    {
+      "id": "track-full-code-review",
+      "owner_agents": ["voltagent-flutter-expert", "agency-code-reviewer", "codex-ultrawork-reviewer"],
+      "scope": "correctness, regressions, architecture, file boundaries, provider state, null/empty paths, and test gaps",
+      "required_output": "severity-ranked findings with exact file paths and targeted fixes"
+    },
+    {
+      "id": "track-refactoring",
+      "owner_agents": ["voltagent-refactoring-specialist", "voltagent-flutter-expert", "agency-mobile-app-builder"],
+      "scope": "reduce duplicated screen sections, stabilize model seams, isolate workout/nutrition/body/wearable/coach modules",
+      "required_output": "low-risk refactor plan with tests before and after"
+    },
+    {
+      "id": "track-agent-testing",
+      "owner_agents": ["voltagent-ai-engineer", "voltagent-llm-architect", "voltagent-responsible-ai-reviewer", "codex-verification-lab"],
+      "scope": "AI coach prompts, source traces, hallucination controls, unsafe advice, deterministic fallback, and eval scenarios",
+      "required_output": "agent eval matrix and gate additions"
+    },
+    {
+      "id": "track-ui-testing",
+      "owner_agents": ["voltagent-ui-ux-tester", "voltagent-accessibility-tester", "agency-evidence-collector"],
+      "scope": "full mobile click-through, iOS/Android viewport stress, large text, keyboard/focus, screenshots, and frustration paths",
+      "required_output": "UI test plan, screenshot proof list, and P0/P1 defect hunt"
+    }
+  ],
+  "custom_agent_gaps": [
+    {
+      "slug": "flutter-native-release-parity-reviewer",
+      "why_needed": "No installed role is specific enough for Flutter plus iOS plus Android release parity.",
+      "scope": "Xcode/Gradle drift, HealthKit/Health Connect permissions, entitlements, signing, simulator/device parity, and store-readiness blockers."
+    },
+    {
+      "slug": "wearable-data-integrity-auditor",
+      "why_needed": "Current roles are mobile/privacy generalists, not wearable-data specialists.",
+      "scope": "sample dedupe, manual-entry policy, day-boundary/timezone correctness, missing-data semantics, sync-state truthfulness, and permission UX."
+    },
+    {
+      "slug": "strength-programming-auditor",
+      "why_needed": "No installed agent is specific to strength-programming prescription quality.",
+      "scope": "readiness-adjusted progression, contraindication filters, deload logic, set logging semantics, and injury-safe exercise substitutions."
+    },
+    {
+      "slug": "nutrition-body-composition-safety-reviewer",
+      "why_needed": "Nutrition and body composition are safety-sensitive and current roles are too generic.",
+      "scope": "macro-target framing, measurement uncertainty, non-shaming copy, eating-disorder risk avoidance, and privacy-by-default presentation."
+    },
+    {
+      "slug": "ai-health-coach-safety-evaluator",
+      "why_needed": "Installed AI/model reviewers are generic rather than fitness-health-coach specific.",
+      "scope": "medical-boundary adherence, hallucination containment, escalation rules, behavior-change harm risks, coach tone safety, and domain-specific fitness coaching eval rubrics."
+    }
+  ],
+  "code_review_findings_top20": [
+    {
+      "id": "finding-01",
+      "severity": "high",
+      "file": "lib/features/wearables/health_wearable_adapter.dart",
+      "line": 51,
+      "issue": "recordingMethodsToFilter likely filters out automatically recorded recovery data instead of manual data only.",
+      "next_action": "Remove or configure the filter and add adapter tests with automatic-only points."
+    },
+    {
+      "id": "finding-02",
+      "severity": "high",
+      "file": "lib/features/wearables/health_wearable_adapter.dart",
+      "line": 6,
+      "issue": "Real wearable sync adapter exists but is not wired into app state; Today injects local sample data.",
+      "next_action": "Introduce a provider/use-case around HealthWearableAdapter and test adapter output reaching session state."
+    },
+    {
+      "id": "finding-03",
+      "severity": "high",
+      "file": "lib/features/coaching/coach_signal.dart",
+      "line": 53,
+      "issue": "Live-session coaching can fall back to post-session progress logic whenever history exists.",
+      "next_action": "Add an active-session branch before history/progress and test activeSession plus history."
+    },
+    {
+      "id": "finding-04",
+      "severity": "high",
+      "file": "lib/features/onboarding/first_session_handoff_screen.dart",
+      "line": 180,
+      "issue": "Onboarding handoff fabricates soreness data from long-term limitations or first-session seed.",
+      "next_action": "Separate first-session seed from real soreness input and test that limitations do not become soreness."
+    },
+    {
+      "id": "finding-05",
+      "severity": "high",
+      "file": "lib/features/onboarding/plan_reveal_controller.dart",
+      "line": 227,
+      "issue": "Client and server sanitizers drift; server strips question marks while client does not.",
+      "next_action": "Share sanitizer logic or add parity tests for question-mark phrases."
+    },
+    {
+      "id": "finding-06",
+      "severity": "high",
+      "file": "lib/features/onboarding/plan_reveal_controller.dart",
+      "line": 16,
+      "issue": "Pending intake and why-now providers are write-only and never cleared after plan reveal or handoff.",
+      "next_action": "Clear after successful handoff and test second-visit freshness."
+    },
+    {
+      "id": "finding-07",
+      "severity": "medium-high",
+      "file": "lib/features/progress/progress_summary.dart",
+      "line": 130,
+      "issue": "Current week is anchored to latest completed session instead of wall-clock current date.",
+      "next_action": "Inject now into summary builder and test history older than seven days."
+    },
+    {
+      "id": "finding-08",
+      "severity": "medium-high",
+      "file": "lib/features/body_composition/body_composition_trust.dart",
+      "line": 66,
+      "issue": "Adherence context repeats stale anchoring to latest completed session.",
+      "next_action": "Use the same wall-clock helper as progress and add old-history tests."
+    },
+    {
+      "id": "finding-09",
+      "severity": "medium-high",
+      "file": "lib/features/wearables/health_wearable_adapter.dart",
+      "line": 95,
+      "issue": "Wearable sync can report synced when no usable data points exist.",
+      "next_action": "Add connected_no_data or unavailable sync state and test empty point results."
+    },
+    {
+      "id": "finding-10",
+      "severity": "medium-high",
+      "file": "lib/features/onboarding/first_session_handoff_screen.dart",
+      "line": 197,
+      "issue": "Final onboarding CTA blocks local workout entry on remote profile completion.",
+      "next_action": "Seed local session first, navigate, then reconcile auth/profile asynchronously."
+    },
+    {
+      "id": "finding-11",
+      "severity": "medium",
+      "file": "lib/features/onboarding/plan_reveal_controller.dart",
+      "line": 192,
+      "issue": "Remote plan parsing defaults missing ids, names, and days instead of rejecting malformed payloads.",
+      "next_action": "Validate required fields and fall back on malformed function responses."
+    },
+    {
+      "id": "finding-12",
+      "severity": "medium",
+      "file": "lib/features/coaching/coach_signal.dart",
+      "line": 343,
+      "issue": "Recovery-session classification is duplicated across coach, progress, composition, and proof code.",
+      "next_action": "Extract one shared classifier before logic diverges."
+    },
+    {
+      "id": "finding-13",
+      "severity": "medium",
+      "file": "lib/features/coaching/coach_command_screen.dart",
+      "line": 126,
+      "issue": "Emotional-map UI is duplicated in coach command and progress screens.",
+      "next_action": "Extract a shared widget to avoid semantic and copy drift."
+    },
+    {
+      "id": "finding-14",
+      "severity": "medium",
+      "file": "lib/screens/onboarding_screen.dart",
+      "line": 6,
+      "issue": "Obsolete M1 onboarding surface can bypass the current landing/intake/plan/handoff contract if routed again.",
+      "next_action": "Remove/archive it or hard-gate it behind dev-only routing."
+    },
+    {
+      "id": "finding-15",
+      "severity": "medium",
+      "file": "lib/features/workout/active_workout_screen.dart",
+      "line": 399,
+      "issue": "Workout debrief stores canned satisfaction and notes instead of real user detail.",
+      "next_action": "Collect those fields or omit them and test only entered fields persist."
+    },
+    {
+      "id": "finding-16",
+      "severity": "medium",
+      "file": "lib/features/session/session_controller.dart",
+      "line": 222,
+      "issue": "attachActiveSessionPlan cannot clear stale in-session plans because it ignores empty lists.",
+      "next_action": "Allow explicit clear and add controller regression coverage."
+    },
+    {
+      "id": "finding-17",
+      "severity": "medium",
+      "file": "lib/features/session/models.dart",
+      "line": 345,
+      "issue": "Volume metrics exclude bodyweight/timed work and skew progress/proof summaries for recovery users.",
+      "next_action": "Introduce a separate effort/work metric."
+    },
+    {
+      "id": "finding-18",
+      "severity": "medium-low",
+      "file": "lib/features/onboarding/plan_reveal_controller.dart",
+      "line": 106,
+      "issue": "Plan reveal reads intake and phrase once, so mounted screens do not recompute if providers reseed.",
+      "next_action": "Encode immutability explicitly or switch to watch/invalidate with a mounted-refresh test."
+    },
+    {
+      "id": "finding-19",
+      "severity": "medium-low",
+      "file": "lib/features/session/session_snapshot_store.dart",
+      "line": 25,
+      "issue": "Offline snapshot recovery deletes unreadable snapshots immediately with no migration path.",
+      "next_action": "Add versioned migrations or backup/telemetry before purge."
+    },
+    {
+      "id": "finding-20",
+      "severity": "low",
+      "file": "lib/screens/today_screen.dart",
+      "line": 24,
+      "issue": "Today screen carries readiness hydration, logging, recovery shortcuts, nutrition, wearable samples, and auth sign-out.",
+      "next_action": "Split into smaller widgets/controllers after adding targeted tests."
+    }
+  ],
+  "ui_testing_next_harnesses": [
+    "integration_test/onboarding_to_first_logged_set_test.dart",
+    "integration_test/auth_guard_and_deeplink_test.dart",
+    "integration_test/background_resume_active_workout_test.dart",
+    "integration_test/offline_restore_and_replay_test.dart",
+    "integration_test/wearable_permission_denied_test.dart",
+    "integration_test/ios_small_screen_safe_area_test.dart",
+    "integration_test/android_low_end_logger_latency_test.dart",
+    "test/features/profile/profile_screen_test.dart",
+    "test/screens/loading_and_not_found_test.dart",
+    "test/features/wearables/health_wearable_adapter_test.dart",
+    "test/features/nutrition/nutrition_target_panel_test.dart",
+    "test/goldens/today_small_iphone_golden_test.dart",
+    "test/goldens/active_workout_android_compact_golden_test.dart",
+    "test/goldens/progress_emotion_empty_vs_populated_golden_test.dart",
+    "transformfit-harness/apple_android_device_matrix_gate.py",
+    "transformfit-harness/navigation_contract_gate.py",
+    "transformfit-harness/perf_frame_budget_gate.py"
+  ],
+  "top_20_improvement_backlog": [
+    {
+      "id": "imp-01",
+      "title": "Make active workout logging one-thumb fast with sticky set controls",
+      "owner_agent_slug": "voltagent-flutter-expert",
+      "benchmark_app": "Strong Workout Tracker Gym Log",
+      "code_targets": ["lib/features/workout", "lib/screens/today_screen.dart", "test/features/workout"],
+      "test_plan": "Widget test every set action: add, edit, undo, rest, RPE/RIR, and finish under narrow mobile constraints"
+    },
+    {
+      "id": "imp-02",
+      "title": "Add explainable progressive overload with previous-set and readiness context",
+      "owner_agent_slug": "agency-behavioral-nudge-engine",
+      "benchmark_app": "Ladder",
+      "code_targets": ["lib/features/workout", "transformfit-harness/workout_logger_intelligence_gate.py"],
+      "test_plan": "Scenario tests for progression, deload, pain, low-readiness, and stale history"
+    },
+    {
+      "id": "imp-03",
+      "title": "Split AI coach into router, workout, nutrition, safety, wearable, and out-of-domain lanes",
+      "owner_agent_slug": "voltagent-llm-architect",
+      "benchmark_app": "Joe-Heffer/trainer",
+      "code_targets": ["lib/features/coaching", "transformfit-harness/coaching_runtime_gate.py"],
+      "test_plan": "Prompt/eval tests prove each query routes to one lane with source trace and safe refusal where needed"
+    },
+    {
+      "id": "imp-04",
+      "title": "Build a privacy-first wearable consent and source-confidence screen",
+      "owner_agent_slug": "voltagent-mobile-app-developer",
+      "benchmark_app": "Oura",
+      "code_targets": ["lib/features/wearables", "ios/Runner", "android/app"],
+      "test_plan": "Widget tests for not-connected, denied, partial, stale, and malformed wearable states"
+    },
+    {
+      "id": "imp-05",
+      "title": "Add Apple Watch and Wear OS workout companion acceptance criteria",
+      "owner_agent_slug": "agency-mobile-app-builder",
+      "benchmark_app": "Apple Fitness",
+      "code_targets": ["ios", "android", "transformfit-harness/native_mobile_setup_gate.py"],
+      "test_plan": "Native readiness gate requires explicit companion-app scope, unavailable states, and toolchain proof caveats"
+    },
+    {
+      "id": "imp-06",
+      "title": "Add dynamic nutrition target rationale from adherence, expenditure, and trend inputs",
+      "owner_agent_slug": "voltagent-ai-engineer",
+      "benchmark_app": "MacroFactor",
+      "code_targets": ["lib/features/body_composition", "lib/features/coaching", "lib/features/progress"],
+      "test_plan": "Unit tests for target changes, no-change weeks, low-confidence expenditure, and no diet-culture terms"
+    },
+    {
+      "id": "imp-07",
+      "title": "Add fast food logging design contract: recent foods, barcode/photo seam, recipes, and manual fallback",
+      "owner_agent_slug": "voltagent-ui-ux-tester",
+      "benchmark_app": "MyFitnessPal",
+      "code_targets": ["lib/features/coaching", "lib/features/progress", "transformfit-harness/nutrition_target_gate.py"],
+      "test_plan": "100-scenario nutrition logging matrix covering quick add, no result, offline, and privacy"
+    },
+    {
+      "id": "imp-08",
+      "title": "Turn progress into kept-promises proof before body metrics",
+      "owner_agent_slug": "voltagent-ux-researcher",
+      "benchmark_app": "Caliber",
+      "code_targets": ["lib/features/progress", "lib/features/proof"],
+      "test_plan": "Widget tests prove adherence, strength, recovery, and privacy signals appear before composition"
+    },
+    {
+      "id": "imp-09",
+      "title": "Add community/accountability without default public exposure",
+      "owner_agent_slug": "voltagent-growth-loops",
+      "benchmark_app": "Hevy",
+      "code_targets": ["lib/features/proof", "lib/features/progress", "transformfit-harness/testsprite_full_user_testing.json"],
+      "test_plan": "Privacy-boundary tests for share cards, redaction, anonymous mode, and no auto-post"
+    },
+    {
+      "id": "imp-10",
+      "title": "Add challenge and milestone loops that do not shame missed days",
+      "owner_agent_slug": "agency-behavioral-nudge-engine",
+      "benchmark_app": "Strava",
+      "code_targets": ["lib/features/behavior", "lib/features/emotion", "lib/screens/today_screen.dart"],
+      "test_plan": "Behavioral repair tests for missed-day comeback, low-readiness, and recommitment"
+    },
+    {
+      "id": "imp-11",
+      "title": "Add coach-led program packaging with clear equipment and schedule fit",
+      "owner_agent_slug": "voltagent-market-researcher",
+      "benchmark_app": "Nike Training Club",
+      "code_targets": ["lib/features/onboarding", "lib/features/workout"],
+      "test_plan": "Onboarding tests prove equipment, schedule, experience, pain, and preference shape the plan"
+    },
+    {
+      "id": "imp-12",
+      "title": "Add exercise library search with equipment, muscle, movement, pain, and substitution filters",
+      "owner_agent_slug": "voltagent-flutter-expert",
+      "benchmark_app": "JEFIT",
+      "code_targets": ["lib/features/workout", "test/features/workout"],
+      "test_plan": "Search/filter tests for empty states, synonyms, contraindicated movements, and offline cache"
+    },
+    {
+      "id": "imp-13",
+      "title": "Add coach-athlete calendar semantics for planned, completed, skipped, modified, and recovered sessions",
+      "owner_agent_slug": "agency-workflow-architect",
+      "benchmark_app": "TrainingPeaks",
+      "code_targets": ["lib/features/session", "lib/features/progress", "test/features/session"],
+      "test_plan": "State-machine tests for all session lifecycle transitions and rollback"
+    },
+    {
+      "id": "imp-14",
+      "title": "Add daily coach brief with one next action instead of content-library browsing",
+      "owner_agent_slug": "voltagent-ui-designer",
+      "benchmark_app": "Peloton",
+      "code_targets": ["lib/screens/today_screen.dart", "lib/features/coaching"],
+      "test_plan": "Today-screen tests assert one primary action, rationale, and no competing CTAs"
+    },
+    {
+      "id": "imp-15",
+      "title": "Add audience-specific onboarding variants without stereotypes",
+      "owner_agent_slug": "voltagent-responsible-ai-reviewer",
+      "benchmark_app": "Sweat",
+      "code_targets": ["lib/features/onboarding", "transformfit-harness/coaching_harness.json"],
+      "test_plan": "Copy and scenario tests for identity-safe, accessible, non-stereotyped personalization"
+    },
+    {
+      "id": "imp-16",
+      "title": "Add 66-day habit loop as private commitment, not public pressure",
+      "owner_agent_slug": "voltagent-growth-loops",
+      "benchmark_app": "Gymshark Training and Fitness",
+      "code_targets": ["lib/features/behavior", "lib/features/progress"],
+      "test_plan": "Habit-loop tests for opt-in, pause, travel, injury, and restart states"
+    },
+    {
+      "id": "imp-17",
+      "title": "Add sleep/recovery/strain conflict resolution before hard workout prescriptions",
+      "owner_agent_slug": "voltagent-ai-engineer",
+      "benchmark_app": "WHOOP",
+      "code_targets": ["lib/features/wearables", "lib/features/coaching", "lib/features/workout"],
+      "test_plan": "Coach tests prove low recovery can modify or stop progression with source trace"
+    },
+    {
+      "id": "imp-18",
+      "title": "Add privacy and medical-boundary review for every health-data surface",
+      "owner_agent_slug": "voltagent-security-auditor",
+      "benchmark_app": "Google Health / Fitbit",
+      "code_targets": ["lib/features/wearables", "lib/features/body_composition", "supabase"],
+      "test_plan": "Security tests/checklist for PII, local storage, auth boundaries, and no private export"
+    },
+    {
+      "id": "imp-19",
+      "title": "Add low-end-device and large-text visual regression lane",
+      "owner_agent_slug": "voltagent-accessibility-tester",
+      "benchmark_app": "Garmin Connect",
+      "code_targets": ["test", "script", "transformfit-harness/testsprite_full_user_testing.json"],
+      "test_plan": "Golden/visual smoke suite across 320px, 390px, 430px, large text, dark mode, and reduced motion"
+    },
+    {
+      "id": "imp-20",
+      "title": "Add store-conversion proof package for iOS and Android",
+      "owner_agent_slug": "agency-app-store-optimizer",
+      "benchmark_app": "Ladder",
+      "code_targets": ["ios", "android", "assets/brand", "transformfit-harness/native_mobile_setup_gate.py"],
+      "test_plan": "ASO artifact gate checks screenshots, privacy labels, app icon, launch screen, and claim substantiation"
+    }
+  ],
+  "linked_harnesses": [
+    "competitive_reverse_engineering_gate",
+    "ux_ui_research_ingestion_gate",
+    "coaching_runtime_gate",
+    "coach_quality_eval_gate",
+    "wearable_dai_interface_gate",
+    "testsprite_full_user_testing_gate",
+    "native_mobile_setup_gate",
+    "two_day_war_room_gate"
+  ],
+  "open_gaps": [
+    "External GitHub fitness-agent repositories were not cloned, executed, security-audited, or adopted as dependencies.",
+    "Commercial app benchmarks are public research inputs, not complete reverse engineering or endorsement.",
+    "The subagent market-research sidecar exceeded context and was replaced by local source-backed research.",
+    "Real recruited user testing and live TestSprite cloud runs remain incomplete.",
+    "Native strict toolchain builds and physical wearable sync remain separate proof obligations."
+  ]
+}

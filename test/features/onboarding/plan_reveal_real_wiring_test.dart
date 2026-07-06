@@ -45,10 +45,7 @@ class _SeededWhyNow extends UserWhyNow {
   String? build() => _value;
 }
 
-ProviderScope _wrap({
-  required PlanIntake? intake,
-  String? whyNow,
-}) {
+ProviderScope _wrap({required PlanIntake? intake, String? whyNow}) {
   return ProviderScope(
     overrides: [
       pendingIntakeProvider.overrideWith(() => _SeededIntake(intake)),
@@ -74,10 +71,9 @@ void main() {
     (tester) async {
       // Pump with the REAL controller (no override of
       // planRevealControllerProvider) reading the real seeded intake.
-      await tester.pumpWidget(_wrap(
-        intake: enteredIntake,
-        whyNow: enteredPhrase,
-      ));
+      await tester.pumpWidget(
+        _wrap(intake: enteredIntake, whyNow: enteredPhrase),
+      );
       // Allow the async controller future to resolve (one frame for build()
       // to return a Future, additional frames for settle).
       await tester.pump();
@@ -140,17 +136,18 @@ void main() {
     'REAL controller path: echoed user phrase reaches the Recognition beat, '
     'sanitized of markup/emoji (VAL-ONB-031 / VAL-ONB-059)',
     (tester) async {
-      await tester.pumpWidget(_wrap(
-        intake: enteredIntake,
-        whyNow: enteredPhrase,
-      ));
+      await tester.pumpWidget(
+        _wrap(intake: enteredIntake, whyNow: enteredPhrase),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
 
       // The Recognition beat echoes the user's phrase.
       expect(
-        find.textContaining('You said "I am tired of starting over every January."'),
+        find.textContaining(
+          'You said "I am tired of starting over every January."',
+        ),
         findsOneWidget,
       );
     },
@@ -160,10 +157,12 @@ void main() {
     'REAL controller path: markup in the user phrase is stripped before echo '
     '(VAL-ONB-059 sanitization boundary)',
     (tester) async {
-      await tester.pumpWidget(_wrap(
-        intake: enteredIntake,
-        whyNow: 'I want to <b>get</b> stronger 💪',
-      ));
+      await tester.pumpWidget(
+        _wrap(
+          intake: enteredIntake,
+          whyNow: 'I want to <b>get</b> stronger 💪',
+        ),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
       await tester.pumpAndSettle();
@@ -180,13 +179,123 @@ void main() {
       expect(echoed.contains('<'), isFalse, reason: 'markup not stripped');
       expect(echoed.contains('>'), isFalse, reason: 'markup not stripped');
       expect(
-        RegExp(r'[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}]', unicode: true)
-            .hasMatch(echoed),
+        RegExp(
+          r'[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}]',
+          unicode: true,
+        ).hasMatch(echoed),
         isFalse,
         reason: 'emoji not stripped',
       );
-      expect(echoed.contains('get stronger'), isTrue,
-          reason: 'the words remain after sanitizing');
+      expect(
+        echoed.contains('get stronger'),
+        isTrue,
+        reason: 'the words remain after sanitizing',
+      );
+    },
+  );
+
+  testWidgets(
+    'REAL controller path: question marks are stripped from echoed why-now phrase '
+    'to match server sanitizer',
+    (tester) async {
+      await tester.pumpWidget(
+        _wrap(
+          intake: enteredIntake,
+          whyNow: 'Can I <em>really</em> get strong? Why now? 💪',
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pumpAndSettle();
+
+      final recognitionFinder = find.bySemanticsLabel('Recognition beat');
+      expect(recognitionFinder, findsOneWidget);
+      final textFinder = find.descendant(
+        of: recognitionFinder,
+        matching: find.byType(Text),
+      );
+      expect(textFinder, findsOneWidget);
+      final echoed = tester.widget<Text>(textFinder).data ?? '';
+      expect(
+        echoed.contains('?'),
+        isFalse,
+        reason: 'client echo must match server sanitizer question stripping',
+      );
+      expect(echoed.contains('<'), isFalse, reason: 'markup not stripped');
+      expect(echoed.contains('>'), isFalse, reason: 'markup not stripped');
+      expect(
+        echoed.contains('Can I really get strong Why now'),
+        isTrue,
+        reason: 'words remain after parity sanitizing',
+      );
+    },
+  );
+
+  testWidgets(
+    'REAL controller path: malformed remote plan payload falls back instead '
+    'of defaulting missing ids names and days',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            pendingIntakeProvider.overrideWith(
+              () => _SeededIntake(enteredIntake),
+            ),
+            userWhyNowProvider.overrideWith(() => _SeededWhyNow(enteredPhrase)),
+            planRevealRemoteInvokerProvider.overrideWithValue((
+              Map<String, Object?> body,
+            ) async {
+              return {
+                'plan': {
+                  'goal': 'remote_goal',
+                  'experienceLevel': 'advanced',
+                  'effectiveEquipment': ['bodyweight'],
+                  'daysPerWeek': 4,
+                  'contraindications': <String>[],
+                  'days': [
+                    {
+                      'focus': 'Remote full body',
+                      'split': 'full_body',
+                      'exercises': [
+                        {
+                          'id': 'remote-exercise-1',
+                          // Missing name: must reject the whole remote plan
+                          // instead of silently rendering a blank exercise.
+                          'muscleGroup': 'legs',
+                          'equipment': 'bodyweight',
+                          'sets': 3,
+                          'repsMin': 8,
+                          'repsMax': 12,
+                          'rpeTarget': 7,
+                          'restSeconds': 90,
+                          'isCompound': true,
+                          'sortOrder': 0,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                'headline': 'Remote malformed headline',
+                'reasoning': 'Remote malformed reasoning',
+                'coaching_cue': 'Remote malformed cue',
+                'changes_made': ['remote malformed'],
+                'is_fallback': false,
+                'model_used': 'remote-malformed-test',
+              };
+            }),
+          ],
+          child: const MaterialApp(home: PlanRevealScreen()),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pumpAndSettle();
+
+      expect(find.bySemanticsLabel('Fallback indicator'), findsOneWidget);
+      expect(find.textContaining('5 days a week'), findsOneWidget);
+      expect(find.textContaining('lose fat goal'), findsOneWidget);
+      expect(find.textContaining('Remote malformed headline'), findsNothing);
+      expect(find.textContaining('remote_goal'), findsNothing);
     },
   );
 
@@ -198,9 +307,9 @@ void main() {
       // surfaces it honestly (is_fallback: true), never silent. Wrap in a
       // bare ProviderScope (no overrides) so the providers exist but are
       // null/empty, simulating a deep link straight to plan-reveal.
-      await tester.pumpWidget(const ProviderScope(
-        child: MaterialApp(home: PlanRevealScreen()),
-      ));
+      await tester.pumpWidget(
+        const ProviderScope(child: MaterialApp(home: PlanRevealScreen())),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
       await tester.pumpAndSettle();

@@ -6,7 +6,7 @@
 // VAL-ONB-056/057). Identical intake -> Identical plan. Bodyweight/no-equipment
 // intake yields a non-empty plan with no full_gym fallback. Contraindicated
 // exercises excluded.
-import { assertEquals, assertNotEquals, assert } from "jsr:@std/assert";
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
 import { generatePlan, type PlanIntake } from "./plan_generation.ts";
 
 const _gen = (i: PlanIntake) => generatePlan(i);
@@ -66,7 +66,10 @@ Deno.test("equipment filter: uses only selected + bodyweight, never full_gym", (
   const eq = new Set<string>(["bodyweight", ...intake.equipment]);
   for (const d of p.days) {
     for (const e of d.exercises) {
-      assert(eq.has(e.equipment), `${e.id} needs ${e.equipment}, not in ${[...eq]}`);
+      assert(
+        eq.has(e.equipment),
+        `${e.id} needs ${e.equipment}, not in ${[...eq]}`,
+      );
     }
   }
 });
@@ -85,7 +88,11 @@ Deno.test("no-equipment intake -> non-empty bodyweight-only plan (no full_gym fa
     assert(d.exercises.length > 0);
     total += d.exercises.length;
     for (const e of d.exercises) {
-      assertEquals(e.equipment, "bodyweight", `bodyweight-only intake must not fall back to "${e.id}" using ${e.equipment}`);
+      assertEquals(
+        e.equipment,
+        "bodyweight",
+        `bodyweight-only intake must not fall back to "${e.id}" using ${e.equipment}`,
+      );
     }
   }
   assert(total > 0);
@@ -192,13 +199,28 @@ Deno.test("volume grid: build_strength/advanced -> 5x3-5@9", () => {
 });
 
 Deno.test("null experienceLevel falls back to intermediate row (plan equals explicit intermediate)", () => {
-  const a: PlanIntake = { goal: "lose_fat", trainingDaysPerWeek: 3, equipment: ["dumbbells"], experienceLevel: null };
-  const b: PlanIntake = { goal: "lose_fat", trainingDaysPerWeek: 3, equipment: ["dumbbells"], experienceLevel: "intermediate" };
+  const a: PlanIntake = {
+    goal: "lose_fat",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+    experienceLevel: null,
+  };
+  const b: PlanIntake = {
+    goal: "lose_fat",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+    experienceLevel: "intermediate",
+  };
   assertEquals(_json(_gen(a)), _json(_gen(b)));
 });
 
 Deno.test("rest seconds: compound=120, isolation=60 (non-beginner)", () => {
-  const p = _gen({ goal: "build_muscle", trainingDaysPerWeek: 3, equipment: ["dumbbells"], experienceLevel: "intermediate" });
+  const p = _gen({
+    goal: "build_muscle",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+    experienceLevel: "intermediate",
+  });
   for (const d of p.days) {
     for (const e of d.exercises) {
       assertEquals(e.restSeconds, e.isCompound ? 120 : 60);
@@ -207,13 +229,21 @@ Deno.test("rest seconds: compound=120, isolation=60 (non-beginner)", () => {
 });
 
 Deno.test("split: 3 days -> 3 full-body days", () => {
-  const p = _gen({ goal: "get_fitter", trainingDaysPerWeek: 3, equipment: ["dumbbells"] });
+  const p = _gen({
+    goal: "get_fitter",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+  });
   assertEquals(p.days.length, 3);
   assertEquals(new Set(p.days.map((d) => d.split)), new Set(["full"]));
 });
 
 Deno.test("split: 4 days -> upper/lower/upper/lower", () => {
-  const p = _gen({ goal: "build_muscle", trainingDaysPerWeek: 4, equipment: ["dumbbells"] });
+  const p = _gen({
+    goal: "build_muscle",
+    trainingDaysPerWeek: 4,
+    equipment: ["dumbbells"],
+  });
   assertEquals(p.days.length, 4);
   assertEquals(p.days[0].split, "upper");
   assertEquals(p.days[1].split, "lower");
@@ -222,7 +252,11 @@ Deno.test("split: 4 days -> upper/lower/upper/lower", () => {
 });
 
 Deno.test("split: 5 days -> push/pull/legs/upper/lower", () => {
-  const p = _gen({ goal: "get_fitter", trainingDaysPerWeek: 5, equipment: ["dumbbells", "barbell"] });
+  const p = _gen({
+    goal: "get_fitter",
+    trainingDaysPerWeek: 5,
+    equipment: ["dumbbells", "barbell"],
+  });
   assertEquals(p.days.length, 5);
   assertEquals(p.days[0].split, "push");
   assertEquals(p.days[1].split, "pull");
@@ -233,25 +267,52 @@ Deno.test("split: 5 days -> push/pull/legs/upper/lower", () => {
 });
 
 Deno.test("split: 2 days -> 2 full-body days", () => {
-  const p = _gen({ goal: "build_strength", trainingDaysPerWeek: 2, equipment: ["barbell"] });
+  const p = _gen({
+    goal: "build_strength",
+    trainingDaysPerWeek: 2,
+    equipment: ["barbell"],
+  });
   assertEquals(p.days.length, 2);
   for (const d of p.days) assert(d.exercises.length <= 6);
 });
 
 Deno.test("consequential: changing equipment changes the plan", () => {
-  const a: PlanIntake = { goal: "get_fitter", trainingDaysPerWeek: 3, equipment: ["dumbbells"] };
-  const b: PlanIntake = { goal: "get_fitter", trainingDaysPerWeek: 3, equipment: ["barbell"] };
+  const a: PlanIntake = {
+    goal: "get_fitter",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+  };
+  const b: PlanIntake = {
+    goal: "get_fitter",
+    trainingDaysPerWeek: 3,
+    equipment: ["barbell"],
+  };
   assertNotEquals(_json(_gen(a)), _json(_gen(b)));
 });
 
 Deno.test("consequential: changing goal changes sets/reps/rpe", () => {
-  const a: PlanIntake = { goal: "build_muscle", trainingDaysPerWeek: 3, equipment: ["dumbbells"], experienceLevel: "intermediate" };
-  const b: PlanIntake = { goal: "build_strength", trainingDaysPerWeek: 3, equipment: ["dumbbells"], experienceLevel: "intermediate" };
+  const a: PlanIntake = {
+    goal: "build_muscle",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+    experienceLevel: "intermediate",
+  };
+  const b: PlanIntake = {
+    goal: "build_strength",
+    trainingDaysPerWeek: 3,
+    equipment: ["dumbbells"],
+    experienceLevel: "intermediate",
+  };
   assertNotEquals(_json(_gen(a)), _json(_gen(b)));
 });
 
 Deno.test("output contract: positive sets, repsMax>=repsMin, rpe 1..10", () => {
-  const p = _gen({ goal: "build_muscle", trainingDaysPerWeek: 5, equipment: ["dumbbells", "pull_up_bar"], experienceLevel: "advanced" });
+  const p = _gen({
+    goal: "build_muscle",
+    trainingDaysPerWeek: 5,
+    equipment: ["dumbbells", "pull_up_bar"],
+    experienceLevel: "advanced",
+  });
   for (const d of p.days) {
     for (const e of d.exercises) {
       assert(e.name.length > 0);

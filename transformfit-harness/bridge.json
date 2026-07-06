@@ -1,6 +1,6 @@
 {
   "schema": "transformfit-harness.bridge.v1",
-  "version": "1.0.0",
+  "version": "1.23.0",
   "scope": "transformfit-flutter",
   "what_this_is": "THE ROUTING LAYER: for each TransformFit artifact type, maps the artifact to which gates run on it. Tier-1 gates are BUILT, mechanical, fail-closed (GREEN/RED only). Tier-2 (adversarial teardown vs named-gold) and Tier-3 (coach/buyer panel + metric trace) are DEFINED now as future HUMAN-GATE-ONLY RECORDED-PENDING gates — never auto-green, never blocking in this mission (built once gold is calibrated in M3+). Mirrors rig-design-studio/gtm/bridge.json + gate-shared.mjs (the anti-fake-green law: a human-gate-only gate may NEVER emit GREEN).",
   "gate_definitions": {
@@ -35,6 +35,213 @@
       "source": "transformfit-harness/build_test_gate.sh",
       "kind": "deterministic_build_test",
       "pass_condition": "flutter analyze AND flutter test green (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "coaching_harness_gate": {
+      "source": "transformfit-harness/coaching_harness_gate.py",
+      "kind": "deterministic_harness_contract_check",
+      "pass_condition": "coaching_harness.json contains exact personas, tone arc, message rules, workflow states, north-star trace, and no banned terms (exit 0)",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "competitive_reverse_engineering_gate": {
+      "source": "transformfit-harness/competitive_reverse_engineering_gate.py",
+      "kind": "deterministic_competitive_evidence_check",
+      "pass_condition": "audit mode validates source-backed ledger and honest incomplete status; complete mode requires >=100 app records and >=20 screen-state records",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "ux_ui_research_ingestion_gate": {
+      "source": "transformfit-harness/ux_ui_research_ingestion_gate.py",
+      "kind": "deterministic_research_traceability_check",
+      "pass_condition": "ux_ui_research_ingestion.json maps source-backed research to every required screen and coaching workflow, with missing repos recorded as gaps rather than proof",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "coaching_runtime_gate": {
+      "source": "transformfit-harness/coaching_runtime_gate.py",
+      "kind": "deterministic_runtime_embedding_check",
+      "pass_condition": "CoachSignal runtime exists, maps every coaching workflow to source IDs, is wired through providers, and renders inside Today and active workout surfaces with tests",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "coach_quality_eval_gate": {
+      "source": "transformfit-harness/coach_quality_eval_gate.py",
+      "kind": "deterministic_coach_quality_scenario_check",
+      "pass_condition": "coach-quality runtime and tests cover day-zero, low-readiness, active coasting, rapid volume jump, reported pain, and unsafe-copy scenarios; active workout surfaces observation and next action",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "nutrition_target_gate": {
+      "source": "transformfit-harness/nutrition_target_gate.py",
+      "kind": "deterministic_nutrition_activation_check",
+      "pass_condition": "nutrition target model, state, Today UI, proof row, official-source sidecar, tests, safety copy, and ship-gate wiring are present; app surface contains no banned body-outcome nutrition terms",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "body_composition_trust_gate": {
+      "source": "transformfit-harness/body_composition_trust_gate.py",
+      "kind": "deterministic_body_composition_trust_check",
+      "pass_condition": "composition trust logic, screen, /composition route, Today/Progress/Profile discovery, official-source sidecar, 1000-scenario tests, safety copy, and ship-gate wiring are present; visible app surfaces contain no appearance-pressure terms",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "workout_logger_intelligence_gate": {
+      "source": "transformfit-harness/workout_logger_intelligence_gate.py",
+      "kind": "deterministic_workout_logger_intelligence_check",
+      "pass_condition": "active workout logger shows source-backed set intelligence: progression intent, previous-set date, readiness context, rest pace, selected-versus-prescribed post-set countdown, auto-started post-log rest countdown, persisted actual-rest timing, low-readiness load/RPE/planned-set caps, pain-safety progression blocking, technique substitution support, 1000-scenario tests, and ship-gate wiring",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "wearable_dai_interface_gate": {
+      "source": "transformfit-harness/wearable_dai_interface_gate.py",
+      "kind": "deterministic_wearable_dai_interface_check",
+      "pass_condition": "wearable signal state, HealthKit/Health Connect adapter seam, adapter provider use-case into Today session state, DAI interface, native permission setup, permission-pending/unavailable fail-closed zero modifiers, source sidecar, adapter conversion tests, 1000-scenario tests, and ship-gate wiring are present; live device sync remains separate proof",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "coach_command_center_gate": {
+      "source": "transformfit-harness/coach_command_center_gate.py",
+      "kind": "deterministic_coach_command_center_check",
+      "pass_condition": "coach command center logic, provider, /coach route, Today discovery, screen, tests, safety copy, and ship-gate wiring are present; command center remains source-traced across DAI, wearable, readiness, training, nutrition, and safety lanes",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "behavioral_repair_loop_gate": {
+      "source": "transformfit-harness/behavioral_repair_loop_gate.py",
+      "kind": "deterministic_behavioral_repair_loop_check",
+      "pass_condition": "behavioral repair loop logic, provider, Today surface, coach-command lane, day-zero, stale-check-in, low-readiness, pain, missed-day, active-session, nutrition, and proof recommitment states, tests, safety copy, and ship-gate wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "emotional_experience_map_gate": {
+      "source": "transformfit-harness/emotional_experience_map_gate.py",
+      "kind": "deterministic_emotional_experience_map_check",
+      "pass_condition": "emotional experience map logic, provider, Progress surface, coach-command surface, orientation, agency, safety, comeback, momentum, and proof-identity states, tests, safety copy, and ship-gate wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "rig_systems_engineering_gate": {
+      "source": "transformfit-harness/rig_systems_engineering_gate.py",
+      "kind": "deterministic_rig_systems_engineering_check",
+      "pass_condition": "RIG systems model, provider, coach-command UI, A1/A2/A3/A4 archetypes, BMS bands, D1/D2/D3 triple double diamond cells, tests, safety copy, and ship-gate wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "testsprite_full_user_testing_gate": {
+      "source": "transformfit-harness/testsprite_full_user_testing_gate.py",
+      "kind": "deterministic_testsprite_user_testing_contract_check",
+      "pass_condition": "TestSprite CLI is installed, dry-run project/list and create-batch contracts pass, auth/public-URL cloud blockage is recorded honestly, and the local harness expands to 20 expert lanes, 20 user personas, 20 critical flows, and 1000 deterministic user scenarios",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "fitness_agent_review_swarm_gate": {
+      "source": "transformfit-harness/fitness_agent_review_swarm_gate.py",
+      "kind": "deterministic_fitness_agent_review_swarm_check",
+      "pass_condition": "fitness_agent_review_swarm.json contains required local agent roles, GitHub fitness-agent repo inputs, 20 Apple/Android app benchmarks, 20 improvement items, 20 code-review findings, next UI harnesses, honest sidecar caveats, and route-contract parity with app_router.dart",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "native_mobile_setup_gate": {
+      "source": "transformfit-harness/native_mobile_setup_gate.py",
+      "kind": "deterministic_native_platform_setup_check",
+      "pass_condition": "iOS and Android app shell files contain the TransformFitAI bundle identity, launch branding, app icons, release-safe Android signing posture, release network permissions, and current 2026 platform policy floors; toolchain/store-build proof is separately fail-closed with --require-toolchain-builds",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "two_day_war_room_gate": {
+      "source": "transformfit-harness/two_day_war_room_gate.py",
+      "kind": "deterministic_multidisciplinary_sprint_contract_check",
+      "pass_condition": "two_day_war_room.json contains the 48-hour cadence, 24 heartbeat plan, required specialist groups, influencer-pattern caveats, 20-user panel, KPIs, gates, quality bar, sidecar inputs, and public-action boundaries",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "five_star_experience_gate": {
+      "source": "transformfit-harness/five_star_experience_gate.py",
+      "kind": "deterministic_five_star_experience_check",
+      "pass_condition": "five-star experience logic, provider, coach-command lane, trust milestone UI, review-readiness states, 1000 generated scenarios, store-review source trace, safety copy, and ship-gate wiring are present; no public rating prompt is triggered",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "value_before_auth_gate": {
+      "source": "transformfit-harness/value_before_auth_gate.py",
+      "kind": "deterministic_value_before_auth_check",
+      "pass_condition": "unauthenticated first-open traffic reaches onboarding value before auth, public onboarding remains reachable, protected routes still redirect to auth, landing keeps a deliberate sign-in path, and tests plus ship-gate wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "first_session_handoff_gate": {
+      "source": "transformfit-harness/first_session_handoff_gate.py",
+      "kind": "deterministic_first_session_handoff_check",
+      "pass_condition": "authenticated final onboarding handoff seeds the local workout session, promotes the local guard, enters the workout before remote onboarding completion resolves, keeps the plan queue attached, and preserves ship-gate/non-vacuity wiring",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "accessibility_low_end_device_gate": {
+      "source": "transformfit-harness/accessibility_low_end_device_gate.py",
+      "kind": "deterministic_accessibility_low_end_device_check",
+      "pass_condition": "Today, active workout, proof, progress, auth, onboarding, and route tests prove named semantics, 44px touch targets, compact-phone layouts, and a narrow large-text proof-card sharing path; ship-gate and non-vacuity wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "perf_frame_budget_gate": {
+      "source": "transformfit-harness/perf_frame_budget_gate.py",
+      "kind": "deterministic_perf_frame_budget_check",
+      "pass_condition": "core authenticated routes have a widget-frame budget test proving p95 route-settle frames map to <=800ms at 16ms/frame, covering Today, workout, proof, progress, composition, coach, and profile; ship-gate and non-vacuity wiring are present",
+      "standard": "DETERMINISTIC",
+      "mechanical": true,
+      "human_gate_only": false,
+      "built": true
+    },
+    "ship_gate_non_vacuity_gate": {
+      "source": "transformfit-harness/ship_gate_non_vacuity_gate.py",
+      "kind": "deterministic_ship_gate_non_vacuity_check",
+      "pass_condition": "representative Tier-1 gates pass clean copied fixtures and turn RED under planted temporary failures for five-star experience, coach command routing, workout logger set intelligence, accessibility large-text proof sharing, performance frame budget, and war-room required-gate coverage; the real repo is not mutated",
       "standard": "DETERMINISTIC",
       "mechanical": true,
       "human_gate_only": false,
@@ -75,7 +282,9 @@
       "description": "A Flutter screen / view (the daily wake-up loop, Moments of Truth, danger-zone interventions).",
       "tier_1": [
         {"gate": "design_lint", "why": "screen must satisfy L4 design laws (orange<=3, WCAG AA, font-role, radius)"},
-        {"gate": "build_test_gate", "why": "screen must compile (flutter analyze) and its widget tests must pass"}
+        {"gate": "build_test_gate", "why": "screen must compile (flutter analyze) and its widget tests must pass"},
+        {"gate": "coaching_runtime_gate", "why": "coach-facing screens must render the deterministic coach workflow, evidence trace, and accessible semantics"},
+        {"gate": "accessibility_low_end_device_gate", "why": "core screens must keep named controls, minimum touch targets, compact-phone layouts, and large-text proof-sharing coverage"}
       ],
       "tier_2": [
         {"gate": "adversarial_teardown", "why": "screen scored vs named-gold for its surface; authored-exp >= 86 + activation >= 82"}
@@ -88,7 +297,8 @@
       "description": "A Flutter feature module (state, logic, integration) — e.g. readiness engine, dai-adapt narration.",
       "tier_1": [
         {"gate": "build_test_gate", "why": "feature must compile and its unit/widget tests must pass"},
-        {"gate": "doctrine_lint", "why": "feature copy / surfaced strings must be free of banned anti-patterns (incl. silent-fallback)"}
+        {"gate": "doctrine_lint", "why": "feature copy / surfaced strings must be free of banned anti-patterns (incl. silent-fallback)"},
+        {"gate": "coaching_runtime_gate", "why": "coaching features must be embedded in app providers and primary product surfaces, not only JSON manifests"}
       ],
       "tier_2": [
         {"gate": "adversarial_teardown", "why": "feature scored vs named-gold for its surface; authored-exp >= 86 + activation >= 82"}
@@ -108,6 +318,48 @@
       ],
       "tier_3": [
         {"gate": "coach_buyer_panel", "why": "does this message move Week-2 activation? coach-presence check + BOOK verdict"}
+      ]
+    },
+    "coaching_harness": {
+      "description": "The deterministic coaching system contract: personas, tone arc, message rules, workflow states, proof obligations, and north-star trace.",
+      "tier_1": [
+        {"gate": "coaching_harness_gate", "why": "coaching harness must enforce doctrine L1/L2 and route coach workflows deterministically"},
+        {"gate": "doctrine_lint", "why": "coaching harness copy must avoid banned body-shame, generic slop, false promise, and streak-shame terms"},
+        {"gate": "coaching_runtime_gate", "why": "coaching harness workflows must be wired into the Flutter runtime and covered by tests"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "coaching harness scored vs named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this coaching system move Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "competitive_reverse_engineering": {
+      "description": "The source-backed app reverse-engineering ledger for MacroFactor and the 100-app competitive benchmark.",
+      "tier_1": [
+        {"gate": "competitive_reverse_engineering_gate", "why": "competitive ledger must distinguish audit-ready partial work from complete 100-app proof"},
+        {"gate": "doctrine_lint", "why": "competitive synthesis must avoid unsourced hype and banned transformation/body-shame framing"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "competitive findings scored against named-gold product patterns once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "competitive findings must trace to Week-2 activation and GTM value creation"}
+      ]
+    },
+    "ux_ui_research_ingestion": {
+      "description": "The auditable mapping from scraper/competitive research lessons into TransformFit screens and AI coaching workflows.",
+      "tier_1": [
+        {"gate": "ux_ui_research_ingestion_gate", "why": "research lessons must cite source IDs, required screens, product metrics, and coaching workflows before being claimed embedded"},
+        {"gate": "competitive_reverse_engineering_gate", "why": "research source IDs must resolve against the 100-app competitive ledger or be marked as explicit gaps"},
+        {"gate": "coaching_harness_gate", "why": "coaching workflow traceability must match the deterministic coaching harness"},
+        {"gate": "coaching_runtime_gate", "why": "research-backed coaching workflows must be visible in runtime product surfaces"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "ingestion quality scored against named-gold traceability once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the research-to-screen chain move Week-2 activation? BOOK verdict"}
       ]
     },
     "copy": {
@@ -135,6 +387,290 @@
       "tier_3": [
         {"gate": "coach_buyer_panel", "why": "does this edge function's surfaced output move Week-2 activation? BOOK verdict + metric trace"}
       ]
+    },
+    "coaching_runtime": {
+      "description": "The Flutter runtime embedding of AI coach workflows: CoachSignal engine, provider wiring, Today surface, active workout logger surface, and tests.",
+      "tier_1": [
+        {"gate": "coaching_runtime_gate", "why": "runtime coach embedding must cover every workflow, source trace, app provider wiring, and screen usage"},
+        {"gate": "coach_quality_eval_gate", "why": "coach workflows must pass deterministic quality scenarios for pain, deload, coasting, overreach, and unsafe copy"},
+        {"gate": "coaching_harness_gate", "why": "runtime workflow IDs must match the deterministic coaching harness"},
+        {"gate": "build_test_gate", "why": "runtime coach engine and widget surfaces must compile and pass tests"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "runtime coach experience scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the runtime coach experience move Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "coach_quality_eval": {
+      "description": "The deterministic coach-quality eval runtime and scenario tests for safety, action-point coaching, and behavior-loop trust.",
+      "tier_1": [
+        {"gate": "coach_quality_eval_gate", "why": "the eval harness must cover required coach-quality and safety scenarios"},
+        {"gate": "coaching_runtime_gate", "why": "the eval scenarios must be wired into the primary coach runtime"},
+        {"gate": "build_test_gate", "why": "coach-quality runtime and tests must compile and pass"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "coach-quality scenarios scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the coach-quality layer increase trust and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "nutrition_target": {
+      "description": "The activation nutrition target slice: safe target model, Today UI, proof row, official-source trace, and tests.",
+      "tier_1": [
+        {"gate": "nutrition_target_gate", "why": "nutrition target must be persisted, source-traced, visible, tested, and bounded by conservative safety copy"},
+        {"gate": "build_test_gate", "why": "nutrition target model and Today screen must compile and pass tests"},
+        {"gate": "doctrine_lint", "why": "nutrition target surfaced copy must avoid body-shame, false promises, and unsafe transformation claims"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "nutrition activation experience scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this target increase 24-hour activation and trust? BOOK verdict"}
+      ]
+    },
+    "body_composition_trust": {
+      "description": "The composition-trust slice: safe trend-context logic, dedicated screen, source trace, discovery paths, privacy copy, and 1000-scenario tests.",
+      "tier_1": [
+        {"gate": "body_composition_trust_gate", "why": "composition trust must be source-traced, visible, tested, private by default, and free of appearance-pressure copy"},
+        {"gate": "build_test_gate", "why": "composition trust logic, screen, route, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "composition copy must avoid body-shame, false promises, diagnosis, and transformation pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "composition trust scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does this interpretation layer increase trust and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "workout_logger_intelligence": {
+      "description": "The active workout set-intelligence slice: progression intent, exact previous reference, readiness context, auto-started rest countdown, persisted actual-rest timing, low-readiness load/RPE/planned-set caps, pain-safety progression blocking, technique substitution support, rest pace, source trace, and 1000-scenario tests.",
+      "tier_1": [
+        {"gate": "workout_logger_intelligence_gate", "why": "the active workout logger must make progression and rest decisions explicit at set-entry time"},
+        {"gate": "build_test_gate", "why": "set intelligence logic and active workout widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "workout logger copy must avoid body-shame, false promises, unsafe pressure, and generic coaching"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "logger intelligence scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does explicit set intelligence increase logging confidence and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "wearable_dai_interface": {
+      "description": "The wearable and DAI interface slice: persisted wearable context, HealthKit/Health Connect adapter seam, adapter provider use-case into Today session state, DAI command layer, Today UI, native permissions, permission-pending/unavailable fail-closed zero modifiers, source trace, adapter conversion tests, and 1000-scenario tests.",
+      "tier_1": [
+        {"gate": "wearable_dai_interface_gate", "why": "wearable and DAI integration must be source-traced, visible, permission-bounded, tested, and wired into ship gates"},
+        {"gate": "build_test_gate", "why": "wearable state, DAI logic, native plugin dependency, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "wearable copy must avoid diagnosis, body pressure, fake sync claims, and unsafe coaching promises"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "wearable DAI scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does wearable DAI increase coach trust and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "coach_command_center": {
+      "description": "The v25 coach command surface: a single source-traced command center combining DAI, wearable readiness, readiness entry, training ledger, nutrition, safety, coach handoff, and next-24-hour plan.",
+      "tier_1": [
+        {"gate": "coach_command_center_gate", "why": "the command center must be model-backed, routed, source-traced, discoverable from Today, tested, and free of unsafe coaching copy"},
+        {"gate": "wearable_dai_interface_gate", "why": "the command center depends on the wearable-informed DAI interface contract"},
+        {"gate": "build_test_gate", "why": "command center model, route, screen, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "coach command copy must avoid body-shame, diagnosis, false promises, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "coach command center scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the command center increase coach trust, logging confidence, and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "behavioral_repair_loop": {
+      "description": "The behavioral repair loop: deterministic state routing for day-zero activation, stale check-ins, low readiness, pain safety, missed-day comeback, live-session closure, nutrition bridge, and proof recommitment.",
+      "tier_1": [
+        {"gate": "behavioral_repair_loop_gate", "why": "behavior repair must be model-backed, visible on Today, represented in coach command, tested, source-traced, and wired into ship gates"},
+        {"gate": "coach_command_center_gate", "why": "coach command must expose behavioral repair as a lane alongside DAI, readiness, training, nutrition, and safety"},
+        {"gate": "build_test_gate", "why": "repair model, provider, Today UI, coach command UI, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "repair copy must avoid shame, guilt, diagnosis, false promises, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "behavioral repair loop scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the repair loop improve comeback trust, restart confidence, and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "emotional_experience_map": {
+      "description": "The emotional experience map: deterministic routing for orientation, agency, safety, comeback, momentum, and proof identity across Progress and Coach Command.",
+      "tier_1": [
+        {"gate": "emotional_experience_map_gate", "why": "the emotional map must be model-backed, visible on Progress and Coach Command, tested, source-traced, and wired into ship gates"},
+        {"gate": "behavioral_repair_loop_gate", "why": "emotional state must stay aligned with repair loops for starts, stalls, pain, recovery, and comeback"},
+        {"gate": "build_test_gate", "why": "emotional model, provider, progress UI, coach UI, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "emotional copy must avoid shame, guilt, diagnosis, false promises, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "emotional experience map scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the emotional map improve trust, recommitment, and Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "rig_systems_engineering": {
+      "description": "The RIG systems-engineering layer: A1-A4 build-mode archetypes, BMS confidence routing, and D1/D2/D3 Triple Double Diamond cells mapped across IQRSQPI.",
+      "tier_1": [
+        {"gate": "rig_systems_engineering_gate", "why": "RIG systems engineering must be deterministic, visible in the coach command surface, tested, and wired into ship gates"},
+        {"gate": "coach_command_center_gate", "why": "the systems layer must live inside the coach command center rather than a detached manifest"},
+        {"gate": "build_test_gate", "why": "systems logic, provider, screen, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "systems copy must avoid body-shame, diagnosis, false promises, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "RIG systems layer scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does explicit BMS routing increase trust and coach command clarity? BOOK verdict"}
+      ]
+    },
+    "testsprite_full_user_testing": {
+      "description": "The TestSprite-aware comprehensive user-testing contract: expert lanes, 20 user personas, TestSprite frontend plan specs, 1000 deterministic scenarios, and honest cloud/recruited-user boundaries.",
+      "tier_1": [
+        {"gate": "testsprite_full_user_testing_gate", "why": "the comprehensive testing harness must prove TestSprite CLI contract, generated scenarios, and no fake real-user/cloud claim"},
+        {"gate": "two_day_war_room_gate", "why": "the war-room sprint must require the TestSprite testing KPI, lane, and gate"},
+        {"gate": "doctrine_lint", "why": "testing claims must avoid hype, false public claims, fake endorsements, or unsupported completion language"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "testing plan scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the testing program reduce release risk and improve activation? BOOK verdict"}
+      ]
+    },
+    "fitness_agent_review_swarm": {
+      "description": "The local fitness-agent review swarm: top installed Codex/Agency/VoltAgent/RIG roles, GitHub fitness-agent repo inputs, 20 Apple/Android benchmark apps, 20 improvement items, 20 code-review findings, and next UI/native harnesses.",
+      "tier_1": [
+        {"gate": "fitness_agent_review_swarm_gate", "why": "agent roster, app benchmarks, code-review findings, UI harness plan, and route-contract parity must be deterministic and source-backed"},
+        {"gate": "testsprite_full_user_testing_gate", "why": "review swarm testing outputs must align with the comprehensive 1000-scenario local user-testing contract"},
+        {"gate": "competitive_reverse_engineering_gate", "why": "commercial app benchmark inputs must stay consistent with the complete 100-app competitive ledger"},
+        {"gate": "two_day_war_room_gate", "why": "the war-room sprint must require the review-swarm KPI, lane, and gate"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "review-swarm priorities scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the review swarm reduce release risk and improve activation? BOOK verdict"}
+      ]
+    },
+    "native_mobile_setup": {
+      "description": "The Apple and Android app shell setup: bundle IDs, app names, native launch surfaces, launcher icons, release signing posture, network permissions, and static policy floors.",
+      "tier_1": [
+        {"gate": "native_mobile_setup_gate", "why": "native app setup must be release-safe at the repository level before store-build proof is claimed"},
+        {"gate": "build_test_gate", "why": "Flutter code must still analyze and test against the same platform scaffold"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "native first-open and app-shell quality scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the mobile first-open trust experience support Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "two_day_war_room": {
+      "description": "The governed 48-hour multidisciplinary TransformFit improvement sprint: specialist panel, 20-user scenario panel, KPI model, cadence, public-action boundaries, and proof obligations.",
+      "tier_1": [
+        {"gate": "two_day_war_room_gate", "why": "the 48-hour improvement sprint must preserve required disciplines, users, KPIs, gates, sidecar inputs, and proof cadence"},
+        {"gate": "doctrine_lint", "why": "sprint language must avoid hype, false public claims, body-shame, or fake endorsements"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "war-room outputs scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the team model produce work that moves activation and trust? BOOK verdict"}
+      ]
+    },
+    "five_star_experience": {
+      "description": "The five-star experience review-readiness layer: deterministic product-quality criteria plus safety-first eligibility for native store-review moments after real value, activation, and positive debrief evidence.",
+      "tier_1": [
+        {"gate": "five_star_experience_gate", "why": "review readiness must be value-earned, source-traced, visible in Coach Command, tested across 1000 scenarios, and free of manipulative rating copy"},
+        {"gate": "coach_command_center_gate", "why": "coach command must expose review readiness as a trust lane alongside training, nutrition, readiness, and safety"},
+        {"gate": "build_test_gate", "why": "five-star model, provider, command-center integration, and widget tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "review-readiness copy must avoid manipulative asks, false promises, body-shame, diagnosis, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "five-star experience bar scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does review readiness improve trust, store rating quality, and Week-2 activation without dark patterns? BOOK verdict"}
+      ]
+    },
+    "value_before_auth": {
+      "description": "The value-before-auth first-open corridor: unauthenticated users see TransformFitAI's coach value and can continue public onboarding before account creation, while protected app surfaces remain guarded.",
+      "tier_1": [
+        {"gate": "value_before_auth_gate", "why": "first-open traffic must see product value before the auth wall without weakening protected-route auth boundaries"},
+        {"gate": "build_test_gate", "why": "router, app smoke, and landing tests must compile and pass"},
+        {"gate": "doctrine_lint", "why": "first-open copy must avoid body-shame, pricing pressure, false promises, and unsafe transformation claims"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "first-open value corridor scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does value-before-auth improve activation and client trust without privacy regression? BOOK verdict"}
+      ]
+    },
+    "first_session_handoff": {
+      "description": "The authenticated onboarding-to-session corridor: the final handoff must convert plan intent into a live local workout without waiting on remote profile completion.",
+      "tier_1": [
+        {"gate": "first_session_handoff_gate", "why": "the handoff must enter workout before remote completion resolves while preserving guard safety and plan queue continuity"},
+        {"gate": "build_test_gate", "why": "handoff widget tests must prove local-first navigation, active session seeding, and plan queue continuity"},
+        {"gate": "doctrine_lint", "why": "handoff copy must avoid payment pressure, body-shame, false promises, and unsafe transformation claims"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "first-session handoff scored against named-gold activation flow once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the first-session handoff reduce time-to-first-session and increase Week-2 activation? BOOK verdict"}
+      ]
+    },
+    "accessibility_low_end_device": {
+      "description": "The accessibility and low-end-device release slice: named semantics, 44px touch targets, compact-phone layout coverage, and large-text proof-card sharing verification across the core app corridors.",
+      "tier_1": [
+        {"gate": "accessibility_low_end_device_gate", "why": "accessibility and low-end-device readiness must be deterministic, tested, routed, and non-vacuity-proven"},
+        {"gate": "build_test_gate", "why": "the accessibility widget tests must compile and pass under Flutter"},
+        {"gate": "doctrine_lint", "why": "accessible copy must avoid body-shame, diagnosis, false promises, and unsafe pressure"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "accessibility and compact-mobile coverage scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does the accessible low-end experience improve trust, activation, and workout completion? BOOK verdict"}
+      ]
+    },
+    "perf_frame_budget": {
+      "description": "The local route performance and reliability budget slice: core protected routes must settle inside a deterministic 800ms p95 widget-frame budget before release proof is trusted.",
+      "tier_1": [
+        {"gate": "perf_frame_budget_gate", "why": "route transitions must have a reproducible frame-budget test and fail-closed wiring before p95 performance evidence is trusted"},
+        {"gate": "build_test_gate", "why": "the performance widget test must compile and pass in the normal Flutter test suite"},
+        {"gate": "accessibility_low_end_device_gate", "why": "low-end route performance and compact-device usability are coupled release risks"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "performance and reliability budget scored against named-gold once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does faster perceived navigation improve activation and trust? BOOK verdict"}
+      ]
+    },
+    "ship_gate_non_vacuity": {
+      "description": "The RED-path proof layer for the TransformFit ship gate: representative Tier-1 gates must prove they can fail under planted temporary mutations before green ship evidence is trusted.",
+      "tier_1": [
+        {"gate": "ship_gate_non_vacuity_gate", "why": "ship evidence must prove clean GREEN and planted-failure RED for representative deterministic gates"},
+        {"gate": "two_day_war_room_gate", "why": "the governed sprint must require non-vacuity proof as part of proof discipline"}
+      ],
+      "tier_2": [
+        {"gate": "adversarial_teardown", "why": "non-vacuity coverage scored against named-gold verification discipline once calibrated"}
+      ],
+      "tier_3": [
+        {"gate": "coach_buyer_panel", "why": "does release proof discipline reduce client risk and increase trust? BOOK verdict"}
+      ]
     }
   },
   "gate_maturity": {
@@ -142,7 +678,30 @@
       "doctrine_lint",
       "message_rule_lint",
       "design_lint",
-      "build_test_gate"
+      "build_test_gate",
+      "coaching_harness_gate",
+      "competitive_reverse_engineering_gate",
+      "ux_ui_research_ingestion_gate",
+      "coaching_runtime_gate",
+      "coach_quality_eval_gate",
+      "nutrition_target_gate",
+      "body_composition_trust_gate",
+      "workout_logger_intelligence_gate",
+      "wearable_dai_interface_gate",
+      "coach_command_center_gate",
+      "behavioral_repair_loop_gate",
+      "emotional_experience_map_gate",
+      "rig_systems_engineering_gate",
+      "testsprite_full_user_testing_gate",
+      "fitness_agent_review_swarm_gate",
+      "native_mobile_setup_gate",
+      "two_day_war_room_gate",
+      "five_star_experience_gate",
+      "value_before_auth_gate",
+      "first_session_handoff_gate",
+      "accessibility_low_end_device_gate",
+      "perf_frame_budget_gate",
+      "ship_gate_non_vacuity_gate"
     ],
     "human_gate_only_no_runner_yet": [
       "adversarial_teardown",

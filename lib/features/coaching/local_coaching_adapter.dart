@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+
 /// Local model adapter for coaching copy generation.
 ///
 /// Provides a local-only narration route using Ollama (`rig-128gb-coder:latest`)
@@ -33,11 +35,12 @@ class LocalNarrationResult {
 /// (Ollama runs on localhost:11434).
 class LocalCoachingAdapter {
   LocalCoachingAdapter({
+    // Keep public named parameters stable for tests and dev configuration.
     String model = 'rig-128gb-coder:latest',
     String ollamaHost = 'http://localhost:11434',
     this.timeout = const Duration(seconds: 30),
-  })  : _model = model,
-        _ollamaHost = ollamaHost;
+  }) : _model = model,
+       _ollamaHost = ollamaHost;
 
   final String _model;
   final String _ollamaHost;
@@ -95,7 +98,9 @@ class LocalCoachingAdapter {
 
       final data = jsonDecode(body) as Map<String, dynamic>;
       final models = data['models'] as List? ?? [];
-      return models.any((m) => (m['name'] as String?)?.startsWith(_model) ?? false);
+      return models.any(
+        (m) => (m['name'] as String?)?.startsWith(_model) ?? false,
+      );
     } catch (_) {
       return false;
     }
@@ -129,14 +134,18 @@ class LocalCoachingAdapter {
     client.connectionTimeout = timeout;
 
     try {
-      final request = await client.postUrl(Uri.parse('$_ollamaHost/api/generate'));
+      final request = await client.postUrl(
+        Uri.parse('$_ollamaHost/api/generate'),
+      );
       request.headers.contentType = ContentType.json;
-      request.write(jsonEncode({
-        'model': _model,
-        'prompt': prompt,
-        'stream': false,
-        'options': {'temperature': 0.3},
-      }));
+      request.write(
+        jsonEncode({
+          'model': _model,
+          'prompt': prompt,
+          'stream': false,
+          'options': {'temperature': 0.3},
+        }),
+      );
 
       final response = await request.close().timeout(timeout);
       final body = await response.transform(utf8.decoder).join();
@@ -166,10 +175,7 @@ class LocalCoachingAdapter {
     }
 
     // Must not contain emoji (basic check)
-    final emojiRegex = RegExp(
-      '[\u{1F300}-\u{1F9FF}]',
-      unicode: true,
-    );
+    final emojiRegex = RegExp('[\u{1F300}-\u{1F9FF}]', unicode: true);
     if (emojiRegex.hasMatch(cue)) return false;
 
     return true;
@@ -181,9 +187,12 @@ class LocalCoachingAdapter {
     double volumeMultiplier,
   ) {
     final cue = switch (readinessZone) {
-      'push' => 'Readiness is high — $exerciseCount exercises at full volume. Push the top sets.',
-      'maintain' => 'Steady day — $exerciseCount exercises at standard volume. Hit your numbers.',
-      'deload' => 'Recovery priority — $exerciseCount exercises at ${(volumeMultiplier * 100).round()}% volume. Move well, don\'t grind.',
+      'push' =>
+        'Readiness is high — $exerciseCount exercises at full volume. Push the top sets.',
+      'maintain' =>
+        'Steady day — $exerciseCount exercises at standard volume. Hit your numbers.',
+      'deload' =>
+        'Recovery priority — $exerciseCount exercises at ${(volumeMultiplier * 100).round()}% volume. Move well, don\'t grind.',
       _ => 'Train $exerciseCount exercises today. Match effort to readiness.',
     };
 

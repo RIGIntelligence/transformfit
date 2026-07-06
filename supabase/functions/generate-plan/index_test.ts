@@ -7,8 +7,8 @@
 // flagged is_fallback:true / model_used:"deterministic" on LLM failure), and
 // ALWAYS returns 200 with a complete plan packet (never 501/empty). The acting
 // user is resolved from the JWT ONLY; any caller-supplied user_id is ignored.
-import { assert, assertEquals, assertNotEquals } from "jsr:@std/assert";
-import { handler, type GeneratePlanResponse } from "./index.ts";
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
+import { type GeneratePlanResponse, handler } from "./index.ts";
 
 // --- helpers ---------------------------------------------------------------
 
@@ -18,22 +18,28 @@ Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
 Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
 
 function enc(obj: unknown): string {
-  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 function encBytes(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
+    /=+$/,
+    "",
+  );
 }
 
 async function makeJwt(payload: Record<string, unknown>): Promise<string> {
-  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${enc({
-    exp: Math.floor(Date.now() / 1000) + 3600,
-    iss: "supabase",
-    aud: "authenticated",
-    ...payload,
-  })}`;
+  const signingInput = `${enc({ alg: "HS256", typ: "JWT" })}.${
+    enc({
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iss: "supabase",
+      aud: "authenticated",
+      ...payload,
+    })
+  }`;
   const key = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(TEST_JWT_SECRET),
@@ -41,31 +47,39 @@ async function makeJwt(payload: Record<string, unknown>): Promise<string> {
     false,
     ["sign"],
   );
-  const sig = new Uint8Array(await crypto.subtle.sign(
-    "HMAC",
-    key,
-    new TextEncoder().encode(signingInput),
-  ));
+  const sig = new Uint8Array(
+    await crypto.subtle.sign(
+      "HMAC",
+      key,
+      new TextEncoder().encode(signingInput),
+    ),
+  );
   return `${signingInput}.${encBytes(sig)}`;
 }
 
 function authedReq(token: string, body: unknown): Request {
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan", {
-    method: "POST",
-    headers: {
-      "authorization": `Bearer ${token}`,
-      "content-type": "application/json",
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan",
+    {
+      method: "POST",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  });
+  );
 }
 
 function anonReq(body: unknown): Request {
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan",
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    },
+  );
 }
 
 const VALID_BODY = {
@@ -81,16 +95,26 @@ const VALID_BODY = {
 
 Deno.test("generate-plan: rejects request with no JWT (4xx, no mutation)", async () => {
   const res = await handler(anonReq(VALID_BODY));
-  assert(res.status >= 400 && res.status < 500, `expected 4xx, got ${res.status}`);
+  assert(
+    res.status >= 400 && res.status < 500,
+    `expected 4xx, got ${res.status}`,
+  );
 });
 
 Deno.test("generate-plan: rejects malformed JWT (4xx)", async () => {
   const res = await handler(authedReq("not.a.real.jwt", VALID_BODY));
-  assert(res.status >= 400 && res.status < 500, `expected 4xx, got ${res.status}`);
+  assert(
+    res.status >= 400 && res.status < 500,
+    `expected 4xx, got ${res.status}`,
+  );
 });
 
 Deno.test("generate-plan: valid JWT -> 200 with a complete deterministic plan packet", async () => {
-  const jwt = await makeJwt({ sub: "user-a", email: "a@transformfit.test", role: "authenticated" });
+  const jwt = await makeJwt({
+    sub: "user-a",
+    email: "a@transformfit.test",
+    role: "authenticated",
+  });
   // Ensure no OpenRouter key so the deterministic fallback path fires.
   const prev = Deno.env.get("OPENROUTER_API_KEY");
   Deno.env.delete("OPENROUTER_API_KEY");
@@ -201,7 +225,10 @@ Deno.test("generate-plan: numbers/exercises come ONLY from the engine (immateria
   const eqs = new Set<string>(["bodyweight", "dumbbells"]);
   for (const d of a.plan.days) {
     for (const e of d.exercises) {
-      assert(eqs.has(e.equipment), `${e.id} uses ${e.equipment}, outside effective set`);
+      assert(
+        eqs.has(e.equipment),
+        `${e.id} uses ${e.equipment}, outside effective set`,
+      );
     }
   }
 });
@@ -224,13 +251,20 @@ Deno.test("generate-plan: surfaced fallback has user phrase echo in reasoning", 
 });
 
 // Helper: build a request with both JWT and a body user_id.
-function authedJwtWithBody(token: string, bodyUserId: string, intake: unknown): Request {
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan", {
-    method: "POST",
-    headers: {
-      "authorization": `Bearer ${token}`,
-      "content-type": "application/json",
+function authedJwtWithBody(
+  token: string,
+  bodyUserId: string,
+  intake: unknown,
+): Request {
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/generate-plan",
+    {
+      method: "POST",
+      headers: {
+        "authorization": `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(Object.assign({ user_id: bodyUserId }, intake)),
     },
-    body: JSON.stringify(Object.assign({ user_id: bodyUserId }, intake)),
-  });
+  );
 }

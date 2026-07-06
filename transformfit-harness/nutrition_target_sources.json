@@ -1,0 +1,50 @@
+{
+  "schema": "transformfit.nutrition_target_sources.v1",
+  "version": "1.0.0",
+  "purpose": "Official-source and safety boundary sidecar for the activation nutrition target slice.",
+  "sources": [
+    {
+      "id": "src_odphp_dietary_guidelines_2025_2030",
+      "name": "Dietary Guidelines for Americans, 2025-2030",
+      "publisher": "U.S. Department of Health and Human Services and U.S. Department of Agriculture",
+      "source_url": "https://odphp.health.gov/our-work/nutrition-physical-activity/dietary-guidelines/current-dietary-guidelines",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Provides the general official nutrition context for user-chosen daily targets. The app must not turn this into medical diagnosis, disease treatment, or body-shame copy."
+    },
+    {
+      "id": "src_odphp_physical_activity_guidelines",
+      "name": "Physical Activity Guidelines for Americans",
+      "publisher": "U.S. Department of Health and Human Services",
+      "source_url": "https://odphp.health.gov/our-work/nutrition-physical-activity/physical-activity-guidelines",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Links nutrition target creation to training consistency and recovery context without prescribing a medical nutrition plan."
+    },
+    {
+      "id": "src_nutrition_target_safety_protocol",
+      "name": "TransformFit nutrition target safety protocol",
+      "publisher": "TransformFit harness",
+      "source_url": "local:transformfit-harness/nutrition_target_gate.py",
+      "retrieved_at": "2026-07-02",
+      "product_use": "Requires user-selected targets, bounded units, source trace, conservative copy, and visible non-medical framing."
+    }
+  ],
+  "allowed_target_types": [
+    "protein",
+    "hydration",
+    "recovery_fuel",
+    "meal_rhythm"
+  ],
+  "allowed_units": [
+    "g/day",
+    "ml/day",
+    "meals/day",
+    "times/day"
+  ],
+  "safety_rules": [
+    "Every persisted target carries the phrase not medical nutrition advice.",
+    "The first activation target is user-selected and may be updated by the user.",
+    "The app does not prescribe calorie deficits, diagnose conditions, promise body outcomes, or use body-shame language.",
+    "Targets remain bounded by deterministic validation before they can be saved."
+  ],
+  "activation_kpi_trace": "Activation requires onboarding, one goal, one logged workout, and one nutrition target within 24 hours."
+}

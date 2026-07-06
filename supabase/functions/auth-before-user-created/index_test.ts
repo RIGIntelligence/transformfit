@@ -1,14 +1,17 @@
 // Unit + handler tests for the before_user_created auth hook edge function.
 // Run: deno test --allow-all supabase/functions/auth-before-user-created/index_test.ts
-import { assert, assertEquals } from "jsr:@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { handler, isBlockedEmail } from "./index.ts";
 
 function hookReq(body: unknown, method = "POST"): Request {
-  return new Request("https://zuwtgdqsxmtiqojckpus.functions.supabase.co/auth-before-user-created", {
-    method,
-    body: method === "POST" ? JSON.stringify(body) : undefined,
-    headers: { "content-type": "application/json" },
-  });
+  return new Request(
+    "https://zuwtgdqsxmtiqojckpus.functions.supabase.co/auth-before-user-created",
+    {
+      method,
+      body: method === "POST" ? JSON.stringify(body) : undefined,
+      headers: { "content-type": "application/json" },
+    },
+  );
 }
 
 // --- Pure decision function ---
@@ -53,7 +56,9 @@ Deno.test("handler: @example.com -> HTTP 200 with error.http_code=422 (GoTrue pr
   const body = await res.json();
   assert(typeof body.error === "object");
   assertEquals(body.error.http_code, 422);
-  assert(typeof body.error.message === "string" && body.error.message.length > 0);
+  assert(
+    typeof body.error.message === "string" && body.error.message.length > 0,
+  );
 });
 
 Deno.test("handler: @EXAMPLE.Com -> error.http_code=422 (case-insensitive domain)", async () => {
@@ -72,13 +77,17 @@ Deno.test("handler: @gmail.com -> 200 with empty object (allow)", async () => {
 });
 
 Deno.test("handler: @transformfit.test -> 200 (allow realistic domain)", async () => {
-  const res = await handler(hookReq({ user: { email: "val@transformfit.test" } }));
+  const res = await handler(
+    hookReq({ user: { email: "val@transformfit.test" } }),
+  );
   assertEquals(res.status, 200);
   assertEquals(await res.json(), {});
 });
 
 Deno.test("handler: sub.example.com -> 200 (subdomains NOT blocked)", async () => {
-  const res = await handler(hookReq({ user: { email: "user@sub.example.com" } }));
+  const res = await handler(
+    hookReq({ user: { email: "user@sub.example.com" } }),
+  );
   assertEquals(res.status, 200);
 });
 

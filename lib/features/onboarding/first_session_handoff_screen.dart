@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/engine/plan_generation.dart';
 import 'package:transformfit/features/auth/auth_controller.dart';
+import 'package:transformfit/features/auth/auth_service.dart';
+import 'package:transformfit/features/session/models.dart';
+import 'package:transformfit/features/session/session_controller.dart';
+import 'package:transformfit/features/onboarding/plan_reveal_controller.dart';
+import 'package:transformfit/features/workout/workout_prefill.dart';
+import 'package:transformfit/navigation/auth_state.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 /// The first-session-ready handoff (MoT4).
@@ -19,10 +27,7 @@ import 'package:transformfit/theme/digital_atelier.dart';
 /// /onboarding until the full flow finishes and a half-built profile never
 /// leaks into the main app.
 class FirstSessionHandoffScreen extends ConsumerWidget {
-  const FirstSessionHandoffScreen({
-    super.key,
-    required this.intake,
-  });
+  const FirstSessionHandoffScreen({super.key, required this.intake});
 
   /// The intake that generated the plan. Passed from the plan reveal so the
   /// handoff can deterministically reconstruct the first session without a
@@ -157,17 +162,66 @@ class FirstSessionHandoffScreen extends ConsumerWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      final userId =
-                          ref.read(authFacadeProvider).currentUserId();
-                      if (userId != null) {
-                        await ref
-                            .read(profileFacadeProvider)
-                            .completeOnboarding(userId);
-                        await ref.read(authControllerProvider).refresh();
+                    onPressed: () {
+                      final workoutPrefill = WorkoutPrefill.fromPlanDay(
+                        session1,
+                      );
+                      final sessionPlan = workoutPrefill.sessionExercises
+                          .map(
+                            (exercise) => SessionPlanExercise(
+                              exerciseId: exercise.exerciseId,
+                              exerciseName: exercise.exerciseName,
+                              targetSets: exercise.targetSets,
+                              targetReps: exercise.targetReps,
+                              targetRpe: exercise.targetRpe,
+                              targetRestSeconds: exercise.targetRestSeconds,
+                              suggestedWeightKg: exercise.suggestedWeightKg,
+                            ),
+                          )
+                          .toList(growable: false);
+                      final sessionController = ref.read(
+                        sessionControllerProvider,
+                      );
+                      if (sessionController.state.readinessEntry == null) {
+                        sessionController.submitReadiness(
+                          energyLevel: 7,
+                          sleepQuality: 7,
+                          // Limitations shape exercise selection; they are not
+                          // evidence of today's soreness.
+                          sorenessMap: const [],
+                        );
                       }
-                      if (!context.mounted) return;
-                      context.go('/');
+                      if (sessionController.state.activeSession == null) {
+                        sessionController.startSession(plan: sessionPlan);
+                      } else if (sessionController
+                          .state
+                          .activeSessionPlan
+                          .isEmpty) {
+                        sessionController.attachActiveSessionPlan(sessionPlan);
+                      }
+                      _clearPendingOnboardingProviders(ref);
+                      final userId = ref
+                          .read(authFacadeProvider)
+                          .currentUserId();
+                      if (userId != null) {
+                        final authController = ref.read(authControllerProvider);
+                        final profileFacade = ref.read(profileFacadeProvider);
+                        ref
+                            .read(authGuardStateProvider)
+                            .setStatus(
+                              AuthGuardStatus.authenticatedWithProfile,
+                            );
+                        context.go('/workout', extra: workoutPrefill);
+                        unawaited(
+                          _completeRemoteOnboarding(
+                            profileFacade: profileFacade,
+                            authController: authController,
+                            userId: userId,
+                          ),
+                        );
+                        return;
+                      }
+                      context.go('/workout', extra: workoutPrefill);
                     },
                     child: const Text('Start session'),
                   ),
@@ -177,6 +231,26 @@ class FirstSessionHandoffScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+void _clearPendingOnboardingProviders(WidgetRef ref) {
+  ref.read(pendingIntakeProvider.notifier).clear();
+  ref.read(userWhyNowProvider.notifier).clear();
+}
+
+Future<void> _completeRemoteOnboarding({
+  required ProfileFacade profileFacade,
+  required AuthController authController,
+  required String userId,
+}) async {
+  try {
+    await profileFacade.completeOnboarding(userId);
+    await authController.refresh();
+  } catch (error) {
+    debugPrint(
+      'first-session handoff completion sync failed: ${error.runtimeType}',
     );
   }
 }

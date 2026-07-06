@@ -1,0 +1,53 @@
+{
+  "schema": "transformfit.wearable_dai_sources.v1",
+  "version": "1.1.0",
+  "retrieved_at": "2026-07-02T22:35:00-04:00",
+  "claim_boundary": "This sidecar proves implementation inputs and platform readiness only. It does not prove live wearable authorization, device sync, App Store approval, Google Play approval, or real hardware data quality.",
+  "sources": [
+    {
+      "id": "src_apple_healthkit_data_types",
+      "name": "Apple HealthKit Data Types",
+      "source_url": "https://developer.apple.com/documentation/healthkit/data-types",
+      "retrieved_at": "2026-07-02T22:35:00-04:00",
+      "product_use": "iOS wearable integration source trace for HealthKit quantity and category data used by DAI."
+    },
+    {
+      "id": "src_android_health_connect_overview",
+      "name": "Android Health Connect",
+      "source_url": "https://developer.android.com/health-and-fitness/health-connect",
+      "retrieved_at": "2026-07-02T22:35:00-04:00",
+      "product_use": "Android wearable integration source trace for steps, heart rate, sleep, and workout data access."
+    },
+    {
+      "id": "src_android_health_connect_sleep",
+      "name": "Android Health Connect Sleep Experience",
+      "source_url": "https://developer.android.com/health-and-fitness/health-connect/experiences/sleep",
+      "retrieved_at": "2026-07-02T22:35:00-04:00",
+      "product_use": "Sleep-session context and caveats for readiness adjustment without medical overreach."
+    },
+    {
+      "id": "src_flutter_health_package",
+      "name": "Flutter health package",
+      "source_url": "https://pub.dev/packages/health",
+      "retrieved_at": "2026-07-02T22:35:00-04:00",
+      "product_use": "Cross-platform Flutter bridge for Apple HealthKit and Google Health Connect, replacing deprecated Google Fit paths."
+    }
+  ],
+  "wearable_quality_bar": [
+    "DAI must consume the same persisted session state as coach workflow, not a parallel mock.",
+    "Wearable data must change readiness context through explicit modifier language, not hidden personalization.",
+    "HealthKit and Health Connect must stay opt-in, source-traced, and permission-bound.",
+    "Permission-pending and unavailable snapshots must fail closed with zero readiness modifier and no wearable-derived training inference.",
+    "Local sample sync is allowed for deterministic tests; live device sync requires separate hardware proof.",
+    "Wearable copy must avoid diagnosis, body-pressure, or unsupported performance promises."
+  ],
+  "team_panel_proxy": {
+    "simulated_users": 20,
+    "designers": 4,
+    "fitness_coaches": 4,
+    "ai_engineers": 4,
+    "behavioral_science_specialists": 4,
+    "privacy_safety_reviewers": 2,
+    "boundary": "No outreach, endorsement, public claim, or private wearable data export occurred."
+  }
+}

@@ -77,7 +77,10 @@ class CoachCommandCenter {
       '$confidenceLabel. $commandReason $safetyBoundary';
 }
 
-CoachCommandCenter buildCoachCommandCenter(SessionState state) {
+CoachCommandCenter buildCoachCommandCenter(
+  SessionState state, {
+  DateTime? now,
+}) {
   final dai = buildDaiInterface(state);
   final coach = dai.coachSignal;
   final sourceIds = _uniqueSourceIds([
@@ -86,7 +89,7 @@ CoachCommandCenter buildCoachCommandCenter(SessionState state) {
   ]);
   final riskLabel = _riskLabel(state, dai);
   final headline = _headline(state, dai);
-  final lanes = _buildLanes(state, dai, coach);
+  final lanes = _buildLanes(state, dai, coach, now: now);
 
   return CoachCommandCenter(
     headline: headline,
@@ -153,12 +156,13 @@ String _riskLabel(SessionState state, DaiInterface dai) {
 List<CoachCommandLane> _buildLanes(
   SessionState state,
   DaiInterface dai,
-  CoachSignal coach,
-) {
+  CoachSignal coach, {
+  DateTime? now,
+}) {
   final readiness = state.readinessEntry;
   final nutrition = state.nutritionTarget;
   final wearable = state.wearableSignal;
-  final behavior = buildBehavioralRepairLoop(state);
+  final behavior = buildBehavioralRepairLoop(state, now: now);
   final reviewMoment = buildFiveStarExperienceMoment(state);
   final completed = state.history
       .where(

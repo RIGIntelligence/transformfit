@@ -105,7 +105,8 @@ CoachQualityVerdict evaluateCoachSignal({
     );
   }
 
-  if (_hasRapidVolumeJump(state.history) &&
+  if (state.activeSession == null &&
+      _hasRapidVolumeJump(state.history) &&
       signal.workflowId != 'coasting_or_overreaching' &&
       signal.workflowId != 'pain_or_injury_guardrail') {
     add('overreach_workflow', 'Rapid volume jump must route to a hold signal.');

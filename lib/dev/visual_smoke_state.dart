@@ -1,0 +1,166 @@
+import 'package:transformfit/features/session/models.dart';
+import 'package:transformfit/features/session/session_controller.dart';
+import 'package:transformfit/features/wearables/wearable_signal.dart';
+
+SessionState buildVisualSmokeSessionState() {
+  final now = DateTime(2026, 7, 2, 8, 18);
+  const readinessId = 'visual-readiness-2026-07-02';
+
+  return SessionState(
+    readinessEntry: ReadinessEntry(
+      id: readinessId,
+      date: DateTime(2026, 7, 2),
+      score: 82,
+      zone: 'push',
+      energyLevel: 8,
+      sleepQuality: 7,
+      sorenessMap: const ['hips'],
+      hrv: 71,
+      createdAt: DateTime(2026, 7, 2, 7, 42),
+    ),
+    wearableSignal: WearableSignal(
+      id: 'visual-wearable-2026-07-02',
+      capturedAt: DateTime(2026, 7, 2, 7, 45),
+      source: 'apple_healthkit',
+      syncState: 'synced',
+      stepsToday: 6120,
+      restingHeartRateBpm: 58,
+      heartRateVariabilityMs: 71,
+      sleepMinutes: 448,
+      activeEnergyKcal: 390,
+      workoutMinutes: 42,
+    ),
+    activeSession: WorkoutSession(
+      id: 'visual-live-session',
+      startedAt: now.subtract(const Duration(minutes: 18)),
+      readinessEntryId: readinessId,
+      volumeMultiplier: 1.1,
+      loggedSets: const [
+        LoggedSet(
+          id: 'visual-live-squat-1',
+          exerciseId: 'barbell-squat',
+          exerciseName: 'Barbell squat',
+          setNumber: 1,
+          weightKg: 100,
+          reps: 8,
+          rpe: 7,
+        ),
+        LoggedSet(
+          id: 'visual-live-squat-2',
+          exerciseId: 'barbell-squat',
+          exerciseName: 'Barbell squat',
+          setNumber: 2,
+          weightKg: 102.5,
+          reps: 8,
+          rpe: 8,
+        ),
+      ],
+    ),
+    activeSessionPlan: const [
+      SessionPlanExercise(
+        exerciseId: 'barbell-squat',
+        exerciseName: 'Barbell squat',
+        targetSets: 3,
+        targetReps: 8,
+        targetRpe: 8,
+        targetRestSeconds: 150,
+        suggestedWeightKg: 105,
+      ),
+      SessionPlanExercise(
+        exerciseId: 'romanian-deadlift',
+        exerciseName: 'Romanian deadlift',
+        targetSets: 3,
+        targetReps: 10,
+        targetRpe: 7,
+        targetRestSeconds: 120,
+        suggestedWeightKg: 90,
+      ),
+      SessionPlanExercise(
+        exerciseId: 'incline-dumbbell-press',
+        exerciseName: 'Incline dumbbell press',
+        targetSets: 3,
+        targetReps: 10,
+        targetRpe: 7,
+        targetRestSeconds: 90,
+        suggestedWeightKg: 32,
+      ),
+    ],
+    history: [
+      WorkoutSession(
+        id: 'visual-history-1',
+        startedAt: DateTime(2026, 6, 29, 7, 10),
+        endedAt: DateTime(2026, 6, 29, 7, 52),
+        readinessEntryId: 'visual-readiness-2026-06-29',
+        volumeMultiplier: 0.9,
+        sessionNotes: 'Recovery-adjusted lower day.',
+        loggedSets: const [
+          LoggedSet(
+            id: 'visual-history-1-a',
+            exerciseId: 'barbell-squat',
+            exerciseName: 'Barbell squat',
+            setNumber: 1,
+            weightKg: 95,
+            reps: 8,
+            rpe: 7,
+          ),
+          LoggedSet(
+            id: 'visual-history-1-b',
+            exerciseId: 'romanian-deadlift',
+            exerciseName: 'Romanian deadlift',
+            setNumber: 2,
+            weightKg: 85,
+            reps: 10,
+            rpe: 7,
+          ),
+        ],
+      ),
+      WorkoutSession(
+        id: 'visual-history-2',
+        startedAt: DateTime(2026, 7, 1, 7, 5),
+        endedAt: DateTime(2026, 7, 1, 7, 48),
+        readinessEntryId: 'visual-readiness-2026-07-01',
+        volumeMultiplier: 1,
+        sessionNotes: 'Kept the appointment and moved clean.',
+        loggedSets: const [
+          LoggedSet(
+            id: 'visual-history-2-a',
+            exerciseId: 'barbell-squat',
+            exerciseName: 'Barbell squat',
+            setNumber: 1,
+            weightKg: 100,
+            reps: 8,
+            rpe: 7,
+          ),
+          LoggedSet(
+            id: 'visual-history-2-b',
+            exerciseId: 'barbell-squat',
+            exerciseName: 'Barbell squat',
+            setNumber: 2,
+            weightKg: 100,
+            reps: 8,
+            rpe: 8,
+          ),
+          LoggedSet(
+            id: 'visual-history-2-c',
+            exerciseId: 'incline-dumbbell-press',
+            exerciseName: 'Incline dumbbell press',
+            setNumber: 3,
+            weightKg: 30,
+            reps: 10,
+            rpe: 7,
+          ),
+        ],
+      ),
+    ],
+    lastDebrief: SessionDebrief(
+      id: 'visual-debrief-2',
+      sessionId: 'visual-history-2',
+      createdAt: DateTime(2026, 7, 1, 7, 55),
+      perceivedExertion: 7,
+      satisfaction: 5,
+      whatWorked: 'Warm-up ramp matched readiness before load.',
+      whatToChange: 'Keep hinge volume crisp and stop one rep earlier.',
+      nextSessionFocus: 'Earn the third squat set before adding load',
+    ),
+  );
+}
