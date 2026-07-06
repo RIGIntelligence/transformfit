@@ -22,7 +22,7 @@ class _WellnessDashboardScreenState
   final String _overallZone = 'maintaining';
 
   // Loading state — set to true during data fetch.
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   final List<_WellnessModule> _modules = const [
     _WellnessModule(

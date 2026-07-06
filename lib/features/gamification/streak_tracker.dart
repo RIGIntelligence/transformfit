@@ -263,7 +263,9 @@ class StreakTracker {
       for (int i = 0; i < streak.value.currentDays; i++) {
         final day = lastDay.subtract(Duration(days: i));
         if (day.isAfter(today) ||
-            day.isBefore(today.subtract(Duration(days: days)))) continue;
+            day.isBefore(today.subtract(Duration(days: days)))) {
+          continue;
+        }
         calendar.putIfAbsent(day, () => {}).add(streak.key);
       }
     }

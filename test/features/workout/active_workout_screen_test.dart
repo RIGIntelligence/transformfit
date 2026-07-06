@@ -6,6 +6,7 @@ import 'package:transformfit/features/session/session_controller.dart';
 import 'package:transformfit/features/workout/active_workout_screen.dart';
 import 'package:transformfit/features/workout/workout_prefill.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
+import 'package:transformfit/widgets/transformfit_brand_mark.dart';
 
 SessionController _liveController({List<WorkoutSession> history = const []}) {
   final readiness = ReadinessEntry(
@@ -521,14 +522,14 @@ void main() {
   );
 
   testWidgets(
-    'active workout top bar fits a compact iPhone viewport', skip: true,
+    'active workout top bar fits a compact iPhone viewport',
     (tester) async {
       _setTestViewport(tester, const Size(320, 568));
 
       await _pump(tester, _liveController());
 
       expect(tester.takeException(), isNull);
-      expect(find.text('TransformFitAI logo'), findsWidgets);
+      expect(find.byType(TransformFitBrandMark), findsOneWidget);
       expect(
         find.bySemanticsLabel(RegExp(r'Workout timer, .+')),
         findsOneWidget,
@@ -1130,21 +1131,31 @@ void main() {
 
       await _logAndPump(tester);
       await tester.tap(_findFinishButton());
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.text('Debrief'), findsOneWidget);
-      await tester.tap(find.bySemanticsLabel('Increase Satisfaction'));
-      await tester.pump();
-      await tester.enterText(
-        find.byKey(const ValueKey('active_workout_pain_field')),
-        'Left knee stayed quiet.',
+      // The bottom sheet content is in a scrollable overlay.
+      // Scroll the debrief sheet to make each element visible.
+      final sheetScrollable = find.byType(SingleChildScrollView).last;
+      final satisfactionUp = find.bySemanticsLabel('Increase Satisfaction');
+      await tester.scrollUntilVisible(
+        satisfactionUp,
+        200,
+        scrollable: sheetScrollable,
       );
-      await tester.enterText(
-        find.byKey(const ValueKey('active_workout_next_focus_field')),
-        'Keep the squat crisp.',
-      );
-      await tester.tap(find.text('Save debrief'));
+      await tester.tap(satisfactionUp);
       await tester.pump();
+      final painField = find.byKey(const ValueKey('active_workout_pain_field'));
+      await tester.scrollUntilVisible(painField, 200, scrollable: sheetScrollable);
+      await tester.enterText(painField, 'Left knee stayed quiet.');
+      final focusField =
+          find.byKey(const ValueKey('active_workout_next_focus_field'));
+      await tester.scrollUntilVisible(focusField, 200, scrollable: sheetScrollable);
+      await tester.enterText(focusField, 'Keep the squat crisp.');
+      final saveButton = find.text('Save debrief');
+      await tester.scrollUntilVisible(saveButton, 200, scrollable: sheetScrollable);
+      await tester.tap(saveButton);
+      await tester.pump(const Duration(milliseconds: 500));
 
       final state = container.read(sessionControllerProvider).state;
       expect(state.activeSession, isNull);
