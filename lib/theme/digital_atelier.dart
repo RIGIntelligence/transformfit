@@ -25,7 +25,7 @@ class DigitalAtelierTokens {
 
   static const Color background = Color(0xFF0A0A0A);
   static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color accentOrange = Color(0xFFF97316);
+  static const Color accentOrange = Color(0xFFFF6B35);
 
   /// Muted red for inline error text (distinct from the accent token so it
   /// does not consume the <=3 accent-uses-per-screen budget).
@@ -47,15 +47,15 @@ class DigitalAtelierTokens2 {
 
   // -- Surface colors -------------------------------------------------------
 
-  static const Color surface = Color(0xFF111111);
-  static const Color surfaceElevated = Color(0xFF1A1A1A);
+  static const Color surface = Color(0xFF141414);
+  static const Color surfaceElevated = Color(0xFF1C1C1C);
   static Color surfaceGlass({double opacity = 0.08}) =>
       Colors.white.withValues(alpha: opacity);
   static const Color surfaceBorder = Color(0xFF1E1E1E);
 
   // -- Semantic colors ------------------------------------------------------
 
-  static const Color success = Color(0xFF10B981);
+  static const Color success = Color(0xFF30D158);
   static const Color warning = Color(0xFFF59E0B);
   static const Color info = Color(0xFF3B82F6);
   static const Color calm = Color(0xFF6366F1);
@@ -241,7 +241,7 @@ class DigitalAtelierTokens2 {
   /// Accent text style using the primary orange.
   static const TextStyle accent = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: Color(0xFFF97316),
+    color: Color(0xFFFF6B35),
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );
@@ -317,25 +317,25 @@ class DigitalAtelierExtension
   factory DigitalAtelierExtension.standard() => const DigitalAtelierExtension(
         // Background & Surface
         background: Color(0xFF0A0A0A),
-        surface: Color(0xFF111111),
-        surfaceElevated: Color(0xFF1A1A1A),
-        surfaceInput: Color(0xFF151515),
+        surface: Color(0xFF141414),
+        surfaceElevated: Color(0xFF1C1C1C),
+        surfaceInput: Color(0xFF1C1C1C),
         surfaceBorder: Color(0xFF1E1E1E),
         surfaceDivider: Color(0xFF252525),
         // Accent Colors
-        accentPrimary: Color(0xFFF97316),
+        accentPrimary: Color(0xFFFF6B35),
         accentSecondary: Color(0xFF8B5CF6),
-        accentTertiary: Color(0xFF10B981),
+        accentTertiary: Color(0xFF30D158),
         accentDanger: Color(0xFFEF4444),
         accentInfo: Color(0xFF3B82F6),
         // Text Colors
         textPrimary: Color(0xFFFFFFFF),
         canvasDeep: Color(0xFF050505),
-        textSecondary: Color(0xFF9CA3AF),
-        textMuted: Color(0xFF8B95A5),
+        textSecondary: Color(0xFF8E8E93),
+        textMuted: Color(0xFF48484A),
         textInverse: Color(0xFF0A0A0A),
         // Semantic Colors
-        success: Color(0xFF10B981),
+        success: Color(0xFF30D158),
         warning: Color(0xFFF59E0B),
         recovery: Color(0xFF8B5CF6),
         calm: Color(0xFF6366F1),
@@ -435,9 +435,9 @@ class DigitalAtelierExtension
   // No arbitrary values. The mathematical foundation ensures visual harmony.
   // =========================================================================
 
-  static const double screenMargin = MathematicalDesign.spaceXl;  // 21px (fib)
-  static const double cardGap = MathematicalDesign.spaceLg;       // 13px (fib)
-  static const double sectionGap = MathematicalDesign.space2xl;   // 34px (fib)
+  static const double screenMargin = 20.0;
+  static const double cardGap = 12.0;
+  static const double sectionGap = 32.0;
 
   // =========================================================================
   // Golden Ratio Layout Helpers

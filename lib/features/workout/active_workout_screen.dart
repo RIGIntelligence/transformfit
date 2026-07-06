@@ -2205,7 +2205,7 @@ class _BottomBar extends StatelessWidget {
               ],
             ),
             SizedBox(height: t.spaceSm),
-            // Log Set button — full-width, 56px, pill shape
+            // Log Set button — v4: full width, accent bg, white text, 56px
             Semantics(
               button: true,
               enabled: canLog,
@@ -2220,25 +2220,12 @@ class _BottomBar extends StatelessWidget {
                   duration: DigitalAtelierTokens2.durationFast,
                   height: 56,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(t.radiusPill),
-                    gradient: canLog
+                    borderRadius: BorderRadius.circular(t.radiusPill),
+                    color: canLog
                         ? (allSetsComplete
-                            ? LinearGradient(
-                                colors: [
-                                  t.accentTertiary,
-                                  t.accentInfo,
-                                ],
-                              )
-                            : LinearGradient(
-                                colors: [
-                                  t.accentPrimary,
-                                  t.accentPrimary
-                                      .withValues(alpha: 0.8),
-                                ],
-                              ))
-                        : null,
-                    color: canLog ? null : t.surfaceDivider,
+                            ? t.accentTertiary
+                            : t.accentPrimary)
+                        : t.surfaceDivider,
                   ),
                   child: Center(
                     child: Text(
@@ -2251,7 +2238,7 @@ class _BottomBar extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: canLog
-                            ? t.textInverse
+                            ? Colors.white
                             : t.textMuted,
                         letterSpacing: 0.3,
                       ),
@@ -2601,8 +2588,8 @@ class _CelebrationOverlayState extends State<_CelebrationOverlay> {
         x: _rng.nextDouble(),
         y: -_rng.nextDouble() * 0.3,
         color: [
-          const Color(0xFFF97316),
-          const Color(0xFF10B981),
+          const Color(0xFFFF6B35),
+          const Color(0xFF30D158),
           const Color(0xFF8B5CF6),
           const Color(0xFF3B82F6),
           const Color(0xFFF59E0B),

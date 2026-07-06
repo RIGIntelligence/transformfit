@@ -1,0 +1,20 @@
+{
+  "type": "error",
+  "fatal": false,
+  "timestamp": "2026-07-06T16:46:35.529579",
+  "error": "Exception: test",
+  "stackTrace": "#0      main.<anonymous closure>.<anonymous closure> (file:///Users/rig128gb/Developer/transformfit-flutter/test/services/crash_analytics_notifications_test.dart:17:55)\n#1      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)\n<asynchronous suspension>\n#2      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)\n<asynchronous suspension>\n#3      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)\n<asynchronous suspension>\n",
+  "reason": null,
+  "context": null,
+  "userId": "u1",
+  "customKeys": {
+    "plan": "pro"
+  },
+  "breadcrumbs": [
+    {
+      "timestamp": "2026-07-06T16:46:35.525955",
+      "level": "info",
+      "message": "test breadcrumb"
+    }
+  ]
+}

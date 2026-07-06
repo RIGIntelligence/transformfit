@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:transformfit/theme/digital_atelier.dart';
+
 import 'package:transformfit/widgets/tf_progress_ring.dart';
 
 // ---------------------------------------------------------------------------
-// Wellness Dashboard — Whoop-inspired recovery hero + 3 compact metrics
+// Wellness Dashboard — v4 Design System
 //
-// Recovery circle (50% viewport) + Mood/Stress/Sleep cards + mini sparklines.
-// No module grid, no burnout detector, no recommendations card.
+// Recovery circle (240px) + 3 metric cards (Mood, Stress, Sleep).
+// Each card: icon + value + trend arrow. 12px gap, no borders.
 // ---------------------------------------------------------------------------
 
 class WellnessDashboardScreen extends ConsumerStatefulWidget {
@@ -31,7 +31,6 @@ class _WellnessDashboardScreenState
       score: 78,
       color: Color(0xFF22C55E),
       trend: _TrendDirection.up,
-      sparkline: [65, 70, 68, 72, 75, 74, 78],
     ),
     _MetricData(
       title: 'Stress',
@@ -39,7 +38,6 @@ class _WellnessDashboardScreenState
       score: 62,
       color: Color(0xFFF59E0B),
       trend: _TrendDirection.down,
-      sparkline: [70, 68, 65, 60, 63, 61, 62],
     ),
     _MetricData(
       title: 'Sleep',
@@ -47,7 +45,6 @@ class _WellnessDashboardScreenState
       score: 81,
       color: Color(0xFF3B82F6),
       trend: _TrendDirection.up,
-      sparkline: [72, 75, 78, 76, 80, 79, 81],
     ),
   ];
 
@@ -56,9 +53,9 @@ class _WellnessDashboardScreenState
     return Semantics(
       label: 'Wellness dashboard screen',
       child: Scaffold(
-        backgroundColor: DigitalAtelierTokens.background,
+        backgroundColor: const Color(0xFF0A0A0A),
         appBar: AppBar(
-          backgroundColor: DigitalAtelierTokens.background,
+          backgroundColor: const Color(0xFF0A0A0A),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: Semantics(
@@ -82,44 +79,34 @@ class _WellnessDashboardScreenState
           centerTitle: true,
         ),
         body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final heroSize = (constraints.maxHeight * 0.5).clamp(180.0, 320.0);
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
+                // Hero: Wellness Ring — 240px centered
+                _WellnessHero(
+                  score: _overallScore,
+                  zone: _overallZone,
+                ),
+
+                const SizedBox(height: 32),
+
+                // 3 Metric Cards — 12px gap, no borders
+                Row(
                   children: [
-                    const SizedBox(height: 16),
-
-                    // Hero: Wellness Ring
-                    _WellnessHero(
-                      score: _overallScore,
-                      zone: _overallZone,
-                      size: heroSize,
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // 3 Metric Cards
-                    Row(
-                      children: _metrics
-                          .map((m) => Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                  ),
-                                  child: _MetricCard(metric: m),
-                                ),
-                              ))
-                          .toList(),
-                    ),
-
-                    const SizedBox(height: 48),
+                    Expanded(child: _MetricCard(metric: _metrics[0])),
+                    const SizedBox(width: 12),
+                    Expanded(child: _MetricCard(metric: _metrics[1])),
+                    const SizedBox(width: 12),
+                    Expanded(child: _MetricCard(metric: _metrics[2])),
                   ],
                 ),
-              );
-            },
+
+                const SizedBox(height: 48),
+              ],
+            ),
           ),
         ),
       ),
@@ -128,19 +115,19 @@ class _WellnessDashboardScreenState
 }
 
 // ---------------------------------------------------------------------------
-// Wellness Hero — centered ring + score + zone + trend
+// Wellness Hero — 240px centered ring + score + zone + trend
 // ---------------------------------------------------------------------------
 
 class _WellnessHero extends StatelessWidget {
   const _WellnessHero({
     required this.score,
     required this.zone,
-    required this.size,
   });
 
   final double score;
   final String zone;
-  final double size;
+
+  static const double _ringSize = 240.0;
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +142,12 @@ class _WellnessHero extends StatelessWidget {
           children: [
             TfProgressRing(
               value: score / 100,
-              size: size,
+              size: _ringSize,
               strokeWidth: 10,
               label: score.toStringAsFixed(0),
               textStyle: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: size * 0.2,
+                fontSize: _ringSize * 0.2,
                 fontWeight: FontWeight.w700,
                 color: zoneColor,
                 letterSpacing: -0.5,
@@ -169,16 +156,14 @@ class _WellnessHero extends StatelessWidget {
               semanticLabel: 'Wellness score ${score.toStringAsFixed(0)}',
             ),
             const SizedBox(height: 12),
-            // Zone label
+            // Zone label — 15px, secondary color
             Text(
               _zoneLabel(zone).toUpperCase(),
               style: const TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.0,
-                height: 1.2,
-                color: Color(0xFF6B7280),
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF8E8E93),
               ),
             ),
             const SizedBox(height: 4),
@@ -227,7 +212,7 @@ class _WellnessHero extends StatelessWidget {
   Color _zoneColor(String zone) {
     switch (zone) {
       case 'thriving':
-        return const Color(0xFF10B981);
+        return const Color(0xFF30D158);
       case 'maintaining':
         return const Color(0xFF3B82F6);
       case 'recovering':
@@ -235,7 +220,7 @@ class _WellnessHero extends StatelessWidget {
       case 'needsAttention':
         return const Color(0xFFEF4444);
       default:
-        return const Color(0xFFF97316);
+        return const Color(0xFFFF6B35);
     }
   }
 
@@ -256,7 +241,7 @@ class _WellnessHero extends StatelessWidget {
   Color _trendColor(String zone) {
     switch (zone) {
       case 'thriving':
-        return const Color(0xFF10B981);
+        return const Color(0xFF30D158);
       case 'maintaining':
         return const Color(0xFF3B82F6);
       case 'recovering':
@@ -264,7 +249,7 @@ class _WellnessHero extends StatelessWidget {
       case 'needsAttention':
         return const Color(0xFFEF4444);
       default:
-        return const Color(0xFF6B7280);
+        return const Color(0xFF8E8E93);
     }
   }
 
@@ -285,7 +270,7 @@ class _WellnessHero extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Metric Card — icon + score + trend arrow + mini sparkline
+// Metric Card — icon + value + trend arrow, no border
 // ---------------------------------------------------------------------------
 
 enum _TrendDirection { up, down, flat }
@@ -297,7 +282,6 @@ class _MetricData {
     required this.score,
     required this.color,
     required this.trend,
-    required this.sparkline,
   });
 
   final String title;
@@ -305,7 +289,6 @@ class _MetricData {
   final int score;
   final Color color;
   final _TrendDirection trend;
-  final List<int> sparkline;
 }
 
 class _MetricCard extends StatelessWidget {
@@ -319,7 +302,7 @@ class _MetricCard extends StatelessWidget {
       label: '${metric.title}: ${metric.score}',
       button: true,
       child: Material(
-        color: DigitalAtelierTokens2.surface,
+        color: const Color(0xFF141414),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
@@ -332,7 +315,7 @@ class _MetricCard extends StatelessWidget {
                 // Icon
                 Icon(metric.icon, size: 28, color: metric.color),
                 const SizedBox(height: 8),
-                // Score
+                // Value
                 Text(
                   '${metric.score}',
                   style: const TextStyle(
@@ -353,22 +336,10 @@ class _MetricCard extends StatelessWidget {
                     fontFamily: 'Inter',
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF9CA3AF),
+                    color: Color(0xFF8E8E93),
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Mini sparkline
-                SizedBox(
-                  height: 20,
-                  width: double.infinity,
-                  child: CustomPaint(
-                    painter: _SparklinePainter(
-                      values: metric.sparkline,
-                      color: metric.color,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
                 // Trend arrow
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -412,11 +383,11 @@ class _MetricCard extends StatelessWidget {
   Color _trendColor(_TrendDirection dir) {
     switch (dir) {
       case _TrendDirection.up:
-        return const Color(0xFF10B981);
+        return const Color(0xFF30D158);
       case _TrendDirection.down:
         return const Color(0xFFF59E0B);
       case _TrendDirection.flat:
-        return const Color(0xFF6B7280);
+        return const Color(0xFF8E8E93);
     }
   }
 
@@ -430,60 +401,4 @@ class _MetricCard extends StatelessWidget {
         return 'Flat';
     }
   }
-}
-
-// ---------------------------------------------------------------------------
-// Mini Sparkline Painter — 7 dots connected by a line
-// ---------------------------------------------------------------------------
-
-class _SparklinePainter extends CustomPainter {
-  _SparklinePainter({required this.values, required this.color});
-
-  final List<int> values;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (values.isEmpty) return;
-
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.6)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final dotPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final minVal = values.reduce((a, b) => a < b ? a : b).toDouble();
-    final maxVal = values.reduce((a, b) => a > b ? a : b).toDouble();
-    final range = (maxVal - minVal).clamp(1.0, double.infinity);
-
-    final points = <Offset>[];
-    for (var i = 0; i < values.length; i++) {
-      final x = (i / (values.length - 1)) * size.width;
-      final y = size.height -
-          ((values[i] - minVal) / range) * size.height;
-      points.add(Offset(x, y));
-    }
-
-    // Draw line
-    if (points.length > 1) {
-      final path = Path()..moveTo(points[0].dx, points[0].dy);
-      for (var i = 1; i < points.length; i++) {
-        path.lineTo(points[i].dx, points[i].dy);
-      }
-      canvas.drawPath(path, paint);
-    }
-
-    // Draw dots
-    for (final point in points) {
-      canvas.drawCircle(point, 2, dotPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_SparklinePainter old) =>
-      old.values != values || old.color != color;
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:transformfit/theme/digital_atelier.dart';
+
 
 // ============================================================================
-// Coach Chat Screen — Ladder / iMessage-quality clean chat
+// Coach Chat Screen — v4 Design System
 //
 // Clean message bubbles, no metadata, Playfair for coach voice,
 // pill-shaped input with quick-action chips.
@@ -396,7 +396,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     return Semantics(
       label: 'AI coach chat screen',
       child: Scaffold(
-        backgroundColor: DigitalAtelierTokens.background,
+        backgroundColor: const Color(0xFF0A0A0A),
         resizeToAvoidBottomInset: true,
         appBar: _buildAppBar(),
         body: Column(
@@ -423,11 +423,11 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     );
   }
 
-  // -- App bar — just "Coach", no persona -----------------------------------
+  // -- App bar — just "Coach" -----------------------------------------------
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: DigitalAtelierTokens.background,
+      backgroundColor: const Color(0xFF0A0A0A),
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
@@ -469,13 +469,13 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
             Container(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: DigitalAtelierTokens2.surface,
+                color: Color(0xFF141414),
               ),
               child: const Icon(
                 Icons.chat_bubble_outline,
-                color: Color(0xFF9CA3AF),
+                color: Color(0xFF8E8E93),
                 size: 36,
               ),
             ),
@@ -522,8 +522,8 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 
   Widget _buildMessageList(List<CoachMessage> messages) {
     return RefreshIndicator(
-      color: const Color(0xFFF97316),
-      backgroundColor: DigitalAtelierTokens.background,
+      color: const Color(0xFFFF6B35),
+      backgroundColor: const Color(0xFF0A0A0A),
       onRefresh: () => ref.read(chatMessagesProvider.notifier).loadOlder(),
       child: ListView.builder(
         controller: _scrollController,
@@ -568,7 +568,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     );
   }
 
-  // -- Input area -----------------------------------------------------------
+  // -- Input area — pill shape, surfaceInput bg, accent send button ---------
 
   Widget _buildInputArea() {
     return SafeArea(
@@ -599,7 +599,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
                       fontSize: 15,
                     ),
                     filled: true,
-                    fillColor: const Color(0xFF151515),
+                    fillColor: const Color(0xFF1C1C1C),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 18,
                       vertical: 14,
@@ -634,7 +634,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
                   width: 44,
                   height: 44,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFF97316),
+                    color: Color(0xFFFF6B35),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -653,7 +653,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 }
 
 // ---------------------------------------------------------------------------
-// Coach bubble — left-aligned, surface bg, Playfair font
+// Coach bubble — left-aligned, surface bg, 16px radius, Playfair font
 // ---------------------------------------------------------------------------
 
 class _CoachBubble extends StatelessWidget {
@@ -682,7 +682,7 @@ class _CoachBubble extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    backgroundColor: DigitalAtelierTokens2.surfaceElevated,
+                    backgroundColor: const Color(0xFF1C1C1C),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -696,10 +696,8 @@ class _CoachBubble extends StatelessWidget {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: DigitalAtelierTokens2.surface,
-                  borderRadius: BorderRadius.circular(16).copyWith(
-                    bottomLeft: const Radius.circular(4),
-                  ),
+                  color: const Color(0xFF141414),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   message.text,
@@ -712,15 +710,15 @@ class _CoachBubble extends StatelessWidget {
                 ),
               ),
             ),
-            // Timestamp
+            // Timestamp — 13px, tertiary color
             Padding(
               padding: const EdgeInsets.only(left: 4, top: 4, bottom: 8),
               child: Text(
                 _formatTime(message.timestamp),
                 style: const TextStyle(
                   fontFamily: 'Inter',
-                  color: Color(0xFF6B7280),
-                  fontSize: 11,
+                  color: Color(0xFF48484A),
+                  fontSize: 13,
                 ),
               ),
             ),
@@ -738,7 +736,7 @@ class _CoachBubble extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// User bubble — right-aligned, accentPrimary bg, Inter font
+// User bubble — right-aligned, accent bg, 16px radius, Inter font
 // ---------------------------------------------------------------------------
 
 class _UserBubble extends StatelessWidget {
@@ -767,7 +765,7 @@ class _UserBubble extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    backgroundColor: DigitalAtelierTokens2.surfaceElevated,
+                    backgroundColor: const Color(0xFF1C1C1C),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -781,10 +779,8 @@ class _UserBubble extends StatelessWidget {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF97316),
-                  borderRadius: BorderRadius.circular(16).copyWith(
-                    bottomRight: const Radius.circular(4),
-                  ),
+                  color: const Color(0xFFFF6B35),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   message.text,
@@ -797,15 +793,15 @@ class _UserBubble extends StatelessWidget {
                 ),
               ),
             ),
-            // Timestamp
+            // Timestamp — 13px, tertiary color
             Padding(
               padding: const EdgeInsets.only(right: 4, top: 4, bottom: 8),
               child: Text(
                 _formatTime(message.timestamp),
                 style: const TextStyle(
                   fontFamily: 'Inter',
-                  color: Color(0xFF6B7280),
-                  fontSize: 11,
+                  color: Color(0xFF48484A),
+                  fontSize: 13,
                 ),
               ),
             ),
@@ -844,10 +840,8 @@ class _TypingIndicator extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
               decoration: BoxDecoration(
-                color: DigitalAtelierTokens2.surface,
-                borderRadius: BorderRadius.circular(16).copyWith(
-                  bottomLeft: const Radius.circular(4),
-                ),
+                color: const Color(0xFF141414),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: AnimatedBuilder(
                 animation: animCtrl,
@@ -868,8 +862,8 @@ class _TypingIndicator extends StatelessWidget {
                           child: Container(
                             width: 7,
                             height: 7,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF6B7280),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF48484A),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -908,7 +902,7 @@ class _QuickActionChip extends StatelessWidget {
       child: SizedBox(
         height: 44,
         child: Material(
-          color: DigitalAtelierTokens2.surface,
+          color: const Color(0xFF141414),
           borderRadius: BorderRadius.circular(999),
           child: InkWell(
             onTap: () {
@@ -921,7 +915,7 @@ class _QuickActionChip extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(action.icon, size: 16, color: const Color(0xFF9CA3AF)),
+                  Icon(action.icon, size: 16, color: const Color(0xFF8E8E93)),
                   const SizedBox(width: 6),
                   Text(
                     action.label,

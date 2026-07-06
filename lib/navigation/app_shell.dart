@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
-import 'package:transformfit/theme/digital_atelier.dart';
+
 
 /// Root shell for authenticated users — wraps the app in a [Scaffold] with
 /// a 4-tab bottom navigation bar. Each tab maintains its own nested
@@ -11,7 +11,6 @@ import 'package:transformfit/theme/digital_atelier.dart';
 /// when switching tabs.
 ///
 /// Tabs: Home | Workout | Coach | Profile
-/// Wellness is accessible from Home and Profile (merged out of nav).
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -50,15 +49,16 @@ class AppShell extends StatelessWidget {
   }
 }
 
-/// Bottom nav — 4 icons, no labels, orange dot indicator, glass blur.
+/// Bottom nav — v4 Design System.
+/// 4 icons, no labels, orange dot indicator, glass blur.
 class _BottomNav extends StatelessWidget {
   const _BottomNav({required this.currentIndex, required this.onTap});
 
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  static const _inactiveColor = Color(0xFF6B7280);
-  static const _activeColor = Colors.white;
+  static const _inactiveColor = Color(0xFF48484A);
+  static const _activeColor = Color(0xFFFF6B35);
 
   @override
   Widget build(BuildContext context) {
@@ -66,66 +66,51 @@ class _BottomNav extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
+          height: 56,
           decoration: BoxDecoration(
-            color: DigitalAtelierTokens2.surface.withValues(alpha: 0.85),
+            color: const Color(0xFF050505).withValues(alpha: 0.85),
             border: const Border(
               top: BorderSide(color: Color(0xFF1A1A1A), width: 0.5),
             ),
           ),
-          child: Stack(
-            children: [
-              // Very subtle barbell texture behind the nav bar (10% opacity).
-              Positioned.fill(
-                child: Opacity(
-                  opacity: 0.10,
-                  child: Image.asset(
-                    'assets/imagery/hero_barbell.png',
-                    fit: BoxFit.cover,
-                    cacheWidth: 400,
-                    cacheHeight: 100,
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _NavItem(
+                    icon: Icons.home_outlined,
+                    activeIcon: Icons.home,
+                    isActive: currentIndex == 0,
+                    semanticLabel: 'Home tab',
+                    onTap: () => onTap(0),
                   ),
-                ),
-              ),
-              SafeArea(
-                top: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _NavItem(
-                        icon: Icons.home_outlined,
-                        activeIcon: Icons.home,
-                        isActive: currentIndex == 0,
-                        semanticLabel: 'Home tab',
-                        onTap: () => onTap(0),
-                      ),
-                      _NavItem(
-                        icon: Icons.fitness_center,
-                        activeIcon: Icons.fitness_center,
-                        isActive: currentIndex == 1,
-                        semanticLabel: 'Workout tab',
-                        onTap: () => onTap(1),
-                      ),
-                      _NavItem(
-                        icon: Icons.chat_bubble_outline,
-                        activeIcon: Icons.chat_bubble,
-                        isActive: currentIndex == 2,
-                        semanticLabel: 'Coach tab',
-                        onTap: () => onTap(2),
-                      ),
-                      _NavItem(
-                        icon: Icons.person_outline,
-                        activeIcon: Icons.person,
-                        isActive: currentIndex == 3,
-                        semanticLabel: 'Profile tab',
-                        onTap: () => onTap(3),
-                      ),
-                    ],
+                  _NavItem(
+                    icon: Icons.fitness_center,
+                    activeIcon: Icons.fitness_center,
+                    isActive: currentIndex == 1,
+                    semanticLabel: 'Workout tab',
+                    onTap: () => onTap(1),
                   ),
-                ),
+                  _NavItem(
+                    icon: Icons.chat_bubble_outline,
+                    activeIcon: Icons.chat_bubble,
+                    isActive: currentIndex == 2,
+                    semanticLabel: 'Coach tab',
+                    onTap: () => onTap(2),
+                  ),
+                  _NavItem(
+                    icon: Icons.person_outline,
+                    activeIcon: Icons.person,
+                    isActive: currentIndex == 3,
+                    semanticLabel: 'Profile tab',
+                    onTap: () => onTap(3),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -167,18 +152,20 @@ class _NavItem extends StatelessWidget {
               Icon(
                 isActive ? activeIcon : icon,
                 size: 24,
-                color: isActive ? _BottomNav._activeColor : _BottomNav._inactiveColor,
+                color: isActive
+                    ? _BottomNav._activeColor
+                    : _BottomNav._inactiveColor,
               ),
               const SizedBox(height: 4),
-              // Orange dot indicator for active tab
+              // Orange dot indicator for active tab — 6px
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOut,
-                width: isActive ? 4 : 0,
-                height: isActive ? 4 : 0,
+                width: isActive ? 6 : 0,
+                height: isActive ? 6 : 0,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFF97316),
+                  color: Color(0xFFFF6B35),
                 ),
               ),
             ],
