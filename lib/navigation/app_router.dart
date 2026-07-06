@@ -20,6 +20,7 @@ import 'package:transformfit/features/onboarding/landing_screen.dart';
 import 'package:transformfit/features/onboarding/plan_reveal_screen.dart';
 import 'package:transformfit/features/onboarding/welcome_screen.dart';
 import 'package:transformfit/features/progress/progress_screen.dart';
+import 'package:transformfit/features/progress/progress_photo_screen.dart';
 import 'package:transformfit/features/proof/proof_card_screen.dart';
 import 'package:transformfit/features/workout/active_workout_screen.dart';
 import 'package:transformfit/features/workout/workout_prefill.dart';
@@ -133,6 +134,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/progress',
         name: 'progress',
         builder: (context, state) => const ProgressScreen(),
+      ),
+      GoRoute(
+        path: '/progress-dashboard',
+        name: 'progress-dashboard',
+        builder: (context, state) => const ProgressScreen(),
+      ),
+      GoRoute(
+        path: '/progress-photos',
+        name: 'progress-photos',
+        builder: (context, state) => const ProgressPhotoScreen(),
       ),
       GoRoute(
         path: '/composition',
