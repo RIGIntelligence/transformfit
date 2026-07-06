@@ -1,0 +1,18 @@
+{
+  "name": "transformfit-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "E2E tests for TransformFit web app using Playwright",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:onboarding": "npx playwright test onboarding.spec.ts",
+    "test:workout": "npx playwright test workout.spec.ts",
+    "test:navigation": "npx playwright test navigation.spec.ts",
+    "install:browsers": "npx playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
