@@ -12,6 +12,7 @@ import 'package:transformfit/features/session/local_session_cleanup.dart';
 import 'package:transformfit/features/session/models.dart';
 import 'package:transformfit/features/session/session_controller.dart';
 import 'package:transformfit/navigation/auth_state.dart';
+import 'package:transformfit/theme/digital_atelier.dart';
 
 class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
@@ -662,12 +663,164 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 24),
+                      const _QuickAccessSection(),
                     ],
                   ),
                 ),
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAccessSection extends StatelessWidget {
+  const _QuickAccessSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Quick access section',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Quick Access',
+            style: TextStyle(
+              fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: DigitalAtelierTokens.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _QuickAccessCard(
+            icon: Icons.chat_bubble_outline,
+            title: 'Coach Chat',
+            subtitle: 'Talk to your AI coach',
+            accentColor: const Color(0xFFF97316),
+            onTap: () => context.go('/coach-chat'),
+          ),
+          const SizedBox(height: 10),
+          _QuickAccessCard(
+            icon: Icons.spa_outlined,
+            title: 'Wellness',
+            subtitle: 'Mood, stress, sleep & mindfulness',
+            accentColor: const Color(0xFF8B5CF6),
+            onTap: () => context.go('/wellness'),
+          ),
+          const SizedBox(height: 10),
+          _QuickAccessCard(
+            icon: Icons.restaurant_outlined,
+            title: 'Nutrition',
+            subtitle: 'Macros, water & supplements',
+            accentColor: const Color(0xFF10B981),
+            onTap: () => context.go('/nutrition'),
+          ),
+          const SizedBox(height: 10),
+          _QuickAccessCard(
+            icon: Icons.emoji_events_outlined,
+            title: 'Achievements',
+            subtitle: 'Level, streaks & milestones',
+            accentColor: const Color(0xFFF59E0B),
+            onTap: () => context.go('/gamification'),
+          ),
+          const SizedBox(height: 10),
+          _QuickAccessCard(
+            icon: Icons.fitness_center,
+            title: 'Exercise Library',
+            subtitle: '110 exercises with form cues',
+            accentColor: const Color(0xFF3B82F6),
+            onTap: () => context.go('/exercises'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickAccessCard extends StatelessWidget {
+  const _QuickAccessCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.accentColor,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color accentColor;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Open $title',
+      button: true,
+      child: Material(
+        color: DigitalAtelierTokens2.surface,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: DigitalAtelierTokens2.surfaceBorder,
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: accentColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: accentColor, size: 20),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: DigitalAtelierTokens.textPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: DigitalAtelierTokens.textPrimary
+                              .withValues(alpha: 0.5),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: DigitalAtelierTokens.textPrimary
+                      .withValues(alpha: 0.3),
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

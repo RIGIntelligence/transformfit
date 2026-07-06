@@ -5,7 +5,12 @@ import 'package:transformfit/engine/plan_generation.dart';
 import 'package:transformfit/features/body_composition/body_composition_screen.dart';
 import 'package:transformfit/features/coaching/coach_command_screen.dart';
 import 'package:transformfit/features/coaching/coach_consistency_screen.dart';
+import 'package:transformfit/features/coaching/coach_chat_screen.dart';
 import 'package:transformfit/features/danger_zones/danger_zone_screen.dart';
+import 'package:transformfit/features/exercise_library/exercise_library_screen.dart';
+import 'package:transformfit/features/gamification/gamification_dashboard_screen.dart';
+import 'package:transformfit/features/nutrition/nutrition_dashboard_screen.dart';
+import 'package:transformfit/features/wellness/wellness_dashboard_screen.dart';
 import 'package:transformfit/features/debrief/debrief_screen.dart';
 import 'package:transformfit/features/trends/recommit_screen.dart';
 import 'package:transformfit/features/trends/trends_screen.dart';
@@ -23,6 +28,10 @@ import 'package:transformfit/screens/auth_screen.dart';
 import 'package:transformfit/screens/loading_screen.dart';
 import 'package:transformfit/screens/not_found_screen.dart';
 import 'package:transformfit/screens/profile_screen.dart';
+import 'package:transformfit/features/settings/data_export_screen.dart';
+import 'package:transformfit/features/settings/privacy_policy_screen.dart';
+import 'package:transformfit/features/settings/settings_screen.dart';
+import 'package:transformfit/features/settings/terms_of_service_screen.dart';
 import 'package:transformfit/screens/today_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -163,6 +172,51 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/profile',
         name: 'profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        name: 'settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/privacy-policy',
+        name: 'privacy-policy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: '/terms',
+        name: 'terms',
+        builder: (context, state) => const TermsOfServiceScreen(),
+      ),
+      GoRoute(
+        path: '/data-export',
+        name: 'data-export',
+        builder: (context, state) => const DataExportScreen(),
+      ),
+      GoRoute(
+        path: '/coach-chat',
+        name: 'coach-chat',
+        builder: (context, state) => const CoachChatScreen(),
+      ),
+      GoRoute(
+        path: '/wellness',
+        name: 'wellness',
+        builder: (context, state) => const WellnessDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/nutrition',
+        name: 'nutrition',
+        builder: (context, state) => const NutritionDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/gamification',
+        name: 'gamification',
+        builder: (context, state) => const GamificationDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/exercises',
+        name: 'exercises',
+        builder: (context, state) => const ExerciseLibraryScreen(),
       ),
     ],
     redirect: (context, state) {

@@ -42,6 +42,14 @@ flutter:
     - assets/imagery/hero_sleep.png
     - assets/imagery/hero_ai_coach.png
     - assets/imagery/hero_app_store.png
+    - assets/imagery/exercise_squat.png
+    - assets/imagery/exercise_bench_press.png
+    - assets/imagery/exercise_deadlift.png
+    - assets/imagery/exercise_pullup.png
+    - assets/imagery/exercise_plank.png
+    - assets/imagery/exercise_yoga.png
+    - assets/imagery/exercise_kettlebell.png
+    - assets/imagery/exercise_overhead_press.png
   fonts:
     - family: Playfair
       fonts:
