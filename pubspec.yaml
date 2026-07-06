@@ -33,6 +33,15 @@ flutter:
   uses-material-design: true
   assets:
     - assets/brand/transformfitai-logo-original.jpg
+    - assets/imagery/hero_workout.png
+    - assets/imagery/hero_mindfulness.png
+    - assets/imagery/hero_app_mockup.png
+    - assets/imagery/hero_barbell.png
+    - assets/imagery/hero_nutrition.png
+    - assets/imagery/hero_gamification.png
+    - assets/imagery/hero_sleep.png
+    - assets/imagery/hero_ai_coach.png
+    - assets/imagery/hero_app_store.png
   fonts:
     - family: Playfair
       fonts:
