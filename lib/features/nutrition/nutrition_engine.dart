@@ -1,3 +1,5 @@
+library;
+
 /// Evidence-based nutrition calculation engine for TransformFit.
 ///
 /// Pure Dart, deterministic — no side effects, no I/O.

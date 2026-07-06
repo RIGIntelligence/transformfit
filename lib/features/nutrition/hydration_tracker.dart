@@ -1,3 +1,5 @@
+library;
+
 /// Hydration tracking for TransformFit.
 ///
 /// Tracks water/coffee/tea intake with caffeine-adjusted equivalents.

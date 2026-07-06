@@ -1,3 +1,5 @@
+library;
+
 /// Nutrition data models for TransformFit.
 ///
 /// All models are pure Dart with JSON serialization.
@@ -344,5 +346,5 @@ class NutritionTarget {
       'P:${proteinGrams.toStringAsFixed(0)}g, '
       'C:${carbsGrams.toStringAsFixed(0)}g, '
       'F:${fatGrams.toStringAsFixed(0)}g, '
-      '${waterGlasses} glasses)';
+      '$waterGlasses glasses)';
 }

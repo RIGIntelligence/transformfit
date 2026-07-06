@@ -1,3 +1,5 @@
+library;
+
 /// Evidence-based supplement tracking for TransformFit.
 ///
 /// Contains a pre-loaded database of 20+ supplements with peer-reviewed
