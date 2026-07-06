@@ -19,8 +19,8 @@ const TEST_JWT_SECRET = "transformfit-test-jwt-secret";
 Deno.env.set("SUPABASE_JWT_SECRET", TEST_JWT_SECRET);
 Deno.env.set("SUPABASE_JWT_ISSUER", "supabase");
 Deno.env.set("SUPABASE_JWT_AUDIENCE", "authenticated");
-// Ensure Ollama points to a port that refuses connections immediately.
-Deno.env.set("OLLAMA_HOST", "http://127.0.0.1:1");
+// Ensure Ollama host cannot resolve — forces deterministic fallback.
+Deno.env.set("OLLAMA_HOST", "http://ollama.invalid:11434");
 
 function enc(obj: unknown): string {
   return btoa(JSON.stringify(obj)).replace(/\+/g, "-").replace(/\//g, "_")
