@@ -205,7 +205,9 @@ void main() {
       ),
     );
     router.go('/workout');
-    await tester.pumpAndSettle();
+    for (int i = 0; i < 15; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
 
     expect(find.text('No live session'), findsOneWidget);
   });
