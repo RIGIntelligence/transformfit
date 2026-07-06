@@ -116,7 +116,7 @@ class NutritionCoach {
     if (percent < 50) {
       return NutritionCoachAdvice(
         message:
-            'You\'re at ${percent}% of your protein target. '
+            'You\'re at $percent% of your protein target. '
             'Consider a protein-rich snack — ${remaining.round()}g remaining.',
         category: NutritionAdviceCategory.protein,
         confidence: 0.9,

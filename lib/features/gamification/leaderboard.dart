@@ -128,9 +128,10 @@ class LeaderboardBuilder {
     for (var i = 0; i < filtered.length; i++) {
       final tuple = filtered[i];
       // Same score as previous → same rank.
-      final rank = (i > 0 && tuple.$3 == filtered[i - 1]..$3)
-          ? entries[i - 1].rank
-          : i + 1;
+      final rank =
+          (i > 0 && tuple.$3 == filtered[i - 1].$3)
+              ? entries[i - 1].rank
+              : i + 1;
       entries.add(LeaderboardEntry(
         userId: tuple.$1,
         displayName: tuple.$2,

@@ -80,8 +80,6 @@ class _BodyCompTrendsChartState extends ConsumerState<BodyCompTrendsChart> {
     // Compute Y-axis ranges for weight/lean (left) and body fat (right).
     final weights = data.map((d) => d.weightKg).toList();
     final fats = data.map((d) => d.bodyFatPercent).toList();
-    final leans = data.map((d) => d.leanMassKg).toList();
-
     final weightMin = weights.reduce(math.min) - 2;
     final weightMax = weights.reduce(math.max) + 2;
     final fatMin = (fats.reduce(math.min) - 2).clamp(0.0, double.infinity);
@@ -175,7 +173,7 @@ class _BodyCompTrendsChartState extends ConsumerState<BodyCompTrendsChart> {
                         reservedSize: 44,
                         interval: 2,
                         getTitlesWidget: (value, _) => Text(
-                          '${value.toStringAsFixed(0)}',
+                          value.toStringAsFixed(0),
                           style: t.textTheme.caption,
                         ),
                       ),
@@ -290,7 +288,7 @@ class _BodyCompTrendsChartState extends ConsumerState<BodyCompTrendsChart> {
       barWidth: 2.5,
       dotData: FlDotData(
         show: true,
-        getDotPainter: (spot, _, __, ___) => FlDotCirclePainter(
+        getDotPainter: (_, _, _, _) => FlDotCirclePainter(
           radius: 3,
           color: color,
         ),
@@ -448,7 +446,7 @@ class _DeltaMetric extends StatelessWidget {
     final isNegative = delta < 0;
     final color = isNegative ? t.accentTertiary : t.accentPrimary;
     final arrow = isNegative ? '↓' : '↑';
-    final sign = isNegative ? '' : '+';
+    final sign = isNegative ? '' : '+' ;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -480,7 +478,6 @@ class _EmptyState extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Icons.monitor_weight_outlined;
             Icon(Icons.monitor_weight_outlined, color: t.textMuted, size: 40),
             const SizedBox(height: 12),
             Text(

@@ -215,9 +215,8 @@ class _ExerciseHistoryChartState extends ConsumerState<ExerciseHistoryChart> {
                       barWidth: 2.5,
                       dotData: FlDotData(
                         show: true,
-                        getDotPainter: (spot, _, __, ___) {
-                          final isTouched =
-                              _touchedIndex == spot.x.toInt();
+                        getDotPainter: (FlSpot spot, _, _, _) {
+                          final isTouched = _touchedIndex == spot.x.toInt();
                           return FlDotCirclePainter(
                             radius: isTouched ? 5 : 3,
                             color: t.accentPrimary,
