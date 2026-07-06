@@ -68,9 +68,12 @@ class TransformFitApp extends ConsumerWidget {
     ref.watch(authControllerProvider);
     final router = ref.watch(appRouterProvider);
 
+    // Read the platform text scale factor for Dynamic Type support.
+    final textScaleFactor = MediaQuery.textScaleFactorOf(context);
+
     return MaterialApp.router(
       title: 'TransformFit',
-      theme: buildDigitalAtelierTheme(),
+      theme: buildDigitalAtelierTheme(textScaleFactor: textScaleFactor),
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

@@ -490,6 +490,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
       label: 'AI coach chat screen',
       child: Scaffold(
         backgroundColor: DigitalAtelierTokens.background,
+        resizeToAvoidBottomInset: true,
         appBar: _buildAppBar(meta),
         body: Column(
           children: [

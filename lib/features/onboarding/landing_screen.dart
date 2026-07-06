@@ -73,25 +73,52 @@ class _LandingBodyState extends State<_LandingBody>
   final ScrollController _scrollCtrl = ScrollController();
   double _scrollOffset = 0;
 
+  bool _animationsInitialized = false;
+  bool _reducedMotion = false;
+
   @override
   void initState() {
     super.initState();
+    // Parallax listener
+    _scrollCtrl.addListener(() {
+      setState(() => _scrollOffset = _scrollCtrl.offset);
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_animationsInitialized) return;
+    _animationsInitialized = true;
+
+    final t = Theme.of(context).extension<DigitalAtelierExtension>() ??
+        DigitalAtelierExtension.standard();
+    _reducedMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
 
     // ── Gradient (infinite, 8s cycle) ──
     _gradientCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 8),
-    )..repeat(reverse: true);
+      duration: t.resolvedDuration(const Duration(seconds: 8), context),
+    );
+    if (!_reducedMotion) {
+      _gradientCtrl.repeat(reverse: true);
+    }
     _gradientAnim = CurvedAnimation(
       parent: _gradientCtrl,
-      curve: Curves.easeInOut,
+      curve: t.resolvedCurve(Curves.easeInOut, context),
     );
 
     // ── Typewriter (3s forward, then stay) ──
     _typewriterCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000),
-    )..forward();
+      duration: t.resolvedDuration(const Duration(milliseconds: 3000), context),
+    );
+    if (_reducedMotion) {
+      _typewriterCtrl.value = 1.0;
+    } else {
+      _typewriterCtrl.forward();
+    }
     _typewriterCharCount = StepTween(
       begin: 0,
       end: LandingScreen._valueClaim.length,
@@ -103,41 +130,57 @@ class _LandingBodyState extends State<_LandingBody>
     // ── Feature cards (1.2s forward) ──
     _cardsCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..forward();
+      duration: t.resolvedDuration(const Duration(milliseconds: 1200), context),
+    );
+    if (_reducedMotion) {
+      _cardsCtrl.value = 1.0;
+    } else {
+      _cardsCtrl.forward();
+    }
 
     // ── Readiness ring (2s forward) ──
     _ringCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    )..forward();
+      duration: t.resolvedDuration(const Duration(milliseconds: 2000), context),
+    );
+    if (_reducedMotion) {
+      _ringCtrl.value = 1.0;
+    } else {
+      _ringCtrl.forward();
+    }
     _ringAnim = CurvedAnimation(
       parent: _ringCtrl,
-      curve: Curves.easeOutCubic,
+      curve: t.resolvedCurve(Curves.easeOutCubic, context),
     );
 
     // ── Pulse (infinite 1.8s) ──
     _pulseCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1800),
-    )..repeat(reverse: true);
+      duration: t.resolvedDuration(const Duration(milliseconds: 1800), context),
+    );
+    if (!_reducedMotion) {
+      _pulseCtrl.repeat(reverse: true);
+    }
 
     // ── Coach bubble (0.8s forward) ──
     _bubbleCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..forward();
+      duration: t.resolvedDuration(const Duration(milliseconds: 800), context),
+    );
+    if (_reducedMotion) {
+      _bubbleCtrl.value = 1.0;
+    } else {
+      _bubbleCtrl.forward();
+    }
 
     // ── Particles (continuous 60fps-ish, 10s cycle) ──
     _particleCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat();
-
-    // Parallax listener
-    _scrollCtrl.addListener(() {
-      setState(() => _scrollOffset = _scrollCtrl.offset);
-    });
+      duration: t.resolvedDuration(const Duration(seconds: 10), context),
+    );
+    if (!_reducedMotion) {
+      _particleCtrl.repeat();
+    }
   }
 
   @override

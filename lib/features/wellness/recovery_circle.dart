@@ -61,58 +61,107 @@ class _RecoveryCircleState extends State<RecoveryCircle>
     super.dispose();
   }
 
+  final _colorLegend = const [
+    _LegendEntry(label: 'Push', color: Color(0xFF10B981)),
+    _LegendEntry(label: 'Maintain', color: Color(0xFFF59E0B)),
+    _LegendEntry(label: 'Deload', color: Color(0xFFEF4444)),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<DigitalAtelierExtension>()!;
     final zone = _RecoveryZone.fromScore(widget.score);
 
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (context, child) {
-          return CustomPaint(
-            painter: _RecoveryCirclePainter(
-              score: widget.score,
-              progress: _animation.value,
-              strokeWidth: widget.strokeWidth,
-              accentPrimary: t.accentPrimary,
-              accentDanger: t.accentDanger,
-              warning: t.warning,
-              success: t.success,
-              textPrimary: t.textPrimary,
-              textMuted: t.textMuted,
-              surfaceBorder: t.surfaceBorder,
-            ),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${(widget.score * _animation.value).round()}',
-                    style: t.textTheme.dataLarge.copyWith(
-                      fontSize: widget.size * 0.25,
-                      fontWeight: FontWeight.w700,
-                    ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: widget.size,
+          height: widget.size,
+          child: AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: _RecoveryCirclePainter(
+                  score: widget.score,
+                  progress: _animation.value,
+                  strokeWidth: widget.strokeWidth,
+                  accentPrimary: t.accentPrimary,
+                  accentDanger: t.accentDanger,
+                  warning: t.warning,
+                  success: t.success,
+                  textPrimary: t.textPrimary,
+                  textMuted: t.textMuted,
+                  surfaceBorder: t.surfaceBorder,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${(widget.score * _animation.value).round()}',
+                        style: t.textTheme.dataLarge.copyWith(
+                          fontSize: widget.size * 0.25,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        zone.label,
+                        style: t.textTheme.caption.copyWith(
+                          color: zone.color,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    zone.label,
-                    style: t.textTheme.caption.copyWith(
-                      color: zone.color,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
+                ),
+              );
+            },
+          ),
+        ),
+        // Color legend — ensures color zones have text labels (accessibility).
+        const SizedBox(height: 12),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < _colorLegend.length; i++) ...[
+              if (i > 0) SizedBox(width: t.spaceMd),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _colorLegend[i].color,
+                ),
               ),
-            ),
-          );
-        },
-      ),
+              SizedBox(width: t.spaceXs),
+              Text(
+                _colorLegend[i].label,
+                style: TextStyle(
+                  color: t.textMuted,
+                  fontSize: 11,
+                  fontFamily: DigitalAtelierExtension.dataFontFamily,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Legend entry for color-coded zones
+// ---------------------------------------------------------------------------
+
+class _LegendEntry {
+  const _LegendEntry({required this.label, required this.color});
+  final String label;
+  final Color color;
 }
 
 // ---------------------------------------------------------------------------

@@ -60,6 +60,7 @@ class Exercise {
     this.equipment,
     this.isCompound = false,
     this.estimatedCaloriesPerSet = 5,
+    this.imageAsset,
   });
 
   /// Stable identifier — lowercase, hyphenated, never changes.
@@ -101,6 +102,10 @@ class Exercise {
   /// Rough calories burned per working set (kcal).
   final int estimatedCaloriesPerSet;
 
+  /// Asset path for the exercise demonstration image (e.g. 'assets/imagery/exercise_squat.png').
+  /// Null when no specific image exists — the UI falls back to a muscle-group placeholder.
+  final String? imageAsset;
+
   // ── Serialization ──────────────────────────────────────────────────────
 
   Map<String, Object?> toJson() => {
@@ -117,6 +122,7 @@ class Exercise {
         'equipment': equipment,
         'isCompound': isCompound,
         'estimatedCaloriesPerSet': estimatedCaloriesPerSet,
+        'imageAsset': imageAsset,
       };
 
   factory Exercise.fromJson(Map<String, Object?> json) {
@@ -144,6 +150,7 @@ class Exercise {
       isCompound: json['isCompound'] as bool? ?? false,
       estimatedCaloriesPerSet:
           json['estimatedCaloriesPerSet'] as int? ?? 5,
+      imageAsset: json['imageAsset'] as String?,
     );
   }
 

@@ -357,7 +357,7 @@ class DigitalAtelierExtension
         // Text Colors
         textPrimary: Color(0xFFF0EDE8),
         textSecondary: Color(0xFF9CA3AF),
-        textMuted: Color(0xFF6B7280),
+        textMuted: Color(0xFF8B95A5),
         textInverse: Color(0xFF0A0A0A),
         // Semantic Colors
         success: Color(0xFF10B981),
@@ -906,7 +906,7 @@ class TransformFitTextTheme {
         fontSize: 12,
         fontWeight: FontWeight.w400,
         height: 1.3,
-        color: Color(0xFF6B7280),
+        color: Color(0xFF8B95A5),
       ));
 
   // -- DataLarge — Inter 32px/1.0 bold tabular (Whoop recovery score) -------
@@ -1007,7 +1007,7 @@ Duration lerpDuration(Duration a, Duration b, double t) {
 // buildDigitalAtelierTheme — production theme builder
 // ============================================================================
 
-ThemeData buildDigitalAtelierTheme() {
+ThemeData buildDigitalAtelierTheme({double textScaleFactor = 1.0}) {
   final ext = DigitalAtelierExtension.standard();
 
   final colorScheme = ColorScheme.dark(
@@ -1025,6 +1025,8 @@ ThemeData buildDigitalAtelierTheme() {
   );
   final baseWhite = interTypography.white;
 
+  // Apply Dynamic Type scaling via TransformFitTextTheme.
+
   final textTheme = _applyFontFamily(
     baseWhite,
     DigitalAtelierExtension.dataFontFamily,
@@ -1032,32 +1034,32 @@ ThemeData buildDigitalAtelierTheme() {
     headlineMedium: TextStyle(
       fontFamily: DigitalAtelierExtension.coachVoiceFontFamily,
       color: ext.textPrimary,
-      fontSize: 40,
+      fontSize: 40 * textScaleFactor,
       fontWeight: FontWeight.w600,
       height: 1.1,
     ),
     titleMedium: TextStyle(
       fontFamily: DigitalAtelierExtension.coachVoiceFontFamily,
       color: ext.textPrimary,
-      fontSize: 22,
+      fontSize: 22 * textScaleFactor,
       fontWeight: FontWeight.w500,
     ),
     bodyLarge: TextStyle(
       fontFamily: DigitalAtelierExtension.dataFontFamily,
       color: ext.textPrimary,
-      fontSize: 16,
+      fontSize: 16 * textScaleFactor,
       height: 1.5,
     ),
     bodyMedium: TextStyle(
       fontFamily: DigitalAtelierExtension.dataFontFamily,
       color: ext.textSecondary,
-      fontSize: 14,
+      fontSize: 14 * textScaleFactor,
       height: 1.4,
     ),
     bodySmall: TextStyle(
       fontFamily: DigitalAtelierExtension.dataFontFamily,
       color: ext.textMuted,
-      fontSize: 12,
+      fontSize: 12 * textScaleFactor,
       height: 1.3,
     ),
   );

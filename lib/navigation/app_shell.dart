@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
@@ -15,6 +16,8 @@ class AppShell extends StatelessWidget {
   /// [StatefulShellRoute.indexedStack].
   final StatefulNavigationShell navigationShell;
 
+  static const _tabNames = ['Today', 'Workout', 'Coach', 'Wellness', 'Profile'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +30,15 @@ class AppShell extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
+    // Announce the tab switch for screen readers.
+    if (index != navigationShell.currentIndex && index < _tabNames.length) {
+      SemanticsService.sendAnnouncement(
+        View.of(context),
+        '${_tabNames[index]} tab selected',
+        Directionality.of(context),
+      );
+    }
+
     // When tapping the already-active tab, pop to the first route in that
     // branch (same behaviour as iOS UITabBarController).
     if (index == navigationShell.currentIndex) {

@@ -1,42 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:transformfit/features/nutrition/macro_model.dart';
+import 'package:transformfit/features/nutrition/nutrition_state.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 // ---------------------------------------------------------------------------
 // Nutrition dashboard screen — macro tracking, hydration, supplements.
+// Wired to NutritionEngine, HydrationTracker, SupplementTracker via providers.
 // ---------------------------------------------------------------------------
 
-class NutritionDashboardScreen extends ConsumerStatefulWidget {
+class NutritionDashboardScreen extends ConsumerWidget {
   const NutritionDashboardScreen({super.key});
 
   @override
-  ConsumerState<NutritionDashboardScreen> createState() =>
-      _NutritionDashboardScreenState();
-}
-
-class _NutritionDashboardScreenState
-    extends ConsumerState<NutritionDashboardScreen> {
-  // Demo state — in production these come from providers.
-  int _waterGlasses = 3;
-  final int _waterTarget = 8;
-  int _mealsLogged = 2;
-  final int _mealsTarget = 4;
-  final int _supplementsTaken = 1;
-  final int _supplementsTarget = 3;
-
-  // Macro demo data.
-  final double _targetCalories = 2400;
-  final double _actualCalories = 1650;
-  final double _targetProtein = 160;
-  final double _actualProtein = 112;
-  final double _targetCarbs = 280;
-  final double _actualCarbs = 190;
-  final double _targetFat = 67;
-  final double _actualFat = 48;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final nutrition = ref.watch(nutritionProvider);
 
     return Semantics(
       label: 'Nutrition dashboard screen',
@@ -81,32 +60,35 @@ class _NutritionDashboardScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _MacroTargetsCard(
-                          targetCalories: _targetCalories,
-                          actualCalories: _actualCalories,
-                          targetProtein: _targetProtein,
-                          actualProtein: _actualProtein,
-                          targetCarbs: _targetCarbs,
-                          actualCarbs: _actualCarbs,
-                          targetFat: _targetFat,
-                          actualFat: _actualFat,
+                          targetCalories: nutrition.target.calories,
+                          actualCalories: nutrition.actualMacros.calories,
+                          targetProtein: nutrition.target.proteinGrams,
+                          actualProtein: nutrition.actualMacros.proteinGrams,
+                          targetCarbs: nutrition.target.carbsGrams,
+                          actualCarbs: nutrition.actualMacros.carbsGrams,
+                          targetFat: nutrition.target.fatGrams,
+                          actualFat: nutrition.actualMacros.fatGrams,
+                          adherence: nutrition.adherence,
                         ),
                         const SizedBox(height: 16),
                         _NutritionStatusCard(
                           icon: Icons.restaurant_outlined,
                           title: 'Meals Logged',
-                          current: _mealsLogged,
-                          target: _mealsTarget,
+                          current: nutrition.mealsLogged,
+                          target: 4,
                           color: DigitalAtelierTokens.accentOrange,
-                          subtitle: '$_mealsLogged of $_mealsTarget meals today',
+                          subtitle:
+                              '${nutrition.mealsLogged} of 4 meals today',
                         ),
                         const SizedBox(height: 12),
                         _NutritionStatusCard(
                           icon: Icons.water_drop_outlined,
                           title: 'Water Intake',
-                          current: _waterGlasses,
-                          target: _waterTarget,
+                          current: nutrition.waterGlasses,
+                          target: nutrition.waterTarget,
                           color: const Color(0xFF3B82F6),
-                          subtitle: '$_waterGlasses of $_waterTarget glasses',
+                          subtitle:
+                              '${nutrition.waterGlasses} of ${nutrition.waterTarget} glasses',
                           trailing: Semantics(
                             label: 'Add water glass',
                             button: true,
@@ -114,13 +96,8 @@ class _NutritionDashboardScreenState
                               icon: Icon(Icons.add_circle_outline,
                                   color: DigitalAtelierTokens.accentOrange,
                                   size: 28),
-                              onPressed: () {
-                                setState(() {
-                                  if (_waterGlasses < _waterTarget + 4) {
-                                    _waterGlasses++;
-                                  }
-                                });
-                              },
+                              onPressed: () =>
+                                  ref.read(nutritionProvider.notifier).logWater(),
                               tooltip: 'Add water glass',
                             ),
                           ),
@@ -129,10 +106,11 @@ class _NutritionDashboardScreenState
                         _NutritionStatusCard(
                           icon: Icons.medication_outlined,
                           title: 'Supplements',
-                          current: _supplementsTaken,
-                          target: _supplementsTarget,
+                          current: nutrition.supplementsTaken,
+                          target: nutrition.supplementsTarget,
                           color: const Color(0xFF8B5CF6),
-                          subtitle: '$_supplementsTaken of $_supplementsTarget taken',
+                          subtitle:
+                              '${nutrition.supplementsTaken} of ${nutrition.supplementsTarget} taken',
                         ),
                         const SizedBox(height: 24),
                         Text(
@@ -145,20 +123,11 @@ class _NutritionDashboardScreenState
                         ),
                         const SizedBox(height: 12),
                         _QuickAddButtons(
-                          onAddWater: () {
-                            setState(() {
-                              if (_waterGlasses < _waterTarget + 4) {
-                                _waterGlasses++;
-                              }
-                            });
-                          },
-                          onAddMeal: () {
-                            setState(() {
-                              if (_mealsLogged < _mealsTarget + 2) {
-                                _mealsLogged++;
-                              }
-                            });
-                          },
+                          onAddWater: () =>
+                              ref.read(nutritionProvider.notifier).logWater(),
+                          onAddMeal: () => _showQuickMealDialog(context, ref),
+                          onAddSupplement: () =>
+                              _showQuickSupplementDialog(context, ref),
                         ),
                         const SizedBox(height: 24),
                       ],
@@ -172,10 +141,248 @@ class _NutritionDashboardScreenState
       ),
     );
   }
+
+  static void _showQuickMealDialog(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: DigitalAtelierTokens.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _QuickMealSheet(
+        onLog: (name, type, macros) {
+          ref.read(nutritionProvider.notifier).quickAddMeal(
+                name: name,
+                type: type,
+                macros: macros,
+              );
+          Navigator.of(ctx).pop();
+        },
+      ),
+    );
+  }
+
+  static void _showQuickSupplementDialog(
+      BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: DigitalAtelierTokens.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _QuickSupplementSheet(
+        onLog: (name) {
+          ref.read(nutritionProvider.notifier).logSupplement(name);
+          Navigator.of(ctx).pop();
+        },
+      ),
+    );
+  }
 }
 
 // ---------------------------------------------------------------------------
-// Macro targets card
+// Quick meal bottom sheet
+// ---------------------------------------------------------------------------
+
+class _QuickMealSheet extends StatelessWidget {
+  const _QuickMealSheet({required this.onLog});
+
+  final void Function(String name, MealType type, Macros macros) onLog;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final quickMeals = <(String, MealType, Macros)>[
+      (
+        'Protein shake',
+        MealType.snack,
+        const Macros(calories: 200, proteinGrams: 40, carbsGrams: 8, fatGrams: 2)
+      ),
+      (
+        'Chicken & rice',
+        MealType.lunch,
+        const Macros(calories: 550, proteinGrams: 45, carbsGrams: 60, fatGrams: 12)
+      ),
+      (
+        'Greek yogurt + fruit',
+        MealType.snack,
+        const Macros(calories: 250, proteinGrams: 20, carbsGrams: 30, fatGrams: 5)
+      ),
+      (
+        'Oatmeal + eggs',
+        MealType.breakfast,
+        const Macros(calories: 450, proteinGrams: 25, carbsGrams: 55, fatGrams: 14)
+      ),
+      (
+        'Salmon + veggies',
+        MealType.dinner,
+        const Macros(calories: 500, proteinGrams: 40, carbsGrams: 25, fatGrams: 22)
+      ),
+    ];
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Quick Add Meal',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: DigitalAtelierTokens.textPrimary,
+                fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+              ),
+            ),
+            const SizedBox(height: 16),
+            for (final (name, type, macros) in quickMeals)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Semantics(
+                  button: true,
+                  label: 'Quick add $name',
+                  child: InkWell(
+                    onTap: () => onLog(name, type, macros),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: DigitalAtelierTokens2.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: DigitalAtelierTokens2.surfaceBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  name,
+                                  style: TextStyle(
+                                    color: DigitalAtelierTokens.textPrimary,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${macros.calories.toStringAsFixed(0)} kcal · '
+                                  'P${macros.proteinGrams.toStringAsFixed(0)}g '
+                                  'C${macros.carbsGrams.toStringAsFixed(0)}g '
+                                  'F${macros.fatGrams.toStringAsFixed(0)}g',
+                                  style: TextStyle(
+                                    color: DigitalAtelierTokens.textPrimary
+                                        .withValues(alpha: 0.5),
+                                    fontSize: 12,
+                                    fontFamily:
+                                        DigitalAtelierTokens.dataFontFamily,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.add_circle_outline,
+                              color: DigitalAtelierTokens.accentOrange),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Quick supplement bottom sheet
+// ---------------------------------------------------------------------------
+
+class _QuickSupplementSheet extends StatelessWidget {
+  const _QuickSupplementSheet({required this.onLog});
+
+  final void Function(String name) onLog;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final supplements = [
+      'Creatine Monohydrate',
+      'Whey Protein',
+      'Vitamin D3',
+      'Omega-3 (EPA/DHA)',
+      'Magnesium (Glycinate/Citrate)',
+      'Caffeine',
+      'Zinc',
+    ];
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Log Supplement',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: DigitalAtelierTokens.textPrimary,
+                fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+              ),
+            ),
+            const SizedBox(height: 16),
+            for (final name in supplements)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Semantics(
+                  button: true,
+                  label: 'Log $name',
+                  child: InkWell(
+                    onTap: () => onLog(name),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: DigitalAtelierTokens2.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: DigitalAtelierTokens2.surfaceBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              name,
+                              style: TextStyle(
+                                color: DigitalAtelierTokens.textPrimary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.add_circle_outline,
+                              color: DigitalAtelierTokens.accentOrange),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Macro targets card — now with adherence score
 // ---------------------------------------------------------------------------
 
 class _MacroTargetsCard extends StatelessWidget {
@@ -188,6 +395,7 @@ class _MacroTargetsCard extends StatelessWidget {
     required this.actualCarbs,
     required this.targetFat,
     required this.actualFat,
+    required this.adherence,
   });
 
   final double targetCalories;
@@ -198,6 +406,7 @@ class _MacroTargetsCard extends StatelessWidget {
   final double actualCarbs;
   final double targetFat;
   final double actualFat;
+  final double adherence;
 
   @override
   Widget build(BuildContext context) {
@@ -223,13 +432,36 @@ class _MacroTargetsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Daily Macros',
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.6),
-                fontFamily: DigitalAtelierTokens.dataFontFamily,
-                letterSpacing: 1.2,
-              ),
+            Row(
+              children: [
+                Text(
+                  'Daily Macros',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.6),
+                    fontFamily: DigitalAtelierTokens.dataFontFamily,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const Spacer(),
+                // Adherence badge
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _adherenceColor(adherence).withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${(adherence * 100).toStringAsFixed(0)}% match',
+                    style: TextStyle(
+                      color: _adherenceColor(adherence),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: DigitalAtelierTokens.dataFontFamily,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             // Calories ring.
@@ -313,6 +545,12 @@ class _MacroTargetsCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static Color _adherenceColor(double score) {
+    if (score >= 0.8) return const Color(0xFF22C55E);
+    if (score >= 0.5) return const Color(0xFFF59E0B);
+    return const Color(0xFFEF4444);
   }
 }
 
@@ -480,14 +718,19 @@ class _NutritionStatusCard extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Quick add buttons
+// Quick add buttons — now with supplement logging
 // ---------------------------------------------------------------------------
 
 class _QuickAddButtons extends StatelessWidget {
-  const _QuickAddButtons({required this.onAddWater, required this.onAddMeal});
+  const _QuickAddButtons({
+    required this.onAddWater,
+    required this.onAddMeal,
+    required this.onAddSupplement,
+  });
 
   final VoidCallback onAddWater;
   final VoidCallback onAddMeal;
+  final VoidCallback onAddSupplement;
 
   @override
   Widget build(BuildContext context) {
@@ -527,6 +770,28 @@ class _QuickAddButtons extends StatelessWidget {
                 backgroundColor:
                     DigitalAtelierTokens.accentOrange.withValues(alpha: 0.2),
                 foregroundColor: DigitalAtelierTokens.accentOrange,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      DigitalAtelierTokens.cornerRadius * 2),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Semantics(
+            label: 'Quick add supplement',
+            button: true,
+            child: ElevatedButton.icon(
+              onPressed: onAddSupplement,
+              icon: const Icon(Icons.medication_outlined, size: 20),
+              label: const Text('Add Supp'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF8B5CF6).withValues(alpha: 0.2),
+                foregroundColor: const Color(0xFF8B5CF6),
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(

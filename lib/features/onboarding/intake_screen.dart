@@ -28,11 +28,11 @@ class IntakeScreen extends ConsumerStatefulWidget {
 
 /// The canonical step sequence. Each step declares whether an answer is
 /// required to advance.
-enum _IntakeStep { goals, schedule, equipment, experience, injury, whyNow }
+enum _IntakeStep { goals, schedule, equipment, experience, injury, returningFromBreak, doctorClearance, whyNow }
 
 extension _StepMeta on _IntakeStep {
   /// Number of steps in the flow (1-based ordinaling helper).
-  static const count = 6;
+  static const count = 8;
 }
 
 class _IntakeScreenState extends ConsumerState<IntakeScreen> {
@@ -47,6 +47,13 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
   final List<String> _limitations = [];
   String _whyNow = '';
   late final TextEditingController _whyNowController;
+
+  // Returning from break fields.
+  bool? _returningFromBreak;
+  String? _breakDuration; // '1-2_weeks', '1-3_months', '3-6_months', '6+_months'
+
+  // Doctor clearance.
+  String? _doctorClearance; // 'yes', 'no', 'na'
 
   bool _submitting = false;
   String? _error;
@@ -110,6 +117,8 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
       _IntakeStep.equipment => _equipment.isNotEmpty,
       _IntakeStep.experience => _experienceLevels.length == 1,
       _IntakeStep.injury => true,
+      _IntakeStep.returningFromBreak => _returningFromBreak != null,
+      _IntakeStep.doctorClearance => _doctorClearance != null,
       _IntakeStep.whyNow => true,
     };
   }
@@ -176,6 +185,9 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
             _experienceLevels.isEmpty ? null : _experienceLevels.first,
         limitations:
             _limitations.isEmpty ? const [] : _limitations,
+        returningFromBreak: _returningFromBreak ?? false,
+        breakDuration: _breakDuration,
+        doctorClearance: _doctorClearance,
       ));
       ref
           .read(userWhyNowProvider.notifier)
@@ -360,6 +372,8 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
           }),
           semanticPrefix: 'Injury: ',
         ),
+      _IntakeStep.returningFromBreak => _buildReturningFromBreakStep(theme),
+      _IntakeStep.doctorClearance => _buildDoctorClearanceStep(theme),
       _IntakeStep.whyNow => _buildWhyNowStep(theme),
     };
   }
@@ -532,6 +546,277 @@ class _IntakeScreenState extends ConsumerState<IntakeScreen> {
                 ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReturningFromBreakStep(ThemeData theme) {
+    const breakDurations = <(String id, String label)>[
+      ('1-2_weeks', '1–2 weeks'),
+      ('1-3_months', '1–3 months'),
+      ('3-6_months', '3–6 months'),
+      ('6+_months', '6+ months'),
+    ];
+
+    return Semantics(
+      label: 'Returning from break step',
+      container: true,
+      explicitChildNodes: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            header: true,
+            label: 'Returning from break heading',
+            child: Text(
+              'Are you returning from a break?',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontSize: 28,
+                height: 1.2,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'This helps me build the right plan for you. No judgment — everyone takes breaks.',
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 24),
+          // Yes / No
+          Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: _returningFromBreak == true,
+                  label: 'Yes, returning from a break',
+                  child: _SelectCard(
+                    text: 'Yes',
+                    selected: _returningFromBreak == true,
+                    onTap: () => setState(() {
+                      _returningFromBreak = true;
+                      _breakDuration ??= '1-3_months';
+                    }),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: _returningFromBreak == false,
+                  label: 'No, not returning from a break',
+                  child: _SelectCard(
+                    text: 'No',
+                    selected: _returningFromBreak == false,
+                    onTap: () => setState(() {
+                      _returningFromBreak = false;
+                      _breakDuration = null;
+                    }),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (_returningFromBreak == true) ...[
+            const SizedBox(height: 24),
+            Text(
+              'How long was your break?',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Column(
+              children: [
+                for (final (id, label) in breakDurations)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Semantics(
+                      button: true,
+                      selected: _breakDuration == id,
+                      label: 'Break duration: $label',
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: _SelectCard(
+                          text: label,
+                          selected: _breakDuration == id,
+                          onTap: () =>
+                              setState(() => _breakDuration = id),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: DigitalAtelierTokens.accentOrange.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: DigitalAtelierTokens.accentOrange.withValues(alpha: 0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline,
+                      color: DigitalAtelierTokens.accentOrange, size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Returning users get a "Return to Training" plan with lower volume '
+                      'and a gradual ramp-up to prevent injury.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDoctorClearanceStep(ThemeData theme) {
+    const options = <(String id, String label, String description)>[
+      ('yes', 'Yes, I\'m cleared', 'A doctor has approved exercise for you.'),
+      ('no', 'Not yet cleared', 'You haven\'t seen a doctor or are waiting for clearance.'),
+      ('na', 'Not applicable', 'No injuries or conditions requiring clearance.'),
+    ];
+
+    return Semantics(
+      label: 'Doctor clearance step',
+      container: true,
+      explicitChildNodes: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            header: true,
+            label: 'Doctor clearance heading',
+            child: Text(
+              'Has a doctor cleared you for exercise?',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontSize: 28,
+                height: 1.2,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'If you have injuries or health conditions, we\'ll build a safer plan.',
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 24),
+          Column(
+            children: [
+              for (final (id, label, description) in options)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Semantics(
+                    button: true,
+                    selected: _doctorClearance == id,
+                    label: 'Doctor clearance: $label',
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: InkWell(
+                        onTap: () =>
+                            setState(() => _doctorClearance = id),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 18),
+                          decoration: BoxDecoration(
+                            color: _doctorClearance == id
+                                ? DigitalAtelierTokens.accentOrange
+                                    .withValues(alpha: 0.12)
+                                : const Color(0xFF151515),
+                            borderRadius: BorderRadius.circular(
+                                DigitalAtelierTokens.cornerRadius),
+                            border: Border.all(
+                              color: _doctorClearance == id
+                                  ? DigitalAtelierTokens.accentOrange
+                                  : const Color(0xFF2A2A2A),
+                              width: _doctorClearance == id ? 1.5 : 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                _doctorClearance == id
+                                    ? Icons.check_circle
+                                    : Icons.circle_outlined,
+                                size: 20,
+                                color: _doctorClearance == id
+                                    ? DigitalAtelierTokens.accentOrange
+                                    : theme.disabledColor,
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(label,
+                                        style: theme.textTheme.bodyLarge),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      description,
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                        color: DigitalAtelierTokens
+                                            .textPrimary
+                                            .withValues(alpha: 0.5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          if (_doctorClearance == 'no') ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEF4444).withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.warning_amber,
+                      color: Color(0xFFEF4444), size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'We\'ll create a "Rehab-Friendly" plan that avoids affected areas '
+                      'and keeps intensity low. Please consult a doctor before progressing.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

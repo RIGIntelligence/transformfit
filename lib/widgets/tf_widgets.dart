@@ -8,6 +8,8 @@ library;
 
 export 'tf_animated_counter.dart';
 export 'tf_breathing_circle.dart';
+export 'tf_button.dart';
+export 'tf_card.dart';
 export 'tf_celebration_overlay.dart';
 export 'tf_coach_message_bubble.dart';
 export 'tf_glowing_card.dart';

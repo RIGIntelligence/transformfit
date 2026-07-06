@@ -3250,4 +3250,140 @@ class ExerciseDatabase {
       variations: ['romanian-deadlift', 'good-morning'],
     ),
   ];
+
+  // ---------------------------------------------------------------------------
+  // Exercise image mapping
+  // ---------------------------------------------------------------------------
+  //
+  // Maps exercise IDs to their demonstration image asset paths.
+  // Exercises without a specific image fall back to the closest muscle-group
+  // match via [getImageForExercise].
+
+  static const Map<String, String> _imageMap = {
+    // CHEST
+    'barbell-bench-press': 'assets/imagery/exercise_bench_press.png',
+    'incline-bench-press': 'assets/imagery/exercise_bench_press.png',
+    'dumbbell-bench-press': 'assets/imagery/exercise_bench_press.png',
+    'incline-dumbbell-press': 'assets/imagery/exercise_bench_press.png',
+    'dumbbell-fly': 'assets/imagery/exercise_bench_press.png',
+    'cable-fly': 'assets/imagery/exercise_bench_press.png',
+    'push-up': 'assets/imagery/exercise_plank.png',
+    'incline-push-up': 'assets/imagery/exercise_plank.png',
+    'decline-push-up': 'assets/imagery/exercise_plank.png',
+    'dip': 'assets/imagery/exercise_bench_press.png',
+    'pec-deck': 'assets/imagery/exercise_bench_press.png',
+
+    // BACK
+    'barbell-deadlift': 'assets/imagery/exercise_deadlift.png',
+    'romanian-deadlift': 'assets/imagery/exercise_deadlift.png',
+    'barbell-row': 'assets/imagery/exercise_deadlift.png',
+    'pull-up': 'assets/imagery/exercise_pullup.png',
+    'chin-up': 'assets/imagery/exercise_pullup.png',
+    'lat-pulldown': 'assets/imagery/exercise_pullup.png',
+
+    // SHOULDERS
+    'overhead-press': 'assets/imagery/exercise_overhead_press.png',
+    'barbell-overhead-press': 'assets/imagery/exercise_overhead_press.png',
+    'dumbbell-shoulder-press': 'assets/imagery/exercise_overhead_press.png',
+    'arnold-press': 'assets/imagery/exercise_overhead_press.png',
+    'lateral-raise': 'assets/imagery/exercise_overhead_press.png',
+    'front-raise': 'assets/imagery/exercise_overhead_press.png',
+    'face-pull': 'assets/imagery/exercise_overhead_press.png',
+    'reverse-fly': 'assets/imagery/exercise_overhead_press.png',
+    'upright-row': 'assets/imagery/exercise_overhead_press.png',
+
+    // SQUATS / QUADS / LEGS
+    'barbell-squat': 'assets/imagery/exercise_squat.png',
+    'back-squat': 'assets/imagery/exercise_squat.png',
+    'front-squat': 'assets/imagery/exercise_squat.png',
+    'goblet-squat': 'assets/imagery/exercise_squat.png',
+    'leg-press': 'assets/imagery/exercise_squat.png',
+    'hack-squat': 'assets/imagery/exercise_squat.png',
+    'leg-extension': 'assets/imagery/exercise_squat.png',
+    'lunge': 'assets/imagery/exercise_squat.png',
+    'walking-lunge': 'assets/imagery/exercise_squat.png',
+    'bulgarian-split-squat': 'assets/imagery/exercise_squat.png',
+    'step-up': 'assets/imagery/exercise_squat.png',
+
+    // KETTLEBELL
+    'kettlebell-swing': 'assets/imagery/exercise_kettlebell.png',
+    'kettlebell-goblet-squat': 'assets/imagery/exercise_kettlebell.png',
+    'kettlebell-clean': 'assets/imagery/exercise_kettlebell.png',
+    'kettlebell-snatch': 'assets/imagery/exercise_kettlebell.png',
+    'kettlebell-press': 'assets/imagery/exercise_kettlebell.png',
+    'kettlebell-row': 'assets/imagery/exercise_kettlebell.png',
+    'turkish-get-up': 'assets/imagery/exercise_kettlebell.png',
+
+    // CORE / PLANK
+    'plank': 'assets/imagery/exercise_plank.png',
+    'side-plank': 'assets/imagery/exercise_plank.png',
+    'dead-bug': 'assets/imagery/exercise_plank.png',
+    'bird-dog': 'assets/imagery/exercise_plank.png',
+    'ab-rollout': 'assets/imagery/exercise_plank.png',
+    'hanging-leg-raise': 'assets/imagery/exercise_plank.png',
+    'cable-crunch': 'assets/imagery/exercise_plank.png',
+    'russian-twist': 'assets/imagery/exercise_plank.png',
+
+    // MOBILITY / YOGA
+    'hip-90-90': 'assets/imagery/exercise_yoga.png',
+    'world-greatest-stretch': 'assets/imagery/exercise_yoga.png',
+    'cat-cow': 'assets/imagery/exercise_yoga.png',
+    'downward-dog': 'assets/imagery/exercise_yoga.png',
+    'childs-pose': 'assets/imagery/exercise_yoga.png',
+    'pigeon-stretch': 'assets/imagery/exercise_yoga.png',
+    'thoracic-rotation': 'assets/imagery/exercise_yoga.png',
+    'hip-flexor-stretch': 'assets/imagery/exercise_yoga.png',
+    'figure-four-stretch': 'assets/imagery/exercise_yoga.png',
+    'cossack-squat': 'assets/imagery/exercise_yoga.png',
+  };
+
+  /// Muscle group fallback images for exercises without a specific image.
+  static const Map<MuscleGroup, String> _muscleGroupFallback = {
+    MuscleGroup.chest: 'assets/imagery/exercise_bench_press.png',
+    MuscleGroup.back: 'assets/imagery/exercise_deadlift.png',
+    MuscleGroup.shoulders: 'assets/imagery/exercise_overhead_press.png',
+    MuscleGroup.biceps: 'assets/imagery/exercise_pullup.png',
+    MuscleGroup.triceps: 'assets/imagery/exercise_bench_press.png',
+    MuscleGroup.forearms: 'assets/imagery/exercise_deadlift.png',
+    MuscleGroup.core: 'assets/imagery/exercise_plank.png',
+    MuscleGroup.quads: 'assets/imagery/exercise_squat.png',
+    MuscleGroup.hamstrings: 'assets/imagery/exercise_deadlift.png',
+    MuscleGroup.glutes: 'assets/imagery/exercise_squat.png',
+    MuscleGroup.calves: 'assets/imagery/exercise_squat.png',
+    MuscleGroup.traps: 'assets/imagery/exercise_deadlift.png',
+    MuscleGroup.lats: 'assets/imagery/exercise_pullup.png',
+    MuscleGroup.rearDelts: 'assets/imagery/exercise_overhead_press.png',
+    MuscleGroup.hipFlexors: 'assets/imagery/exercise_yoga.png',
+    MuscleGroup.obliques: 'assets/imagery/exercise_plank.png',
+  };
+
+  /// Get the demonstration image asset path for an exercise.
+  ///
+  /// Returns the specific image if one exists in [_imageMap], otherwise
+  /// falls back to the primary muscle group image.
+  static String? getImageForExercise(Exercise exercise) {
+    // Check for a specific image first.
+    final specific = _imageMap[exercise.id];
+    if (specific != null) return specific;
+
+    // Fall back to primary muscle group.
+    if (exercise.primaryMuscles.isNotEmpty) {
+      return _muscleGroupFallback[exercise.primaryMuscles.first];
+    }
+    return null;
+  }
+
+  /// Get the demonstration image for an exercise by ID.
+  static String? getImageById(String exerciseId) {
+    final specific = _imageMap[exerciseId];
+    if (specific != null) return specific;
+
+    // Find the exercise in the database.
+    for (final exercise in exercises) {
+      if (exercise.id == exerciseId) {
+        return getImageForExercise(exercise);
+      }
+    }
+    return null;
+  }
 }

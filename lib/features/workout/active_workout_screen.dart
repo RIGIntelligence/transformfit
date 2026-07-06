@@ -21,6 +21,7 @@ import 'package:transformfit/features/session/session_controller.dart';
 import 'package:transformfit/features/workout/set_intelligence.dart';
 import 'package:transformfit/features/workout/workout_prefill.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
+import 'package:transformfit/widgets/tf_error_state.dart';
 import 'package:transformfit/widgets/transformfit_brand_mark.dart';
 
 // ============================================================================
@@ -66,6 +67,9 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
 
   // Set log flash animation
   bool _setJustLogged = false;
+
+  // Session error state
+  String? _sessionError;
 
   WorkoutPlanExercise? get _currentPlanExercise {
     if (_sessionPlan.isEmpty) return null;
@@ -399,6 +403,33 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
       'use a pain-free option or finish.',
     );
     HapticFeedback.selectionClick();
+  }
+
+  void _showPainReportDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: DigitalAtelierTokens.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => _PainReportSheet(
+        onReport: (bodyPart, severity) {
+          Navigator.of(context).pop();
+          setState(() {
+            _painSafetyActive = true;
+            _painSafetyWeightCeiling = _weightKg;
+            _applyPainSafetyCaps();
+          });
+          _publishLiveStatus(
+            'Pain reported: $bodyPart (severity $severity/10). '
+            'Pain safety active — load capped at ${_painSafetyWeightCeiling}kg, '
+            'RPE capped at 6. Consider swapping exercise or finishing.',
+          );
+          HapticFeedback.heavyImpact();
+        },
+      ),
+    );
   }
 
   List<WorkoutPlanExercise> _initialSessionPlan(
@@ -760,6 +791,25 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
       return _ClosedWorkoutSurface(hasDebrief: state.lastDebrief != null);
     }
 
+    // Show error state if session has an error
+    if (_sessionError != null) {
+      final t = Theme.of(context).extension<DigitalAtelierExtension>()!;
+      return Scaffold(
+        backgroundColor: t.background,
+        body: SafeArea(
+          child: TfErrorState(
+            icon: Icons.fitness_center,
+            title: 'Session Error',
+            message: _sessionError!,
+            onRetry: () {
+              setState(() => _sessionError = null);
+            },
+            retryLabel: 'Dismiss',
+          ),
+        ),
+      );
+    }
+
     final t = Theme.of(context).extension<DigitalAtelierExtension>()!;
     final previousReference = previousSetReferenceForExercise(
       state.history,
@@ -987,6 +1037,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
                 onLogSet: _logSet,
                 onUndo: _undoLastSet,
                 onFinish: _finishSession,
+                onReportPain: _showPainReportDialog,
               ),
             ),
           ],
@@ -2002,6 +2053,7 @@ class _BottomBar extends StatelessWidget {
     required this.onLogSet,
     required this.onUndo,
     required this.onFinish,
+    required this.onReportPain,
   });
 
   final int totalVolume;
@@ -2019,6 +2071,7 @@ class _BottomBar extends StatelessWidget {
   final VoidCallback onLogSet;
   final VoidCallback onUndo;
   final VoidCallback onFinish;
+  final VoidCallback onReportPain;
 
   @override
   Widget build(BuildContext context) {
@@ -2156,6 +2209,31 @@ class _BottomBar extends StatelessWidget {
                   ),
                   SizedBox(width: t.spaceSm),
                 ],
+                // Report Pain — persistent, always visible
+                Semantics(
+                  button: true,
+                  label: 'Report pain during workout',
+                  child: GestureDetector(
+                    onTap: onReportPain,
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(t.radiusMd),
+                        color: const Color(0xFFEF4444).withValues(alpha: 0.15),
+                        border: Border.all(
+                          color: const Color(0xFFEF4444).withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.healing,
+                        color: Color(0xFFEF4444),
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: t.spaceSm),
                 // Log Set button
                 Expanded(
                   child: Semantics(
@@ -3159,4 +3237,190 @@ int _reducedTechniqueWeight(int currentWeightKg, double multiplier) {
   return (((currentWeightKg * multiplier) / 5).round() * 5)
       .clamp(0, currentWeightKg)
       .toInt();
+}
+
+// ============================================================================
+// Pain Report Sheet — quick body-part + severity assessment
+// ============================================================================
+
+class _PainReportSheet extends StatefulWidget {
+  const _PainReportSheet({required this.onReport});
+
+  final void Function(String bodyPart, int severity) onReport;
+
+  @override
+  State<_PainReportSheet> createState() => _PainReportSheetState();
+}
+
+class _PainReportSheetState extends State<_PainReportSheet> {
+  String? _selectedBodyPart;
+  int _severity = 5;
+
+  static const _bodyParts = <(String id, String label, IconData icon)>[
+    ('shoulder', 'Shoulder', Icons.accessibility_new),
+    ('back_lower', 'Lower Back', Icons.airline_seat_recline_normal),
+    ('back_upper', 'Upper Back', Icons.accessibility),
+    ('knee', 'Knee', Icons.directions_walk),
+    ('elbow', 'Elbow', Icons.sports_martial_arts),
+    ('wrist', 'Wrist', Icons.front_hand),
+    ('hip', 'Hip', Icons.directions_run),
+    ('ankle', 'Ankle', Icons.hiking),
+    ('neck', 'Neck', Icons.person),
+    ('other', 'Other', Icons.healing),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).extension<DigitalAtelierExtension>()!;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: t.surfaceDivider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                const Icon(Icons.healing, color: Color(0xFFEF4444), size: 22),
+                const SizedBox(width: 10),
+                Text(
+                  'Report Pain',
+                  style: TextStyle(
+                    fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: DigitalAtelierTokens.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Where does it hurt? This activates pain safety mode — '
+              'load and RPE will be capped automatically.',
+              style: TextStyle(
+                fontSize: 13,
+                color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Body part selector
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final (id, label, icon) in _bodyParts)
+                  Semantics(
+                    button: true,
+                    selected: _selectedBodyPart == id,
+                    label: 'Pain location: $label',
+                    child: FilterChip(
+                      avatar: Icon(icon, size: 16),
+                      label: Text(label),
+                      selected: _selectedBodyPart == id,
+                      selectedColor:
+                          const Color(0xFFEF4444).withValues(alpha: 0.2),
+                      labelStyle: TextStyle(
+                        color: _selectedBodyPart == id
+                            ? const Color(0xFFEF4444)
+                            : DigitalAtelierTokens.textPrimary,
+                        fontSize: 13,
+                      ),
+                      onSelected: (_) =>
+                          setState(() => _selectedBodyPart = id),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Severity slider
+            Text(
+              'Severity: $_severity / 10',
+              style: TextStyle(
+                fontFamily: DigitalAtelierTokens.dataFontFamily,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: DigitalAtelierTokens.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Mild',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: DigitalAtelierTokens.textPrimary
+                            .withValues(alpha: 0.5))),
+                Expanded(
+                  child: Slider(
+                    value: _severity.toDouble(),
+                    min: 1,
+                    max: 10,
+                    divisions: 9,
+                    activeColor: _severity <= 3
+                        ? const Color(0xFFF59E0B)
+                        : _severity <= 6
+                            ? const Color(0xFFEF4444)
+                            : const Color(0xFF991B1B),
+                    onChanged: (v) =>
+                        setState(() => _severity = v.round()),
+                  ),
+                ),
+                Text('Severe',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: DigitalAtelierTokens.textPrimary
+                            .withValues(alpha: 0.5))),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Submit
+            SizedBox(
+              width: double.infinity,
+              child: Semantics(
+                button: true,
+                label: 'Confirm pain report',
+                child: ElevatedButton(
+                  onPressed: _selectedBodyPart == null
+                      ? null
+                      : () => widget.onReport(
+                            _selectedBodyPart!,
+                            _severity,
+                          ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFEF4444),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    _selectedBodyPart == null
+                        ? 'Select where it hurts'
+                        : 'Confirm — Activate Pain Safety',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 15),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

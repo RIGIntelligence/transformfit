@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
+import 'package:transformfit/widgets/tf_loading_skeleton.dart';
 
 // ---------------------------------------------------------------------------
 // Wellness dashboard screen — unified view of all wellness modules.
@@ -19,6 +20,9 @@ class _WellnessDashboardScreenState
   // Demo state — in production these come from providers.
   final double _overallScore = 72;
   final String _overallZone = 'maintaining';
+
+  // Loading state — set to true during data fetch.
+  bool _isLoading = false;
 
   final List<_WellnessModule> _modules = const [
     _WellnessModule(
@@ -95,7 +99,9 @@ class _WellnessDashboardScreenState
           centerTitle: true,
         ),
         body: SafeArea(
-          child: LayoutBuilder(
+          child: _isLoading
+              ? TfLoadingSkeleton.dashboard()
+              : LayoutBuilder(
             builder: (context, constraints) {
               final wide = constraints.maxWidth >= 600;
               return SingleChildScrollView(

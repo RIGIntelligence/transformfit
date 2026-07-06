@@ -29,6 +29,9 @@ class PlanIntake {
     required this.equipment,
     this.experienceLevel,
     this.limitations = const [],
+    this.returningFromBreak = false,
+    this.breakDuration,
+    this.doctorClearance,
   });
 
   /// Goal id, e.g. "build_muscle".
@@ -46,6 +49,15 @@ class PlanIntake {
 
   /// Limitation ids excluding "none". E.g. {"knee", "shoulder"}.
   final List<String> limitations;
+
+  /// Whether the user is returning from a training break.
+  final bool returningFromBreak;
+
+  /// Duration of the break: '1-2_weeks', '1-3_months', '3-6_months', '6+_months'.
+  final String? breakDuration;
+
+  /// Doctor clearance: 'yes', 'no', 'na' (not applicable).
+  final String? doctorClearance;
 }
 
 // ---------------------------------------------------------------------------

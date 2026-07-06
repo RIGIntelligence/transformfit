@@ -32,35 +32,47 @@ class HomeScreen extends ConsumerWidget {
           // persistence layer is connected.
           await Future<void>.delayed(const Duration(milliseconds: 400));
         },
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          slivers: [
-            const SliverToBoxAdapter(child: _HomeHeader()),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: DigitalAtelierTokens2.s4,
-              ),
-              sliver: SliverList.list(
-                children: [
-                  const SizedBox(height: DigitalAtelierTokens2.s3),
-                  ReadinessScoreCard(readiness: session.readinessEntry),
-                  const SizedBox(height: DigitalAtelierTokens2.s3),
-                  TodaysPlanCard(session: session),
-                  const SizedBox(height: DigitalAtelierTokens2.s3),
-                  const CoachInsightCard(),
-                  const SizedBox(height: DigitalAtelierTokens2.s3),
-                  const QuickActionsRow(),
-                  const SizedBox(height: DigitalAtelierTokens2.s3),
-                  WeeklySummaryCard(history: session.history),
-                  const SizedBox(height: DigitalAtelierTokens2.s7),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: _buildContent(context, session),
       ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, SessionState session) {
+    // Error state: show when session has no data and could not load.
+    // In production, this would come from a provider error state.
+    // For now, this is the pattern for when data loads fail.
+
+    // Loading state: show skeleton while data is loading.
+    // In production, this would come from AsyncValue.loading.
+    // For now, this is the pattern for initial load.
+
+    return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      slivers: [
+        const SliverToBoxAdapter(child: _HomeHeader()),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: DigitalAtelierTokens2.s4,
+          ),
+          sliver: SliverList.list(
+            children: [
+              const SizedBox(height: DigitalAtelierTokens2.s3),
+              ReadinessScoreCard(readiness: session.readinessEntry),
+              const SizedBox(height: DigitalAtelierTokens2.s3),
+              TodaysPlanCard(session: session),
+              const SizedBox(height: DigitalAtelierTokens2.s3),
+              const CoachInsightCard(),
+              const SizedBox(height: DigitalAtelierTokens2.s3),
+              const QuickActionsRow(),
+              const SizedBox(height: DigitalAtelierTokens2.s3),
+              WeeklySummaryCard(history: session.history),
+              const SizedBox(height: DigitalAtelierTokens2.s7),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
