@@ -1,22 +1,23 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 /// Root shell for authenticated users — wraps the app in a [Scaffold] with
-/// a 5-tab bottom navigation bar. Each tab maintains its own nested
+/// a 4-tab bottom navigation bar. Each tab maintains its own nested
 /// [Navigator] via [StatefulShellRoute] so back-stack state is preserved
 /// when switching tabs.
 ///
-/// Unauthenticated users (auth / onboarding) never see this shell.
+/// Tabs: Home | Workout | Coach | Profile
+/// Wellness is accessible from Home and Profile (merged out of nav).
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
-  /// The [StatefulNavigationShell] provided by go_router's
-  /// [StatefulShellRoute.indexedStack].
   final StatefulNavigationShell navigationShell;
 
-  static const _tabNames = ['Today', 'Workout', 'Coach', 'Wellness', 'Profile'];
+  static const _tabNames = ['Home', 'Workout', 'Coach', 'Profile'];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,6 @@ class AppShell extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
-    // Announce the tab switch for screen readers.
     if (index != navigationShell.currentIndex && index < _tabNames.length) {
       SemanticsService.sendAnnouncement(
         View.of(context),
@@ -39,8 +39,6 @@ class AppShell extends StatelessWidget {
       );
     }
 
-    // When tapping the already-active tab, pop to the first route in that
-    // branch (same behaviour as iOS UITabBarController).
     if (index == navigationShell.currentIndex) {
       navigationShell.goBranch(
         index,
@@ -52,111 +50,140 @@ class AppShell extends StatelessWidget {
   }
 }
 
-/// Reusable tab icon with 44px minimum touch target and semantics label.
-class _TabIcon extends StatelessWidget {
-  const _TabIcon({required this.icon, required this.semanticLabel});
-
-  final IconData icon;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: semanticLabel,
-      button: true,
-      child: SizedBox(
-        height: 44,
-        child: Icon(icon),
-      ),
-    );
-  }
-}
-
+/// Bottom nav — 4 icons, no labels, orange dot indicator, glass blur.
 class _BottomNav extends StatelessWidget {
   const _BottomNav({required this.currentIndex, required this.onTap});
 
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  static const _mutedColor = Color(0xFFA0A0A0);
+  static const _inactiveColor = Color(0xFF6B7280);
+  static const _activeColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: DigitalAtelierTokens2.surfaceElevated,
-        border: Border(
-          top: BorderSide(color: DigitalAtelierTokens2.surfaceBorder),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: DigitalAtelierTokens2.surface.withValues(alpha: 0.85),
+            border: const Border(
+              top: BorderSide(color: Color(0xFF1A1A1A), width: 0.5),
+            ),
+          ),
+          child: Stack(
+            children: [
+              // Very subtle barbell texture behind the nav bar (10% opacity).
+              Positioned.fill(
+                child: Opacity(
+                  opacity: 0.10,
+                  child: Image.asset(
+                    'assets/imagery/hero_barbell.png',
+                    fit: BoxFit.cover,
+                    cacheWidth: 400,
+                    cacheHeight: 100,
+                  ),
+                ),
+              ),
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _NavItem(
+                        icon: Icons.home_outlined,
+                        activeIcon: Icons.home,
+                        isActive: currentIndex == 0,
+                        semanticLabel: 'Home tab',
+                        onTap: () => onTap(0),
+                      ),
+                      _NavItem(
+                        icon: Icons.fitness_center,
+                        activeIcon: Icons.fitness_center,
+                        isActive: currentIndex == 1,
+                        semanticLabel: 'Workout tab',
+                        onTap: () => onTap(1),
+                      ),
+                      _NavItem(
+                        icon: Icons.chat_bubble_outline,
+                        activeIcon: Icons.chat_bubble,
+                        isActive: currentIndex == 2,
+                        semanticLabel: 'Coach tab',
+                        onTap: () => onTap(2),
+                      ),
+                      _NavItem(
+                        icon: Icons.person_outline,
+                        activeIcon: Icons.person,
+                        isActive: currentIndex == 3,
+                        semanticLabel: 'Profile tab',
+                        onTap: () => onTap(3),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.isActive,
+    required this.semanticLabel,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final IconData activeIcon;
+  final bool isActive;
+  final String semanticLabel;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '$semanticLabel${isActive ? ", selected" : ""}',
+      button: true,
+      selected: isActive,
+      child: GestureDetector(
         onTap: onTap,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        selectedItemColor: DigitalAtelierTokens.accentOrange,
-        unselectedItemColor: _mutedColor,
-        selectedFontSize: 11,
-        unselectedFontSize: 11,
-        iconSize: 24,
-        items: [
-          BottomNavigationBarItem(
-            icon: _TabIcon(
-              icon: Icons.today,
-              semanticLabel: 'Today tab',
-            ),
-            activeIcon: _TabIcon(
-              icon: Icons.today,
-              semanticLabel: 'Today tab, selected',
-            ),
-            label: 'Today',
+        behavior: HitTestBehavior.opaque,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isActive ? activeIcon : icon,
+                size: 24,
+                color: isActive ? _BottomNav._activeColor : _BottomNav._inactiveColor,
+              ),
+              const SizedBox(height: 4),
+              // Orange dot indicator for active tab
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
+                width: isActive ? 4 : 0,
+                height: isActive ? 4 : 0,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFF97316),
+                ),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: _TabIcon(
-              icon: Icons.fitness_center,
-              semanticLabel: 'Workout tab',
-            ),
-            activeIcon: _TabIcon(
-              icon: Icons.fitness_center,
-              semanticLabel: 'Workout tab, selected',
-            ),
-            label: 'Workout',
-          ),
-          BottomNavigationBarItem(
-            icon: _TabIcon(
-              icon: Icons.chat,
-              semanticLabel: 'Coach tab',
-            ),
-            activeIcon: _TabIcon(
-              icon: Icons.chat,
-              semanticLabel: 'Coach tab, selected',
-            ),
-            label: 'Coach',
-          ),
-          BottomNavigationBarItem(
-            icon: _TabIcon(
-              icon: Icons.favorite,
-              semanticLabel: 'Wellness tab',
-            ),
-            activeIcon: _TabIcon(
-              icon: Icons.favorite,
-              semanticLabel: 'Wellness tab, selected',
-            ),
-            label: 'Wellness',
-          ),
-          BottomNavigationBarItem(
-            icon: _TabIcon(
-              icon: Icons.person,
-              semanticLabel: 'Profile tab',
-            ),
-            activeIcon: _TabIcon(
-              icon: Icons.person,
-              semanticLabel: 'Profile tab, selected',
-            ),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
   }

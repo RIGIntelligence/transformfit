@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transformfit/theme/mathematical_design.dart';
 
 // ============================================================================
 // TransformFit Design System — "Digital Atelier"
@@ -23,7 +24,7 @@ class DigitalAtelierTokens {
   const DigitalAtelierTokens._();
 
   static const Color background = Color(0xFF0A0A0A);
-  static const Color textPrimary = Color(0xFFF0EDE8);
+  static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color accentOrange = Color(0xFFF97316);
 
   /// Muted red for inline error text (distinct from the accent token so it
@@ -50,7 +51,7 @@ class DigitalAtelierTokens2 {
   static const Color surfaceElevated = Color(0xFF1A1A1A);
   static Color surfaceGlass({double opacity = 0.08}) =>
       Colors.white.withValues(alpha: opacity);
-  static const Color surfaceBorder = Color(0xFF262626);
+  static const Color surfaceBorder = Color(0xFF1E1E1E);
 
   // -- Semantic colors ------------------------------------------------------
 
@@ -62,48 +63,31 @@ class DigitalAtelierTokens2 {
 
   // -- Gradient presets -----------------------------------------------------
 
-  static const LinearGradient heroGradient = LinearGradient(
-    colors: [Color(0xFFF97316), Color(0xFF8B5CF6)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const LinearGradient recoveryGradient = LinearGradient(
-    colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const LinearGradient progressGradient = LinearGradient(
-    colors: [Color(0xFF10B981), Color(0xFF3B82F6)],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
-
+  // Gradient presets removed in v3.0 Obsidian Forge.
   // -- Spacing scale --------------------------------------------------------
 
-  static const double s1 = 4;
-  static const double s2 = 8;
-  static const double s3 = 12;
-  static const double s4 = 16;
-  static const double s5 = 24;
-  static const double s6 = 32;
-  static const double s7 = 48;
-  static const double s8 = 64;
+  static const double s1 = MathematicalDesign.spaceXs;   // 3px (fib)
+  static const double s2 = MathematicalDesign.spaceMd;   // 8px (fib)
+  static const double s3 = MathematicalDesign.spaceLg;   // 13px (fib)
+  static const double s4 = MathematicalDesign.textMd;    // 16px (base)
+  static const double s5 = MathematicalDesign.spaceXl;   // 21px (fib)
+  static const double s6 = MathematicalDesign.space2xl;  // 34px (fib)
+  static const double s7 = MathematicalDesign.text2xl;   // 34px (fib)
+  static const double s8 = MathematicalDesign.space3xl;  // 55px (fib)
 
   // -- Border radius --------------------------------------------------------
 
-  static const double radiusSm = 8;
-  static const double radiusMd = 12;
-  static const double radiusLg = 16;
-  static const double radiusXl = 24;
-  static const double radiusPill = 999;
+  static const double radiusSm = MathematicalDesign.radiusSm;   // 3px (fib)
+  static const double radiusMd = MathematicalDesign.radiusMd;   // 5px (fib)
+  static const double radiusLg = MathematicalDesign.radiusLg;   // 8px (fib)
+  static const double radiusXl = MathematicalDesign.radiusXl;   // 13px (fib)
+  static const double radiusPill = MathematicalDesign.radiusPill; // 21px (fib)
 
   // -- Elevation presets with tinted shadows --------------------------------
 
   static const List<BoxShadow> elevationLow = [
     BoxShadow(
-      color: Color(0x1AF97316), // subtle orange tint
+      color: Color(0x14000000),
       blurRadius: 8,
       offset: Offset(0, 2),
     ),
@@ -111,7 +95,7 @@ class DigitalAtelierTokens2 {
 
   static const List<BoxShadow> elevationMedium = [
     BoxShadow(
-      color: Color(0x29F97316),
+      color: Color(0x1F000000),
       blurRadius: 16,
       offset: Offset(0, 4),
     ),
@@ -119,7 +103,7 @@ class DigitalAtelierTokens2 {
 
   static const List<BoxShadow> elevationHigh = [
     BoxShadow(
-      color: Color(0x33F97316),
+      color: Color(0x29000000),
       blurRadius: 32,
       offset: Offset(0, 8),
     ),
@@ -127,24 +111,14 @@ class DigitalAtelierTokens2 {
 
   // -- Animation durations --------------------------------------------------
 
-  static const Duration durationFast = Duration(milliseconds: 150);
-  static const Duration durationNormal = Duration(milliseconds: 300);
-  static const Duration durationSlow = Duration(milliseconds: 500);
-  static const Duration durationCelebration = Duration(milliseconds: 1500);
+  static const Duration durationFast = MathematicalDesign.animFast;           // 100ms (fib)
+  static const Duration durationNormal = MathematicalDesign.animNormal;       // 200ms (fib)
+  static const Duration durationSlow = MathematicalDesign.animSlow;           // 500ms (fib)
+  static const Duration durationCelebration = MathematicalDesign.animCelebration; // 1300ms (fib)
 
   // -- Reusable gradient decorations ----------------------------------------
 
-  static const BoxDecoration heroGradientDecoration = BoxDecoration(
-    gradient: heroGradient,
-  );
-
-  static const BoxDecoration recoveryGradientDecoration = BoxDecoration(
-    gradient: recoveryGradient,
-  );
-
-  static const BoxDecoration progressGradientDecoration = BoxDecoration(
-    gradient: progressGradient,
-  );
+  // Gradient decorations removed in v3.0 Obsidian Forge.
 
   // -- Reusable box decorations ---------------------------------------------
 
@@ -169,42 +143,40 @@ class DigitalAtelierTokens2 {
   // -- Text style presets ---------------------------------------------------
 
   static const TextStyle displayLarge = TextStyle(
-    fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
-    fontSize: 48,
-    fontWeight: FontWeight.w700,
-    height: 1.1,
-    letterSpacing: -1.0,
+    fontFamily: DigitalAtelierTokens.dataFontFamily,
+    color: Color(0xFFFFFFFF),
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    height: 1.2,
   );
 
   static const TextStyle displayMedium = TextStyle(
-    fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
-    fontSize: 36,
+    fontFamily: DigitalAtelierTokens.dataFontFamily,
+    color: Color(0xFFFFFFFF),
+    fontSize: 24,
     fontWeight: FontWeight.w600,
-    height: 1.15,
-    letterSpacing: -0.5,
+    height: 1.2,
   );
 
   static const TextStyle headlineLarge = TextStyle(
-    fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
-    fontSize: 28,
+    fontFamily: DigitalAtelierTokens.dataFontFamily,
+    color: Color(0xFFFFFFFF),
+    fontSize: 24,
     fontWeight: FontWeight.w600,
     height: 1.2,
   );
 
   static const TextStyle headlineMedium = TextStyle(
-    fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
-    fontSize: 22,
+    fontFamily: DigitalAtelierTokens.dataFontFamily,
+    color: Color(0xFFFFFFFF),
+    fontSize: 18,
     fontWeight: FontWeight.w500,
-    height: 1.25,
+    height: 1.3,
   );
 
   static const TextStyle titleLarge = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 1.3,
@@ -212,7 +184,7 @@ class DigitalAtelierTokens2 {
 
   static const TextStyle titleMedium = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 16,
     fontWeight: FontWeight.w600,
     height: 1.3,
@@ -220,7 +192,7 @@ class DigitalAtelierTokens2 {
 
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
@@ -228,7 +200,7 @@ class DigitalAtelierTokens2 {
 
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
@@ -244,7 +216,7 @@ class DigitalAtelierTokens2 {
 
   static const TextStyle labelLarge = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 14,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
@@ -252,7 +224,7 @@ class DigitalAtelierTokens2 {
 
   static const TextStyle dataValue = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.textPrimary,
+    color: Color(0xFFFFFFFF),
     fontSize: 32,
     fontWeight: FontWeight.w700,
     letterSpacing: -0.5,
@@ -269,7 +241,7 @@ class DigitalAtelierTokens2 {
   /// Accent text style using the primary orange.
   static const TextStyle accent = TextStyle(
     fontFamily: DigitalAtelierTokens.dataFontFamily,
-    color: DigitalAtelierTokens.accentOrange,
+    color: Color(0xFFF97316),
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );
@@ -303,6 +275,8 @@ class DigitalAtelierExtension
     required this.accentInfo,
     // -- Text Colors --------------------------------------------------------
     required this.textPrimary,
+    // -- Deep Canvas (bottom nav) -------------------------------------------
+    required this.canvasDeep,
     required this.textSecondary,
     required this.textMuted,
     required this.textInverse,
@@ -355,7 +329,8 @@ class DigitalAtelierExtension
         accentDanger: Color(0xFFEF4444),
         accentInfo: Color(0xFF3B82F6),
         // Text Colors
-        textPrimary: Color(0xFFF0EDE8),
+        textPrimary: Color(0xFFFFFFFF),
+        canvasDeep: Color(0xFF050505),
         textSecondary: Color(0xFF9CA3AF),
         textMuted: Color(0xFF8B95A5),
         textInverse: Color(0xFF0A0A0A),
@@ -364,29 +339,33 @@ class DigitalAtelierExtension
         warning: Color(0xFFF59E0B),
         recovery: Color(0xFF8B5CF6),
         calm: Color(0xFF6366F1),
-        // Spacing (4px base)
-        spaceXs: 4,
-        spaceSm: 8,
-        spaceMd: 12,
-        spaceLg: 16,
-        spaceXl: 24,
-        spaceXxl: 32,
-        spaceXxxl: 48,
-        spaceHuge: 64,
-        // Border Radius
-        radiusSm: 8,
-        radiusMd: 12,
-        radiusLg: 16,
-        radiusXl: 24,
-        radiusPill: 999,
-        // Animation
-        durationFast: Duration(milliseconds: 150),
-        durationNormal: Duration(milliseconds: 300),
-        durationSlow: Duration(milliseconds: 500),
-        durationCelebration: Duration(milliseconds: 1500),
-        curveDefault: Curves.easeOutCubic,
-        curveBounce: Curves.elasticOut,
-        curveSlide: Curves.easeOutQuart,
+        // DEVIATION ENGINE 34: Fine-Tuning — Fibonacci spacing
+        // Previous: 4, 8, 12, 16, 24, 32, 48, 64 (arbitrary 4px base)
+        // Now:      3, 5, 8, 13, 21, 34, 55, 89 (Fibonacci F(4)–F(11))
+        spaceXs: MathematicalDesign.spaceXs,   // 3  (F4)
+        spaceSm: MathematicalDesign.spaceSm,   // 5  (F5)
+        spaceMd: MathematicalDesign.spaceMd,   // 8  (F6)
+        spaceLg: MathematicalDesign.spaceLg,   // 13 (F7)
+        spaceXl: MathematicalDesign.spaceXl,   // 21 (F8)
+        spaceXxl: MathematicalDesign.space2xl, // 34 (F9)
+        spaceXxxl: MathematicalDesign.space3xl, // 55 (F10)
+        spaceHuge: MathematicalDesign.space4xl, // 89 (F11)
+        // DEVIATION ENGINE 34: Fine-Tuning — Fibonacci radii
+        radiusSm: MathematicalDesign.radiusSm,     // 3  (F4)
+        radiusMd: MathematicalDesign.radiusMd,     // 5  (F5)
+        radiusLg: MathematicalDesign.radiusLg,     // 8  (F6)
+        radiusXl: MathematicalDesign.radiusXl,     // 13 (F7)
+        radiusPill: MathematicalDesign.radiusCircle, // 999 (fully round)
+        // DEVIATION ENGINE 36: Speed of Light — Fibonacci animation durations
+        // Small → fast, large → slow (physical law)
+        durationFast: MathematicalDesign.animFast,           // 100ms (F5 micro)
+        durationNormal: MathematicalDesign.animNormal,       // 200ms (F6 standard)
+        durationSlow: MathematicalDesign.animSlow,           // 500ms (F7 emphasis)
+        durationCelebration: MathematicalDesign.animCelebration, // 1300ms (F8 celebration)
+        // DEVIATION ENGINE 37: Absolute Zero — meaningful easing only
+        curveDefault: Curves.easeOutCubic,   // deceleration (arrival)
+        curveBounce: Curves.elasticOut,      // spring (celebration only)
+        curveSlide: Curves.easeOutQuart,     // smooth slide (transitions)
       );
 
   // -- Background & Surface -------------------------------------------------
@@ -406,6 +385,8 @@ class DigitalAtelierExtension
 
   // -- Text Colors ----------------------------------------------------------
   final Color textPrimary;
+  // -- Deep Canvas ----------------------------------------------------------
+  final Color canvasDeep;
   final Color textSecondary;
   final Color textMuted;
   final Color textInverse;
@@ -443,6 +424,54 @@ class DigitalAtelierExtension
   final Curve curveSlide;
 
   // =========================================================================
+  // Layout Spacing Constants (Golden Ratio / Fibonacci)
+  //
+  // DEVIATION ENGINE 33: Casimir Pressure — constrained whitespace creates
+  // measurable visual force. The screen margin (21px) is deliberately tight
+  // to create tension; the section gap (34px) is deliberately large to draw
+  // the eye to the hero element.
+  //
+  // DEVIATION ENGINE 34: Fine-Tuning — every value is a Fibonacci number.
+  // No arbitrary values. The mathematical foundation ensures visual harmony.
+  // =========================================================================
+
+  static const double screenMargin = MathematicalDesign.spaceXl;  // 21px (fib)
+  static const double cardGap = MathematicalDesign.spaceLg;       // 13px (fib)
+  static const double sectionGap = MathematicalDesign.space2xl;   // 34px (fib)
+
+  // =========================================================================
+  // Golden Ratio Layout Helpers
+  // =========================================================================
+
+  /// Major section proportion (61.8%) for Golden Ratio layouts.
+  static const double goldenMajor = MathematicalDesign.goldenMajor;
+
+  /// Minor section proportion (38.2%) for Golden Ratio layouts.
+  static const double goldenMinor = MathematicalDesign.goldenMinor;
+
+  /// Returns the major portion (61.8%) of [total].
+  static double goldenMajorOf(double total) =>
+      MathematicalDesign.goldenMajorOf(total);
+
+  /// Returns the minor portion (38.2%) of [total].
+  static double goldenMinorOf(double total) =>
+      MathematicalDesign.goldenMinorOf(total);
+
+  /// Major section proportion (2/3) for Rule of Thirds layouts.
+  static const double thirdMajor = MathematicalDesign.thirdMajor;
+
+  /// Minor section proportion (1/3) for Rule of Thirds layouts.
+  static const double thirdMinor = MathematicalDesign.thirdMinor;
+
+  /// Returns the major third (2/3) of [total].
+  static double thirdMajorOf(double total) =>
+      MathematicalDesign.thirdMajorOf(total);
+
+  /// Returns the minor third (1/3) of [total].
+  static double thirdMinorOf(double total) =>
+      MathematicalDesign.thirdMinorOf(total);
+
+  // =========================================================================
   // Font families
   // =========================================================================
 
@@ -472,18 +501,16 @@ class DigitalAtelierExtension
   // Component Presets — pre-built BoxDecoration
   // =========================================================================
 
-  /// Standard card: surface bg, md radius, surfaceBorder.
+  /// Standard card: surface bg, md radius, no border.
   BoxDecoration get cardDecoration => BoxDecoration(
         color: surface,
         borderRadius: BorderRadius.circular(radiusMd),
-        border: Border.all(color: surfaceBorder, width: 1),
       );
 
-  /// Elevated card: surfaceElevated bg, md radius, surfaceBorder.
+  /// Elevated card: surfaceElevated bg, md radius, no border.
   BoxDecoration get cardElevated => BoxDecoration(
         color: surfaceElevated,
         borderRadius: BorderRadius.circular(radiusMd),
-        border: Border.all(color: surfaceBorder, width: 1),
       );
 
   /// Input field: surfaceInput bg, sm radius, surfaceBorder.
@@ -500,16 +527,15 @@ class DigitalAtelierExtension
         border: Border.all(color: surfaceBorder, width: 1),
       );
 
-  /// Modal bottom sheet: surfaceElevated bg, lg radius, tinted shadow.
+  /// Modal bottom sheet: surfaceElevated bg, lg radius, shadow.
   BoxDecoration get modalDecoration => BoxDecoration(
         color: surfaceElevated,
         borderRadius: BorderRadius.circular(radiusLg),
-        border: Border.all(color: surfaceBorder, width: 1),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: accentPrimary.withValues(alpha: 0.05),
+            color: Color(0x1F000000),
             blurRadius: 32,
-            offset: const Offset(0, -4),
+            offset: Offset(0, -4),
           ),
         ],
       );
@@ -518,26 +544,11 @@ class DigitalAtelierExtension
   // Gradient Presets
   // =========================================================================
 
-  /// Orange → Purple (135°) — hero moments, onboarding.
-  LinearGradient get gradientHero => LinearGradient(
-        colors: [accentPrimary, accentSecondary],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
+  // gradientHero removed in v3.0 Obsidian Forge.
 
-  /// Green → Blue (135°) — progress, achievements.
-  LinearGradient get gradientProgress => LinearGradient(
-        colors: [accentTertiary, accentInfo],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
+  // gradientProgress removed in v3.0 Obsidian Forge.
 
-  /// Blue → Purple (135°) — recovery, wellness.
-  LinearGradient get gradientRecovery => LinearGradient(
-        colors: [accentInfo, accentSecondary],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
+  // gradientRecovery removed in v3.0 Obsidian Forge.
 
   // =========================================================================
   // Elevation / Shadows — subtle, tinted
@@ -546,21 +557,21 @@ class DigitalAtelierExtension
   /// No shadow — cards use border only.
   List<BoxShadow> get elevationNone => const [];
 
-  /// Modal shadow — primary tint at 5% opacity.
-  List<BoxShadow> get elevationModal => [
+  /// Modal shadow — neutral dark.
+  List<BoxShadow> get elevationModal => const [
         BoxShadow(
-          color: accentPrimary.withValues(alpha: 0.05),
+          color: Color(0x1F000000),
           blurRadius: 32,
-          offset: const Offset(0, -4),
+          offset: Offset(0, -4),
         ),
       ];
 
-  /// FAB shadow — primary tint.
-  List<BoxShadow> get elevationFab => [
+  /// FAB shadow — neutral dark.
+  List<BoxShadow> get elevationFab => const [
         BoxShadow(
-          color: accentPrimary.withValues(alpha: 0.25),
+          color: Color(0x29000000),
           blurRadius: 24,
-          offset: const Offset(0, 8),
+          offset: Offset(0, 8),
         ),
       ];
 
@@ -588,9 +599,7 @@ class DigitalAtelierExtension
   // Legacy v2 gradient getters (backward compat)
   // =========================================================================
 
-  LinearGradient get heroGradient => gradientHero;
-  LinearGradient get recoveryGradient => gradientRecovery;
-  LinearGradient get progressGradient => gradientProgress;
+  // Legacy gradient getters removed in v3.0 Obsidian Forge.
 
   // =========================================================================
   // Legacy v2 spacing getters (backward compat)
@@ -648,24 +657,11 @@ class DigitalAtelierExtension
     return disableAnimations ? Curves.linear : curve;
   }
 
-  /// Returns a static decoration alternative for gradient hero.
-  /// Use when reduced motion is active — no animated gradient shimmer.
-  BoxDecoration get staticHeroDecoration => BoxDecoration(
-        color: accentPrimary,
-        borderRadius: BorderRadius.circular(radiusMd),
-      );
+  // staticHeroDecoration removed in v3.0 Obsidian Forge.
 
-  /// Returns a static decoration alternative for gradient progress.
-  BoxDecoration get staticProgressDecoration => BoxDecoration(
-        color: accentTertiary,
-        borderRadius: BorderRadius.circular(radiusMd),
-      );
+  // staticProgressDecoration removed in v3.0 Obsidian Forge.
 
-  /// Returns a static decoration alternative for gradient recovery.
-  BoxDecoration get staticRecoveryDecoration => BoxDecoration(
-        color: accentInfo,
-        borderRadius: BorderRadius.circular(radiusMd),
-      );
+  // staticRecoveryDecoration removed in v3.0 Obsidian Forge.
 
   // =========================================================================
   // ThemeExtension — copyWith
@@ -685,6 +681,7 @@ class DigitalAtelierExtension
     Color? accentDanger,
     Color? accentInfo,
     Color? textPrimary,
+    Color? canvasDeep,
     Color? textSecondary,
     Color? textMuted,
     Color? textInverse,
@@ -726,6 +723,7 @@ class DigitalAtelierExtension
       accentDanger: accentDanger ?? this.accentDanger,
       accentInfo: accentInfo ?? this.accentInfo,
       textPrimary: textPrimary ?? this.textPrimary,
+      canvasDeep: canvasDeep ?? this.canvasDeep,
       textSecondary: textSecondary ?? this.textSecondary,
       textMuted: textMuted ?? this.textMuted,
       textInverse: textInverse ?? this.textInverse,
@@ -782,6 +780,7 @@ class DigitalAtelierExtension
       accentDanger: Color.lerp(accentDanger, other.accentDanger, t)!,
       accentInfo: Color.lerp(accentInfo, other.accentInfo, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
+      canvasDeep: Color.lerp(canvasDeep, other.canvasDeep, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
       textInverse: Color.lerp(textInverse, other.textInverse, t)!,
@@ -838,118 +837,128 @@ class TransformFitTextTheme {
     return style.copyWith(fontSize: (style.fontSize ?? 16) * scale);
   }
 
-  // -- Heading: Display — Playfair 40px/1.1 bold (hero moments only) --------
+  // -- Heading: Display — Inter 34px/1.2 semibold (screen titles) -----------
+  // Golden Ratio: 16 × φ² ≈ 42px, Fibonacci: 34px
 
   TextStyle get display => _scaled(const TextStyle(
-        fontFamily: 'Playfair',
-        fontSize: 40,
-        fontWeight: FontWeight.w700,
-        height: 1.1,
-        letterSpacing: -0.5,
-        color: Color(0xFFF0EDE8),
+        fontFamily: 'Inter',
+        fontSize: MathematicalDesign.text2xl,  // 34px (fib)
+        fontWeight: FontWeight.w600,
+        height: 1.2,
+        color: Color(0xFFFFFFFF),
       ));
 
-  // -- Heading: H1 — Inter 28px/1.2 semibold (screen titles) ----------------
+  // -- Heading: H1 — Inter 34px/1.2 semibold (screen titles) ----------------
+  // Fibonacci: 34px
 
   TextStyle get h1 => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 28,
+        fontSize: MathematicalDesign.text2xl,  // 34px (fib)
         fontWeight: FontWeight.w600,
         height: 1.2,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
       ));
 
-  // -- Heading: H2 — Inter 22px/1.3 semibold (section headers) --------------
+  // -- Heading: H2 — Inter 21px/1.3 medium (section headers) ----------------
+  // Fibonacci: 21px
 
   TextStyle get h2 => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
+        fontSize: MathematicalDesign.textLg,   // 21px (fib)
+        fontWeight: FontWeight.w500,
         height: 1.3,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
       ));
 
-  // -- Heading: H3 — Inter 18px/1.3 medium (card titles) --------------------
+  // -- Heading: H3 — Inter 21px/1.3 medium (card titles) --------------------
+  // Fibonacci: 21px
 
   TextStyle get h3 => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 18,
+        fontSize: MathematicalDesign.textLg,   // 21px (fib)
         fontWeight: FontWeight.w500,
         height: 1.3,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
       ));
 
   // -- Body — Inter 16px/1.5 regular (body text) ----------------------------
+  // Modular Scale base: 16px
 
   TextStyle get body => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 16,
+        fontSize: MathematicalDesign.textMd,   // 16px (base)
         fontWeight: FontWeight.w400,
         height: 1.5,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
       ));
 
-  // -- BodySmall — Inter 14px/1.4 regular (secondary text) ------------------
+  // -- BodySmall — Inter 13px/1.4 regular (secondary text) ------------------
+  // Fibonacci: 13px
 
   TextStyle get bodySmall => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 14,
+        fontSize: MathematicalDesign.textSm,   // 13px (fib)
         fontWeight: FontWeight.w400,
         height: 1.4,
         color: Color(0xFF9CA3AF),
       ));
 
-  // -- Caption — Inter 12px/1.3 regular (labels, metadata) ------------------
+  // -- Caption — Inter 10px/1.3 regular (labels, metadata) ------------------
+  // Modular Scale: 10px
 
   TextStyle get caption => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 12,
+        fontSize: MathematicalDesign.textXs,   // 10px (scale)
         fontWeight: FontWeight.w400,
         height: 1.3,
         color: Color(0xFF8B95A5),
       ));
 
-  // -- DataLarge — Inter 32px/1.0 bold tabular (Whoop recovery score) -------
+  // -- DataLarge — Inter 34px/1.0 bold tabular (Whoop recovery score) -------
+  // Fibonacci: 34px
 
   TextStyle get dataLarge => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 32,
+        fontSize: MathematicalDesign.text2xl,  // 34px (fib)
         fontWeight: FontWeight.w700,
         height: 1.0,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
         fontFeatures: [FontFeature.tabularFigures()],
       ));
 
-  // -- DataMedium — Inter 24px/1.0 semibold tabular (metrics) ---------------
+  // -- DataMedium — Inter 21px/1.0 semibold tabular (metrics) ---------------
+  // Fibonacci: 21px
 
   TextStyle get dataMedium => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 24,
+        fontSize: MathematicalDesign.textLg,   // 21px (fib)
         fontWeight: FontWeight.w600,
         height: 1.0,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
         fontFeatures: [FontFeature.tabularFigures()],
       ));
 
-  // -- DataSmall — Inter 16px/1.0 medium tabular (inline data) --------------
+  // -- DataSmall — Inter 13px/1.0 medium tabular (inline data) --------------
+  // Fibonacci: 13px
 
   TextStyle get dataSmall => _scaled(const TextStyle(
         fontFamily: 'Inter',
-        fontSize: 16,
+        fontSize: MathematicalDesign.textSm,   // 13px (fib)
         fontWeight: FontWeight.w500,
         height: 1.0,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
         fontFeatures: [FontFeature.tabularFigures()],
       ));
 
-  // -- CoachVoice — Playfair 18px/1.4 medium (coach messages) ---------------
+  // -- CoachVoice — Playfair 16px/1.4 medium (coach messages) ---------------
+  // Modular Scale base: 16px
 
   TextStyle get coachVoice => _scaled(const TextStyle(
         fontFamily: 'Playfair',
-        fontSize: 18,
+        fontSize: MathematicalDesign.textMd,   // 16px (base)
         fontWeight: FontWeight.w500,
         height: 1.4,
-        color: Color(0xFFF0EDE8),
+        color: Color(0xFFFFFFFF),
       ));
 }
 
@@ -1032,17 +1041,18 @@ ThemeData buildDigitalAtelierTheme({double textScaleFactor = 1.0}) {
     DigitalAtelierExtension.dataFontFamily,
   ).copyWith(
     headlineMedium: TextStyle(
-      fontFamily: DigitalAtelierExtension.coachVoiceFontFamily,
+      fontFamily: DigitalAtelierExtension.dataFontFamily,
       color: ext.textPrimary,
-      fontSize: 40 * textScaleFactor,
+      fontSize: 24 * textScaleFactor,
       fontWeight: FontWeight.w600,
-      height: 1.1,
+      height: 1.2,
     ),
     titleMedium: TextStyle(
-      fontFamily: DigitalAtelierExtension.coachVoiceFontFamily,
+      fontFamily: DigitalAtelierExtension.dataFontFamily,
       color: ext.textPrimary,
-      fontSize: 22 * textScaleFactor,
+      fontSize: 18 * textScaleFactor,
       fontWeight: FontWeight.w500,
+      height: 1.3,
     ),
     bodyLarge: TextStyle(
       fontFamily: DigitalAtelierExtension.dataFontFamily,
@@ -1084,7 +1094,6 @@ ThemeData buildDigitalAtelierTheme({double textScaleFactor = 1.0}) {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(ext.radiusMd),
-        side: BorderSide(color: ext.surfaceBorder, width: 1),
       ),
       surfaceTintColor: Colors.transparent,
     ),

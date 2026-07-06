@@ -45,10 +45,6 @@ class _LandingBody extends StatefulWidget {
 
 class _LandingBodyState extends State<_LandingBody>
     with TickerProviderStateMixin {
-  // Gradient shift
-  late final AnimationController _gradientCtrl;
-  late final Animation<double> _gradientAnim;
-
   // Typewriter
   late final AnimationController _typewriterCtrl;
   late final Animation<int> _typewriterCharCount;
@@ -95,19 +91,6 @@ class _LandingBodyState extends State<_LandingBody>
         DigitalAtelierExtension.standard();
     _reducedMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-
-    // ── Gradient (infinite, 8s cycle) ──
-    _gradientCtrl = AnimationController(
-      vsync: this,
-      duration: t.resolvedDuration(const Duration(seconds: 8), context),
-    );
-    if (!_reducedMotion) {
-      _gradientCtrl.repeat(reverse: true);
-    }
-    _gradientAnim = CurvedAnimation(
-      parent: _gradientCtrl,
-      curve: t.resolvedCurve(Curves.easeInOut, context),
-    );
 
     // ── Typewriter (3s forward, then stay) ──
     _typewriterCtrl = AnimationController(
@@ -185,7 +168,6 @@ class _LandingBodyState extends State<_LandingBody>
 
   @override
   void dispose() {
-    _gradientCtrl.dispose();
     _typewriterCtrl.dispose();
     _cardsCtrl.dispose();
     _ringCtrl.dispose();
@@ -208,47 +190,28 @@ class _LandingBodyState extends State<_LandingBody>
     return Scaffold(
       body: Stack(
         children: [
-          // ── Layer 0: Animated gradient background (parallax slower) ──
-          AnimatedBuilder(
-            animation: _gradientAnim,
-            builder: (ctx, _) {
-              final t = _gradientAnim.value;
-              return Transform.translate(
-                offset: Offset(0, -_scrollOffset * 0.15),
-                child: Container(
-                  width: double.infinity,
-                  height: h + 100,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.lerp(
-                          const Color(0xFFF97316),
-                          const Color(0xFF7C3AED),
-                          t,
-                        )!,
-                        Color.lerp(
-                          const Color(0xFF7C3AED),
-                          const Color(0xFFF97316),
-                          t,
-                        )!,
-                      ],
-                      stops: const [0.0, 1.0],
-                    ),
-                  ),
-                ),
-              );
-            },
+          // ── Layer 0: Hero workout background image (parallax slower) ──
+          Transform.translate(
+            offset: Offset(0, -_scrollOffset * 0.15),
+            child: SizedBox(
+              width: double.infinity,
+              height: h + 100,
+              child: Image.asset(
+                'assets/imagery/hero_workout.png',
+                fit: BoxFit.cover,
+                cacheWidth: 1080,
+                cacheHeight: 1920,
+              ),
+            ),
           ),
 
-          // ── Layer 1: Dark overlay to keep text readable ──
+          // ── Layer 1: Dark overlay (70% opacity for hero image) ──
           Transform.translate(
             offset: Offset(0, -_scrollOffset * 0.12),
             child: Container(
               width: double.infinity,
               height: h + 100,
-              color: DigitalAtelierTokens.background.withValues(alpha: 0.82),
+              color: Colors.black.withValues(alpha: 0.70),
             ),
           ),
 

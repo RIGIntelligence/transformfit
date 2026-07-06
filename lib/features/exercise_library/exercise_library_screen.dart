@@ -4,6 +4,7 @@ import 'package:transformfit/features/exercise_library/exercise_database.dart';
 import 'package:transformfit/features/exercise_library/exercise_model.dart';
 import 'package:transformfit/features/exercise_library/exercise_search.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
+import 'package:transformfit/widgets/hero_background.dart';
 
 // ---------------------------------------------------------------------------
 // Exercise library screen — search, filter, browse 110 exercises.
@@ -445,9 +446,19 @@ class _ExerciseCard extends StatelessWidget {
     }
   }
 
+  /// Resolve the image asset for this exercise.
+  /// Checks the exercise's imageAsset field first, then the ID-based map,
+  /// then falls back to a muscle-group placeholder.
+  String _resolveImage() {
+    if (exercise.imageAsset != null) return exercise.imageAsset!;
+    return exerciseImageAsset(exercise.id) ??
+        muscleGroupPlaceholder(exercise.primaryMuscles.first.name);
+  }
+
   @override
   Widget build(BuildContext context) {
     final diffColor = _difficultyColor(exercise.difficulty);
+    final imageAsset = _resolveImage();
 
     return Semantics(
       label:
@@ -475,19 +486,15 @@ class _ExerciseCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: diffColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      exercise.isCompound
-                          ? Icons.fitness_center
-                          : Icons.accessibility_new,
-                      color: diffColor,
-                      size: 22,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      imageAsset,
+                      width: 64,
+                      height: 64,
+                      fit: BoxFit.cover,
+                      cacheWidth: 128,
+                      cacheHeight: 128,
                     ),
                   ),
                   const SizedBox(width: 14),

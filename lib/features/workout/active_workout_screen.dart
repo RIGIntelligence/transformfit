@@ -817,7 +817,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
       exerciseId: _currentPlanExercise?.exerciseId,
     );
     final previous = previousReference?.set;
-    final coachSignal = buildCoachSignal(state);
     final readinessCapActive = _readinessCapActive(state.readinessEntry);
     final completedByIndex = _completedPlanSetCounts(
       plan: _sessionPlan,
@@ -923,14 +922,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
                         ),
                       ),
 
-                      // Coach insight
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                          child: _CoachInsightCard(signal: coachSignal),
-                        ),
-                      ),
-
                       // Live status
                       if (_liveStatus != null)
                         SliverToBoxAdapter(
@@ -941,28 +932,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
                                 _LiveStatusBanner(message: _liveStatus!),
                           ),
                         ),
-
-                      // Quick presets
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                          child: _QuickPresetRow(
-                            hasPrevious: previous != null,
-                            canSkip: _sessionPlan.length > 1 &&
-                                _planIndex < _sessionPlan.length - 1,
-                            onWarmup: _applyWarmupSet,
-                            onApplyPrevious: _applyPreviousSet,
-                            onApplyPlanTarget:
-                                _currentPlanExercise == null
-                                    ? null
-                                    : _applyPlanTarget,
-                            onTechniqueSwap: _applyTechniqueSwap,
-                            onPainSafety: _activatePainSafety,
-                            onSkip: _skipToNextExercise,
-                          ),
-                        ),
-                      ),
 
                       // Set table
                       SliverToBoxAdapter(
@@ -1700,8 +1669,8 @@ class _ControlStepper extends StatelessWidget {
             child: GestureDetector(
               onTap: onDecrement,
               child: Container(
-                width: 44,
-                height: 44,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: t.surfaceElevated,
@@ -1767,8 +1736,8 @@ class _ControlStepper extends StatelessWidget {
             child: GestureDetector(
               onTap: onIncrement,
               child: Container(
-                width: 44,
-                height: 44,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: t.accentPrimary.withValues(alpha: 0.15),
@@ -2153,7 +2122,7 @@ class _BottomBar extends StatelessWidget {
               ),
             ),
             SizedBox(height: t.spaceMd),
-            // Action buttons row
+            // Action buttons row — undo, finish, pain (compact)
             Row(
               children: [
                 // Undo
@@ -2233,65 +2202,63 @@ class _BottomBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: t.spaceSm),
-                // Log Set button
-                Expanded(
-                  child: Semantics(
-                    button: true,
-                    enabled: canLog,
-                    label: allSetsComplete
-                        ? 'Finish and debrief'
-                        : 'Log set, $weightKg kilograms $reps reps',
-                    child: GestureDetector(
-                      onTap: canLog
-                          ? (allSetsComplete ? onFinish : onLogSet)
-                          : null,
-                      child: AnimatedContainer(
-                        duration: DigitalAtelierTokens2.durationFast,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(t.radiusMd),
-                          gradient: canLog
-                              ? (allSetsComplete
-                                  ? LinearGradient(
-                                      colors: [
-                                        t.accentTertiary,
-                                        t.accentInfo,
-                                      ],
-                                    )
-                                  : LinearGradient(
-                                      colors: [
-                                        t.accentPrimary,
-                                        t.accentPrimary
-                                            .withValues(alpha: 0.8),
-                                      ],
-                                    ))
-                              : null,
-                          color: canLog ? null : t.surfaceDivider,
-                        ),
-                        child: Center(
-                          child: Text(
-                            allSetsComplete
-                                ? 'Finish & Debrief'
-                                : 'Log Set  ·  $weightKg kg × $reps',
-                            style: TextStyle(
-                              fontFamily:
-                                  DigitalAtelierTokens.dataFontFamily,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: canLog
-                                  ? t.textInverse
-                                  : t.textMuted,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ),
+              ],
+            ),
+            SizedBox(height: t.spaceSm),
+            // Log Set button — full-width, 56px, pill shape
+            Semantics(
+              button: true,
+              enabled: canLog,
+              label: allSetsComplete
+                  ? 'Finish and debrief'
+                  : 'Log set, $weightKg kilograms $reps reps',
+              child: GestureDetector(
+                onTap: canLog
+                    ? (allSetsComplete ? onFinish : onLogSet)
+                    : null,
+                child: AnimatedContainer(
+                  duration: DigitalAtelierTokens2.durationFast,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(t.radiusPill),
+                    gradient: canLog
+                        ? (allSetsComplete
+                            ? LinearGradient(
+                                colors: [
+                                  t.accentTertiary,
+                                  t.accentInfo,
+                                ],
+                              )
+                            : LinearGradient(
+                                colors: [
+                                  t.accentPrimary,
+                                  t.accentPrimary
+                                      .withValues(alpha: 0.8),
+                                ],
+                              ))
+                        : null,
+                    color: canLog ? null : t.surfaceDivider,
+                  ),
+                  child: Center(
+                    child: Text(
+                      allSetsComplete
+                          ? 'Finish & Debrief'
+                          : 'Log Set  ·  $weightKg kg × $reps',
+                      style: TextStyle(
+                        fontFamily:
+                            DigitalAtelierTokens.dataFontFamily,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: canLog
+                            ? t.textInverse
+                            : t.textMuted,
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ],
         ),

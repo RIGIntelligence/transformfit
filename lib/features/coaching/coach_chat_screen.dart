@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 
 // ============================================================================
-// Coach Chat Screen — MacroFactor / Ladder / Whoop-quality
+// Coach Chat Screen — Ladder / iMessage-quality clean chat
 //
-// Rich coaching UI with persona-aware cards, proactive suggestions,
-// animated quick actions, and premium input area.
+// Clean message bubbles, no metadata, Playfair for coach voice,
+// pill-shaped input with quick-action chips.
 // ============================================================================
 
 // ---------------------------------------------------------------------------
@@ -68,7 +68,6 @@ class _ChatMessagesNotifier extends Notifier<List<CoachMessage>> {
 
   void add(CoachMessage message) => state = [...state, message];
 
-  /// Simulate older messages for pull-to-refresh.
   Future<void> loadOlder() async {
     await Future<void>.delayed(const Duration(milliseconds: 600));
     final older = <CoachMessage>[
@@ -142,66 +141,6 @@ const _streakActions = <_QuickAction>[
 ];
 
 // ---------------------------------------------------------------------------
-// Coach persona metadata
-// ---------------------------------------------------------------------------
-
-class _PersonaMeta {
-  const _PersonaMeta({
-    required this.initial,
-    required this.color,
-    required this.name,
-    required this.role,
-    required this.icon,
-  });
-  final String initial;
-  final Color color;
-  final String name;
-  final String role;
-  final IconData icon;
-}
-
-_PersonaMeta _metaFor(String? persona) {
-  // Use extension tokens for persona colors to avoid hardcoded values.
-  return switch (persona) {
-    'motivator' => const _PersonaMeta(
-        initial: 'M',
-        color: DigitalAtelierTokens.accentOrange,
-        name: 'Motivator',
-        role: 'Momentum builder',
-        icon: Icons.local_fire_department,
-      ),
-    'analyst' => const _PersonaMeta(
-        initial: 'A',
-        color: DigitalAtelierTokens2.info,
-        name: 'Analyst',
-        role: 'Pattern interpreter',
-        icon: Icons.insights,
-      ),
-    'challenger' => const _PersonaMeta(
-        initial: 'C',
-        color: DigitalAtelierTokens.errorText,
-        name: 'Challenger',
-        role: 'Standard-raiser',
-        icon: Icons.speed,
-      ),
-    'zen' => _PersonaMeta(
-        initial: 'Z',
-        color: DigitalAtelierTokens2.recovery,
-        name: 'Zen',
-        role: 'Recovery stabilizer',
-        icon: Icons.spa,
-      ),
-    _ => const _PersonaMeta(
-        initial: 'C',
-        color: DigitalAtelierTokens.accentOrange,
-        name: 'Coach',
-        role: 'AI coach',
-        icon: Icons.psychology,
-      ),
-  };
-}
-
-// ---------------------------------------------------------------------------
 // Screen widget
 // ---------------------------------------------------------------------------
 
@@ -220,19 +159,10 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
   bool _isCoachTyping = false;
   String _currentPersona = 'motivator';
 
-  // Typing indicator animation controller.
   late final AnimationController _typingAnimCtrl;
 
-  // Quick-action chip stagger animation.
-  late final AnimationController _chipAnimCtrl;
-
-  // Send-button press animation.
-  late final AnimationController _sendAnimCtrl;
-
-  // Live message announcement for screen readers.
   String _a11yAnnouncement = '';
 
-  // Track if we're in a post-workout context.
   bool _postWorkout = false;
   bool _lowReadiness = false;
   final bool _streakAtRisk = false;
@@ -244,18 +174,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat();
-
-    _chipAnimCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..forward();
-
-    _sendAnimCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 120),
-      lowerBound: 0.9,
-      upperBound: 1.0,
-    )..value = 1.0;
   }
 
   @override
@@ -264,12 +182,8 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     _scrollController.dispose();
     _focusNode.dispose();
     _typingAnimCtrl.dispose();
-    _chipAnimCtrl.dispose();
-    _sendAnimCtrl.dispose();
     super.dispose();
   }
-
-  // -- Context-aware quick actions ------------------------------------------
 
   List<_QuickAction> get _currentQuickActions {
     if (_postWorkout) return _postWorkoutActions;
@@ -277,8 +191,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     if (_streakAtRisk) return _streakActions;
     return _defaultQuickActions;
   }
-
-  // -- Send logic -----------------------------------------------------------
 
   void _send(String text) {
     final trimmed = text.trim();
@@ -293,7 +205,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     _focusNode.requestFocus();
     _scrollToBottom();
 
-    // Detect context from user input.
     final lower = trimmed.toLowerCase();
     if (lower.contains('workout') || lower.contains('finished')) {
       _postWorkout = true;
@@ -305,7 +216,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 
     setState(() => _isCoachTyping = true);
 
-    // Simulate coach response after a short delay.
     Future<void>.delayed(const Duration(seconds: 1, milliseconds: 500), () {
       if (!mounted) return;
       final response = _simulateCoachResponse(trimmed);
@@ -315,7 +225,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
         _currentPersona = response.persona ?? _currentPersona;
       });
 
-      // Proactive suggestion after certain contexts.
       if (_postWorkout) {
         Future<void>.delayed(const Duration(milliseconds: 800), () {
           if (!mounted) return;
@@ -452,7 +361,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
       );
     }
 
-    // Default challenger-flavored fallback.
     persona = 'challenger';
     confidence = 0.80;
     return CoachMessage(
@@ -484,23 +392,22 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
   @override
   Widget build(BuildContext context) {
     final messages = ref.watch(chatMessagesProvider);
-    final meta = _metaFor(_currentPersona);
 
     return Semantics(
       label: 'AI coach chat screen',
       child: Scaffold(
         backgroundColor: DigitalAtelierTokens.background,
         resizeToAvoidBottomInset: true,
-        appBar: _buildAppBar(meta),
+        appBar: _buildAppBar(),
         body: Column(
           children: [
             // Message list
             Expanded(
               child: messages.isEmpty
-                  ? _buildEmptyState(meta)
+                  ? _buildEmptyState()
                   : _buildMessageList(messages),
             ),
-            // A11y live region for new messages.
+            // A11y live region
             Semantics(
               liveRegion: true,
               label: _a11yAnnouncement,
@@ -516,9 +423,9 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
     );
   }
 
-  // -- App bar --------------------------------------------------------------
+  // -- App bar — just "Coach", no persona -----------------------------------
 
-  PreferredSizeWidget _buildAppBar(_PersonaMeta meta) {
+  PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: DigitalAtelierTokens.background,
       surfaceTintColor: Colors.transparent,
@@ -530,136 +437,56 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
         child: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: DigitalAtelierTokens.textPrimary,
+            color: Colors.white,
             size: 20,
           ),
           onPressed: () => Navigator.of(context).maybePop(),
           tooltip: 'Back',
         ),
       ),
-      title: Semantics(
-        label: 'Current persona: ${meta.name}',
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Persona avatar with colored ring
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: meta.color, width: 1.5),
-                color: meta.color.withValues(alpha: 0.15),
-              ),
-              alignment: Alignment.center,
-              child: Icon(meta.icon, color: meta.color, size: 18),
-            ),
-            const SizedBox(width: 10),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${meta.name} coach',
-                    style: const TextStyle(
-                      fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-                      fontSize: 17,
-                      color: DigitalAtelierTokens.textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: meta.color,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        meta.role,
-                        style: TextStyle(
-                          fontFamily: DigitalAtelierTokens.dataFontFamily,
-                          color: DigitalAtelierTokens.textPrimary
-                              .withValues(alpha: 0.5),
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+      title: const Text(
+        'Coach',
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
         ),
       ),
       centerTitle: true,
-      actions: [
-        Semantics(
-          label: 'Switch persona',
-          button: true,
-          child: IconButton(
-            icon: Icon(Icons.swap_horiz, color: meta.color, size: 22),
-            onPressed: () {
-              setState(() {
-                const personas = [
-                  'motivator',
-                  'analyst',
-                  'challenger',
-                  'zen',
-                ];
-                final idx = personas.indexOf(_currentPersona);
-                _currentPersona = personas[(idx + 1) % personas.length];
-              });
-              // Re-animate chips for the new persona.
-              _chipAnimCtrl.reset();
-              _chipAnimCtrl.forward();
-            },
-            tooltip: 'Switch persona',
-          ),
-        ),
-        const SizedBox(width: 4),
-      ],
     );
   }
 
   // -- Empty state ----------------------------------------------------------
 
-  Widget _buildEmptyState(_PersonaMeta meta) {
+  Widget _buildEmptyState() {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Large persona icon
             Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: meta.color.withValues(alpha: 0.12),
-                border: Border.all(
-                  color: meta.color.withValues(alpha: 0.3),
-                  width: 1.5,
-                ),
+                color: DigitalAtelierTokens2.surface,
               ),
-              child: Icon(meta.icon, color: meta.color, size: 36),
+              child: const Icon(
+                Icons.chat_bubble_outline,
+                color: Color(0xFF9CA3AF),
+                size: 36,
+              ),
             ),
             const SizedBox(height: 24),
-            Text(
+            const Text(
               'Your coach is ready',
-              style: const TextStyle(
-                fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
+              style: TextStyle(
+                fontFamily: 'Playfair',
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
-                color: DigitalAtelierTokens.textPrimary,
+                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
@@ -667,14 +494,13 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
             Text(
               'Ask anything or start a workout',
               style: TextStyle(
-                fontFamily: DigitalAtelierTokens.dataFontFamily,
+                fontFamily: 'Inter',
                 fontSize: 14,
-                color: DigitalAtelierTokens.textPrimary.withValues(alpha: 0.5),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            // Quick action chips in the empty state
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -682,7 +508,6 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
               children: _defaultQuickActions
                   .map((a) => _QuickActionChip(
                         action: a,
-                        personaColor: meta.color,
                         onTap: () => _send(a.label),
                       ))
                   .toList(),
@@ -697,7 +522,7 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 
   Widget _buildMessageList(List<CoachMessage> messages) {
     return RefreshIndicator(
-      color: DigitalAtelierTokens.accentOrange,
+      color: const Color(0xFFF97316),
       backgroundColor: DigitalAtelierTokens.background,
       onRefresh: () => ref.read(chatMessagesProvider.notifier).loadOlder(),
       child: ListView.builder(
@@ -706,51 +531,14 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
         itemCount: messages.length + (_isCoachTyping ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == messages.length && _isCoachTyping) {
-            return _TypingIndicator(
-              animCtrl: _typingAnimCtrl,
-              persona: _currentPersona,
-            );
+            return _TypingIndicator(animCtrl: _typingAnimCtrl);
           }
           final msg = messages[index];
 
-          // Insert a "Coach suggests..." divider before suggestion cards.
-          if (msg.isSuggestion && msg.isFromCoach) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8, top: 4),
-                  child: Row(
-                    children: [
-                      Icon(Icons.auto_awesome,
-                          size: 14,
-                          color: _metaFor(msg.persona).color
-                              .withValues(alpha: 0.6)),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Coach suggests…',
-                        style: TextStyle(
-                          fontFamily: DigitalAtelierTokens.dataFontFamily,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.8,
-                          color: _metaFor(msg.persona).color
-                              .withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                _CoachMessageCard(message: msg),
-                const SizedBox(height: 12),
-              ],
-            );
-          }
-
           if (msg.isFromCoach) {
-            return _CoachMessageCard(message: msg);
+            return _CoachBubble(message: msg);
           }
-          return _UserMessageBubble(message: msg);
+          return _UserBubble(message: msg);
         },
       ),
     );
@@ -760,86 +548,36 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 
   Widget _buildQuickActions() {
     final actions = _currentQuickActions;
-    final meta = _metaFor(_currentPersona);
 
-    return AnimatedBuilder(
-      animation: _chipAnimCtrl,
-      builder: (context, child) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: SizedBox(
-            height: 44,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: actions.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final stagger = (index * 0.12).clamp(0.0, 1.0);
-                final t = (_chipAnimCtrl.value - stagger).clamp(0.0, 1.0);
-                final opacity = Curves.easeOutCubic.transform(t);
-                final slide = (1.0 - Curves.easeOutCubic.transform(t)) * 20;
-
-                return Opacity(
-                  opacity: opacity,
-                  child: Transform.translate(
-                    offset: Offset(0, slide),
-                    child: _QuickActionChip(
-                      action: actions[index],
-                      personaColor: meta.color,
-                      onTap: () => _send(actions[index].label),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: SizedBox(
+        height: 44,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: actions.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            return _QuickActionChip(
+              action: actions[index],
+              onTap: () => _send(actions[index].label),
+            );
+          },
+        ),
+      ),
     );
   }
 
   // -- Input area -----------------------------------------------------------
 
   Widget _buildInputArea() {
-    final meta = _metaFor(_currentPersona);
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // Voice input button (UI only)
-            Semantics(
-              label: 'Voice input',
-              button: true,
-              child: Container(
-                width: 44,
-                height: 44,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: DigitalAtelierTokens2.surface,
-                  borderRadius:
-                      BorderRadius.circular(DigitalAtelierTokens2.radiusPill),
-                  border: Border.all(
-                    color: DigitalAtelierTokens2.surfaceBorder,
-                    width: 1,
-                  ),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.mic_none_rounded,
-                      color: DigitalAtelierTokens.textPrimary
-                          .withValues(alpha: 0.5),
-                      size: 20),
-                  onPressed: () {
-                    // Voice input placeholder — not yet functional.
-                    HapticFeedback.lightImpact();
-                  },
-                  tooltip: 'Voice input',
-                ),
-              ),
-            ),
-            // Text input
+            // Text input — pill-shaped, surfaceInput bg
             Expanded(
               child: Semantics(
                 label: 'Message input',
@@ -848,37 +586,32 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
                   controller: _inputController,
                   focusNode: _focusNode,
                   style: const TextStyle(
-                    fontFamily: DigitalAtelierTokens.dataFontFamily,
-                    color: DigitalAtelierTokens.textPrimary,
+                    fontFamily: 'Inter',
+                    color: Colors.white,
                     fontSize: 15,
                     height: 1.4,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Ask your coach…',
+                    hintText: 'Type a message...',
                     hintStyle: TextStyle(
-                      fontFamily: DigitalAtelierTokens.dataFontFamily,
-                      color: DigitalAtelierTokens.textPrimary
-                          .withValues(alpha: 0.3),
+                      fontFamily: 'Inter',
+                      color: Colors.white.withValues(alpha: 0.3),
                       fontSize: 15,
                     ),
                     filled: true,
-                    fillColor: DigitalAtelierTokens2.surface,
+                    fillColor: const Color(0xFF151515),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 18,
                       vertical: 14,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        DigitalAtelierTokens2.radiusPill,
-                      ),
+                      borderRadius: BorderRadius.circular(999),
                       borderSide: BorderSide.none,
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        DigitalAtelierTokens2.radiusPill,
-                      ),
-                      borderSide: BorderSide(
-                        color: meta.color.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(999),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1E1E1E),
                         width: 1,
                       ),
                     ),
@@ -891,38 +624,23 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
               ),
             ),
             const SizedBox(width: 10),
-            // Send button with press animation
+            // Send button — accent primary
             Semantics(
               label: 'Send message',
               button: true,
               child: GestureDetector(
-                onTapDown: (_) => _sendAnimCtrl.reverse(),
-                onTapUp: (_) {
-                  _sendAnimCtrl.forward();
-                  _send(_inputController.text);
-                },
-                onTapCancel: () => _sendAnimCtrl.forward(),
-                child: ScaleTransition(
-                  scale: _sendAnimCtrl,
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: meta.color,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: meta.color.withValues(alpha: 0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.arrow_upward_rounded,
-                      color: DigitalAtelierTokens.background,
-                      size: 22,
-                    ),
+                onTap: () => _send(_inputController.text),
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF97316),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.arrow_upward_rounded,
+                    color: Colors.white,
+                    size: 22,
                   ),
                 ),
               ),
@@ -935,221 +653,78 @@ class _CoachChatScreenState extends ConsumerState<CoachChatScreen>
 }
 
 // ---------------------------------------------------------------------------
-// Coach message card — rich, full-width, persona-colored
+// Coach bubble — left-aligned, surface bg, Playfair font
 // ---------------------------------------------------------------------------
 
-class _CoachMessageCard extends StatelessWidget {
-  const _CoachMessageCard({required this.message});
+class _CoachBubble extends StatelessWidget {
+  const _CoachBubble({required this.message});
 
   final CoachMessage message;
 
   @override
   Widget build(BuildContext context) {
-    final meta = _metaFor(message.persona);
-
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
-        return Opacity(
-          opacity: Curves.easeOut.transform(value),
-          child: Transform.translate(
-            offset: Offset(0, (1.0 - Curves.easeOut.transform(value)) * 16),
-            child: child,
-          ),
-        );
-      },
-      child: Semantics(
-        label: 'Coach message: ${message.text}',
-        child: GestureDetector(
-          onLongPress: () {
-            Clipboard.setData(ClipboardData(text: message.text));
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Message copied',
-                  style: TextStyle(
-                    fontFamily: DigitalAtelierTokens.dataFontFamily,
-                    color: DigitalAtelierTokens.textPrimary,
+    return Semantics(
+      label: 'Coach message: ${message.text}',
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onLongPress: () {
+                Clipboard.setData(ClipboardData(text: message.text));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text(
+                      'Message copied',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: DigitalAtelierTokens2.surfaceElevated,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.8,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: DigitalAtelierTokens2.surface,
+                  borderRadius: BorderRadius.circular(16).copyWith(
+                    bottomLeft: const Radius.circular(4),
                   ),
                 ),
-                backgroundColor: DigitalAtelierTokens2.surfaceElevated,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: DigitalAtelierTokens2.surface,
-              borderRadius:
-                  BorderRadius.circular(DigitalAtelierTokens2.radiusMd),
-              border: Border(
-                left: BorderSide(color: meta.color, width: 3),
+                child: Text(
+                  message.text,
+                  style: const TextStyle(
+                    fontFamily: 'Playfair',
+                    color: Colors.white,
+                    fontSize: 16,
+                    height: 1.5,
+                  ),
+                ),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Persona header row
-                  Row(
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: meta.color.withValues(alpha: 0.15),
-                        ),
-                        child: Icon(meta.icon, color: meta.color, size: 14),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        meta.name,
-                        style: TextStyle(
-                          fontFamily: DigitalAtelierTokens.dataFontFamily,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: meta.color,
-                        ),
-                      ),
-                      const Spacer(),
-                      // Confidence badge
-                      if (message.confidence != null) ...[
-                        _ConfidenceBadge(
-                          confidence: message.confidence!,
-                          color: meta.color,
-                        ),
-                      ],
-                      if (message.sourceCount != null &&
-                          message.sourceCount! > 0) ...[
-                        const SizedBox(width: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: meta.color.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(
-                              DigitalAtelierTokens2.radiusSm,
-                            ),
-                          ),
-                          child: Text(
-                            '${message.sourceCount} sources',
-                            style: TextStyle(
-                              fontFamily: DigitalAtelierTokens.dataFontFamily,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              color: meta.color.withValues(alpha: 0.8),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Message body — Playfair for coach voice
-                  Text(
-                    message.text,
-                    style: const TextStyle(
-                      fontFamily: DigitalAtelierTokens.coachVoiceFontFamily,
-                      color: DigitalAtelierTokens.textPrimary,
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
-                  ),
-
-                  // Observation + Next action structured sub-sections
-                  if (message.observation != null ||
-                      message.nextAction != null) ...[
-                    const SizedBox(height: 14),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: meta.color.withValues(alpha: 0.06),
-                        borderRadius: BorderRadius.circular(
-                          DigitalAtelierTokens2.radiusSm,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (message.observation != null) ...[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.visibility_outlined,
-                                    size: 14,
-                                    color: meta.color.withValues(alpha: 0.7)),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    message.observation!,
-                                    style: TextStyle(
-                                      fontFamily:
-                                          DigitalAtelierTokens.dataFontFamily,
-                                      fontSize: 12,
-                                      color: DigitalAtelierTokens.textPrimary
-                                          .withValues(alpha: 0.7),
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                          if (message.observation != null &&
-                              message.nextAction != null)
-                            const SizedBox(height: 8),
-                          if (message.nextAction != null) ...[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.arrow_forward_rounded,
-                                    size: 14,
-                                    color: meta.color),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    message.nextAction!,
-                                    style: TextStyle(
-                                      fontFamily:
-                                          DigitalAtelierTokens.dataFontFamily,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: meta.color.withValues(alpha: 0.9),
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ],
-
-                  const SizedBox(height: 8),
-                  // Timestamp
-                  Text(
-                    _formatTime(message.timestamp),
-                    style: TextStyle(
-                      fontFamily: DigitalAtelierTokens.dataFontFamily,
-                      color: DigitalAtelierTokens.textPrimary
-                          .withValues(alpha: 0.3),
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
+            // Timestamp
+            Padding(
+              padding: const EdgeInsets.only(left: 4, top: 4, bottom: 8),
+              child: Text(
+                _formatTime(message.timestamp),
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  color: Color(0xFF6B7280),
+                  fontSize: 11,
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -1163,139 +738,78 @@ class _CoachMessageCard extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Confidence badge
+// User bubble — right-aligned, accentPrimary bg, Inter font
 // ---------------------------------------------------------------------------
 
-class _ConfidenceBadge extends StatelessWidget {
-  const _ConfidenceBadge({required this.confidence, required this.color});
-
-  final double confidence;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = (confidence * 100).round();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(DigitalAtelierTokens2.radiusPill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.check_circle_outline, size: 12, color: color),
-          const SizedBox(width: 4),
-          Text(
-            '$pct% confident',
-            style: TextStyle(
-              fontFamily: DigitalAtelierTokens.dataFontFamily,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// User message bubble
-// ---------------------------------------------------------------------------
-
-class _UserMessageBubble extends StatelessWidget {
-  const _UserMessageBubble({required this.message});
+class _UserBubble extends StatelessWidget {
+  const _UserBubble({required this.message});
 
   final CoachMessage message;
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
-        return Opacity(
-          opacity: Curves.easeOut.transform(value),
-          child: Transform.translate(
-            offset: Offset(0, (1.0 - Curves.easeOut.transform(value)) * 12),
-            child: child,
-          ),
-        );
-      },
-      child: Semantics(
-        label: 'You said: ${message.text}',
-        child: GestureDetector(
-          onLongPress: () {
-            Clipboard.setData(ClipboardData(text: message.text));
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Message copied',
-                  style: TextStyle(
-                    fontFamily: DigitalAtelierTokens.dataFontFamily,
-                    color: DigitalAtelierTokens.textPrimary,
-                  ),
-                ),
-                backgroundColor: DigitalAtelierTokens2.surfaceElevated,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.75,
-                    ),
-                    decoration: BoxDecoration(
-                      color: DigitalAtelierTokens2.surfaceElevated,
-                      borderRadius: BorderRadius.circular(
-                        DigitalAtelierTokens2.radiusMd,
-                      ).copyWith(
-                        bottomRight: const Radius.circular(4),
+    return Semantics(
+      label: 'You said: ${message.text}',
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onLongPress: () {
+                Clipboard.setData(ClipboardData(text: message.text));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text(
+                      'Message copied',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.white,
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          message.text,
-                          style: const TextStyle(
-                            fontFamily: DigitalAtelierTokens.dataFontFamily,
-                            color: DigitalAtelierTokens.textPrimary,
-                            fontSize: 15,
-                            height: 1.45,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          _formatTime(message.timestamp),
-                          style: TextStyle(
-                            fontFamily: DigitalAtelierTokens.dataFontFamily,
-                            color: DigitalAtelierTokens.textPrimary
-                                .withValues(alpha: 0.3),
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
+                    backgroundColor: DigitalAtelierTokens2.surfaceElevated,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.8,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF97316),
+                  borderRadius: BorderRadius.circular(16).copyWith(
+                    bottomRight: const Radius.circular(4),
                   ),
                 ),
-              ],
+                child: Text(
+                  message.text,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    color: Colors.white,
+                    fontSize: 15,
+                    height: 1.45,
+                  ),
+                ),
+              ),
             ),
-          ),
+            // Timestamp
+            Padding(
+              padding: const EdgeInsets.only(right: 4, top: 4, bottom: 8),
+              child: Text(
+                _formatTime(message.timestamp),
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  color: Color(0xFF6B7280),
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -1309,22 +823,16 @@ class _UserMessageBubble extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Typing indicator — 3 dots with persona color, phase-offset bounce
+// Typing indicator — 3 pulsing dots, left-aligned
 // ---------------------------------------------------------------------------
 
 class _TypingIndicator extends StatelessWidget {
-  const _TypingIndicator({
-    required this.animCtrl,
-    required this.persona,
-  });
+  const _TypingIndicator({required this.animCtrl});
 
   final AnimationController animCtrl;
-  final String persona;
 
   @override
   Widget build(BuildContext context) {
-    final meta = _metaFor(persona);
-
     return Semantics(
       label: 'Coach is typing',
       liveRegion: true,
@@ -1333,30 +841,12 @@ class _TypingIndicator extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // Mini persona avatar
             Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: meta.color.withValues(alpha: 0.15),
-              ),
-              child: Icon(meta.icon, color: meta.color, size: 14),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
               decoration: BoxDecoration(
                 color: DigitalAtelierTokens2.surface,
-                borderRadius: BorderRadius.circular(
-                  DigitalAtelierTokens2.radiusMd,
-                ),
-                border: Border(
-                  left: BorderSide(
-                    color: meta.color.withValues(alpha: 0.4),
-                    width: 2,
-                  ),
+                borderRadius: BorderRadius.circular(16).copyWith(
+                  bottomLeft: const Radius.circular(4),
                 ),
               ),
               child: AnimatedBuilder(
@@ -1379,7 +869,7 @@ class _TypingIndicator extends StatelessWidget {
                             width: 7,
                             height: 7,
                             decoration: BoxDecoration(
-                              color: meta.color.withValues(alpha: 0.6),
+                              color: const Color(0xFF6B7280),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -1398,19 +888,17 @@ class _TypingIndicator extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Quick-action chip — persona-aware
+// Quick-action chip — surface bg, pill shape
 // ---------------------------------------------------------------------------
 
 class _QuickActionChip extends StatelessWidget {
   const _QuickActionChip({
     required this.action,
     required this.onTap,
-    required this.personaColor,
   });
 
   final _QuickAction action;
   final VoidCallback onTap;
-  final Color personaColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1418,38 +906,28 @@ class _QuickActionChip extends StatelessWidget {
       label: 'Quick action: ${action.label}',
       button: true,
       child: SizedBox(
-        height: 44, // Minimum touch target
+        height: 44,
         child: Material(
           color: DigitalAtelierTokens2.surface,
-          borderRadius:
-              BorderRadius.circular(DigitalAtelierTokens2.radiusPill),
+          borderRadius: BorderRadius.circular(999),
           child: InkWell(
             onTap: () {
               HapticFeedback.lightImpact();
               onTap();
             },
-            borderRadius:
-                BorderRadius.circular(DigitalAtelierTokens2.radiusPill),
+            borderRadius: BorderRadius.circular(999),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(DigitalAtelierTokens2.radiusPill),
-                border: Border.all(
-                  color: DigitalAtelierTokens2.surfaceBorder,
-                  width: 1,
-                ),
-              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(action.icon, size: 16, color: personaColor),
+                  Icon(action.icon, size: 16, color: const Color(0xFF9CA3AF)),
                   const SizedBox(width: 6),
                   Text(
                     action.label,
                     style: const TextStyle(
-                      fontFamily: DigitalAtelierTokens.dataFontFamily,
-                      color: DigitalAtelierTokens.textPrimary,
+                      fontFamily: 'Inter',
+                      color: Colors.white,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),

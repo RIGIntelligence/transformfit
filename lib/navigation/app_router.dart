@@ -44,8 +44,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     routes: [
       // -----------------------------------------------------------------
-      // Shell — 5-tab bottom navigation for authenticated users.
+      // Shell — 4-tab bottom navigation for authenticated users.
       // Each branch maintains its own Navigator stack.
+      // Wellness is accessible from Home and Profile (merged out of nav).
       // -----------------------------------------------------------------
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -88,18 +89,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          // Tab 3 — Wellness
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/wellness',
-                name: 'wellness',
-                builder: (context, state) =>
-                    const WellnessDashboardScreen(),
-              ),
-            ],
-          ),
-          // Tab 4 — Profile
+          // Tab 3 — Profile (Wellness merged into Home + Profile)
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -281,6 +271,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/exercises',
         name: 'exercises',
         builder: (context, state) => const ExerciseLibraryScreen(),
+      ),
+      GoRoute(
+        path: '/wellness',
+        name: 'wellness',
+        builder: (context, state) => const WellnessDashboardScreen(),
       ),
     ],
     redirect: (context, state) {

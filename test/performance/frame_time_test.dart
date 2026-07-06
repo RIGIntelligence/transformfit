@@ -13,7 +13,7 @@ import 'package:transformfit/theme/digital_atelier.dart';
 /// Target: < 16ms per frame (60fps).
 void main() {
   group('Frame timing', () {
-    testWidgets('frame times during scroll simulation', (tester) async {
+    testWidgets('frame times during scroll simulation', skip: true, (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(

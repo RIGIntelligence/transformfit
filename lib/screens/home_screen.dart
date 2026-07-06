@@ -6,15 +6,12 @@ import 'package:transformfit/features/session/models.dart';
 import 'package:transformfit/features/session/session_controller.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
 import 'package:transformfit/widgets/tf_progress_ring.dart';
+import 'package:transformfit/widgets/hero_background.dart';
 
-/// Clean home screen — replaces the god-widget TodayScreen for the home tab.
+/// Home screen — Whoop-inspired single-hero layout.
 ///
-/// 5 compact cards, each a separate widget:
-///   1. ReadinessScoreCard
-///   2. TodaysPlanCard
-///   3. CoachInsightCard
-///   4. QuickActionsRow
-///   5. WeeklySummaryCard
+/// One massive readiness ring (60% viewport) + 3 compact action cards +
+/// one-line coach hint. No section headers, no weekly summary, no shimmer.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -24,161 +21,212 @@ class HomeScreen extends ConsumerWidget {
 
     return Semantics(
       label: 'Today home screen',
-      child: RefreshIndicator(
+      child: Stack(
+        children: [
+          // Hero AI coach background with dark overlay.
+          const HeroBackground(
+            assetPath: 'assets/imagery/hero_ai_coach.png',
+            overlayOpacity: 0.85,
+            cacheWidth: 800,
+            cacheHeight: 600,
+          ),
+          RefreshIndicator(
         color: DigitalAtelierTokens.accentOrange,
         backgroundColor: DigitalAtelierTokens2.surfaceElevated,
         onRefresh: () async {
-          // Refresh will be wired to a real data reload once the
-          // persistence layer is connected.
           await Future<void>.delayed(const Duration(milliseconds: 400));
         },
         child: _buildContent(context, session),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildContent(BuildContext context, SessionState session) {
-    // Error state: show when session has no data and could not load.
-    // In production, this would come from a provider error state.
-    // For now, this is the pattern for when data loads fail.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screenHeight = constraints.maxHeight;
+        final heroSize = (screenHeight * 0.6).clamp(200.0, 400.0);
 
-    // Loading state: show skeleton while data is loading.
-    // In production, this would come from AsyncValue.loading.
-    // For now, this is the pattern for initial load.
-
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(
-        parent: BouncingScrollPhysics(),
-      ),
-      slivers: [
-        const SliverToBoxAdapter(child: _HomeHeader()),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: DigitalAtelierTokens2.s4,
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
           ),
-          sliver: SliverList.list(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: DigitalAtelierTokens2.s3),
-              ReadinessScoreCard(readiness: session.readinessEntry),
-              const SizedBox(height: DigitalAtelierTokens2.s3),
-              TodaysPlanCard(session: session),
-              const SizedBox(height: DigitalAtelierTokens2.s3),
-              const CoachInsightCard(),
-              const SizedBox(height: DigitalAtelierTokens2.s3),
-              const QuickActionsRow(),
-              const SizedBox(height: DigitalAtelierTokens2.s3),
-              WeeklySummaryCard(history: session.history),
-              const SizedBox(height: DigitalAtelierTokens2.s7),
+              // Header
+              const Padding(
+                padding: EdgeInsets.only(top: 24, bottom: 24),
+                child: Text('Today', style: _Tokens._h1),
+              ),
+
+              // Hero: Readiness Ring
+              _ReadinessHero(
+                readiness: session.readinessEntry,
+                size: heroSize,
+              ),
+
+              const SizedBox(height: 24),
+
+              // 3 Action Cards
+              _ActionCards(),
+
+              const SizedBox(height: 16),
+
+              // Coach Hint
+              const _CoachHint(),
+
+              const SizedBox(height: 48),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
 
 // ---------------------------------------------------------------------------
-// Header
+// Design tokens shorthand (avoids repeated extension lookups in stateless code)
 // ---------------------------------------------------------------------------
 
-class _HomeHeader extends StatelessWidget {
-  const _HomeHeader();
+abstract class _Tokens {
+  static const _h1 = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    height: 1.2,
+    color: Colors.white,
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        DigitalAtelierTokens2.s4,
-        DigitalAtelierTokens2.s5,
-        DigitalAtelierTokens2.s4,
-        DigitalAtelierTokens2.s2,
-      ),
-      child: Semantics(
-        header: true,
-        label: 'Today heading',
-        child: Text(
-          'Today',
-          style: DigitalAtelierTokens2.headlineLarge.copyWith(
-            color: DigitalAtelierTokens.textPrimary,
-          ),
-        ),
-      ),
-    );
-  }
+  static const _dataLarge = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.5,
+    height: 1.1,
+    fontFeatures: [FontFeature.tabularFigures()],
+    color: Colors.white,
+  );
+
+  static const _label = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1.0,
+    height: 1.2,
+    color: Color(0xFF6B7280),
+  );
+
+  static const _bodySmall = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    color: Color(0xFF9CA3AF),
+  );
+
+  static const _coachHint = TextStyle(
+    fontFamily: 'Playfair',
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.italic,
+    height: 1.4,
+    color: Color(0xFF9CA3AF),
+  );
 }
 
 // ---------------------------------------------------------------------------
-// 1. Readiness Score
+// Readiness Hero — centered ring + score + zone label + trend arrow
 // ---------------------------------------------------------------------------
 
-class ReadinessScoreCard extends StatelessWidget {
-  const ReadinessScoreCard({super.key, required this.readiness});
+class _ReadinessHero extends StatelessWidget {
+  const _ReadinessHero({required this.readiness, required this.size});
 
   final ReadinessEntry? readiness;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final score = readiness?.score;
     final zone = readiness?.zone;
 
-    return _HomeCard(
-      semanticLabel: score != null
+    return Semantics(
+      label: score != null
           ? 'Readiness score: $score, zone: ${zone ?? "unknown"}'
           : 'Readiness not yet checked',
-      child: Row(
-        children: [
-          score != null
-              ? TfProgressRing(
-                  value: score / 100,
-                  size: 80,
-                  strokeWidth: 8,
-                  label: '$score',
-                  semanticLabel: 'Readiness $score percent',
-                )
-              : const SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Center(
-                    child: Icon(
-                      Icons.help_outline,
-                      size: 36,
-                      color: Color(0xFFA0A0A0),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Ring
+            score != null
+                ? TfProgressRing(
+                    value: score / 100,
+                    size: size,
+                    strokeWidth: 10,
+                    label: '$score',
+                    textStyle: _Tokens._dataLarge.copyWith(
+                      fontSize: size * 0.2,
+                    ),
+                    semanticLabel: 'Readiness $score percent',
+                  )
+                : SizedBox(
+                    width: size,
+                    height: size,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.help_outline,
+                            size: size * 0.25,
+                            color: const Color(0xFF6B7280),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Check In',
+                            style: _Tokens._bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-          const SizedBox(width: DigitalAtelierTokens2.s4),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  score != null ? 'Readiness' : 'Check In',
-                  style: DigitalAtelierTokens2.titleMedium,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  zone != null ? _zoneLabel(zone) : 'Tap to start your day',
-                  style: DigitalAtelierTokens2.bodySmall,
-                ),
-              ],
-            ),
-          ),
-          Semantics(
-            label: 'Start readiness check',
-            button: true,
-            child: SizedBox(
-              height: 44,
-              width: 44,
-              child: IconButton(
-                icon: const Icon(Icons.chevron_right),
-                color: DigitalAtelierTokens.accentOrange,
-                onPressed: () {
-                  // Navigate to readiness flow
-                },
+
+            const SizedBox(height: 12),
+
+            // Zone label
+            if (zone != null)
+              Text(
+                _zoneLabel(zone).toUpperCase(),
+                style: _Tokens._label,
               ),
-            ),
-          ),
-        ],
+
+            // Trend arrow
+            if (score != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _trendIcon(zone),
+                    size: 14,
+                    color: _trendColor(zone),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    _trendText(zone),
+                    style: _Tokens._bodySmall.copyWith(
+                      color: _trendColor(zone),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -186,136 +234,61 @@ class ReadinessScoreCard extends StatelessWidget {
   String _zoneLabel(String zone) {
     switch (zone) {
       case 'peak':
-        return 'Peak — go hard today';
+        return 'Peak';
       case 'moderate':
-        return 'Moderate — steady work';
+        return 'Moderate';
       case 'deload':
-        return 'Deload — keep it light';
+        return 'Deload';
       default:
         return zone;
+    }
+  }
+
+  IconData _trendIcon(String? zone) {
+    switch (zone) {
+      case 'peak':
+        return Icons.arrow_upward;
+      case 'moderate':
+        return Icons.arrow_forward;
+      case 'deload':
+        return Icons.arrow_downward;
+      default:
+        return Icons.remove;
+    }
+  }
+
+  Color _trendColor(String? zone) {
+    switch (zone) {
+      case 'peak':
+        return const Color(0xFF10B981);
+      case 'moderate':
+        return const Color(0xFF3B82F6);
+      case 'deload':
+        return const Color(0xFFF59E0B);
+      default:
+        return const Color(0xFF6B7280);
+    }
+  }
+
+  String _trendText(String? zone) {
+    switch (zone) {
+      case 'peak':
+        return 'Trending up';
+      case 'moderate':
+        return 'Steady';
+      case 'deload':
+        return 'Recovery mode';
+      default:
+        return 'No trend data';
     }
   }
 }
 
 // ---------------------------------------------------------------------------
-// 2. Today's Plan
+// Action Cards — 3 equal-width cards in a Row
 // ---------------------------------------------------------------------------
 
-class TodaysPlanCard extends StatelessWidget {
-  const TodaysPlanCard({super.key, required this.session});
-
-  final SessionState session;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasActive = session.activeSession != null;
-    final plan = session.activeSessionPlan;
-
-    return _HomeCard(
-      semanticLabel: hasActive
-          ? 'Active session in progress'
-          : 'Today\'s workout plan',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                hasActive ? Icons.play_circle : Icons.event_note,
-                color: DigitalAtelierTokens.accentOrange,
-                size: 20,
-              ),
-              const SizedBox(width: DigitalAtelierTokens2.s2),
-              Text(
-                hasActive ? 'Session In Progress' : 'Today\'s Plan',
-                style: DigitalAtelierTokens2.titleMedium,
-              ),
-            ],
-          ),
-          const SizedBox(height: DigitalAtelierTokens2.s2),
-          Text(
-            hasActive
-                ? '${plan.length} exercises queued. Pick up where you left off.'
-                : 'No active session. Start when you\'re ready.',
-            style: DigitalAtelierTokens2.bodyMedium.copyWith(
-              color: const Color(0xFFA0A0A0),
-            ),
-          ),
-          const SizedBox(height: DigitalAtelierTokens2.s3),
-          SizedBox(
-            width: double.infinity,
-            child: Semantics(
-              label: hasActive ? 'Resume workout' : 'Start workout',
-              button: true,
-              child: ElevatedButton(
-                onPressed: () => context.push('/workout'),
-                child: Text(hasActive ? 'Resume' : 'Start Workout'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// 3. Coach Insight
-// ---------------------------------------------------------------------------
-
-class CoachInsightCard extends ConsumerWidget {
-  const CoachInsightCard({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final signal = ref.watch(coachSignalProvider);
-
-    return _HomeCard(
-      semanticLabel: signal.semanticLabel,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.auto_awesome,
-                color: DigitalAtelierTokens.accentOrange,
-                size: 18,
-              ),
-              const SizedBox(width: DigitalAtelierTokens2.s2),
-              Text(
-                '${signal.personaLabel} Coach',
-                style: DigitalAtelierTokens2.labelLarge.copyWith(
-                  color: DigitalAtelierTokens.accentOrange,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                signal.confidenceLabel,
-                style: DigitalAtelierTokens2.bodySmall,
-              ),
-            ],
-          ),
-          const SizedBox(height: DigitalAtelierTokens2.s2),
-          Text(
-            signal.coachNote,
-            style: DigitalAtelierTokens2.bodyMedium,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// 4. Quick Actions
-// ---------------------------------------------------------------------------
-
-class QuickActionsRow extends StatelessWidget {
-  const QuickActionsRow({super.key});
-
+class _ActionCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
@@ -323,36 +296,27 @@ class QuickActionsRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _QuickAction(
-              icon: Icons.mood,
-              label: 'Mood',
-              semanticLabel: 'Log mood',
-              onTap: () {},
-            ),
-          ),
-          const SizedBox(width: DigitalAtelierTokens2.s2),
-          Expanded(
-            child: _QuickAction(
-              icon: Icons.water_drop,
-              label: 'Water',
-              semanticLabel: 'Log water intake',
-              onTap: () {},
-            ),
-          ),
-          const SizedBox(width: DigitalAtelierTokens2.s2),
-          Expanded(
-            child: _QuickAction(
+            child: _ActionCard(
               icon: Icons.fitness_center,
               label: 'Workout',
               semanticLabel: 'Start workout',
               onTap: () => context.push('/workout'),
             ),
           ),
-          const SizedBox(width: DigitalAtelierTokens2.s2),
+          const SizedBox(width: 12),
           Expanded(
-            child: _QuickAction(
+            child: _ActionCard(
+              icon: Icons.mood,
+              label: 'Log Mood',
+              semanticLabel: 'Log mood',
+              onTap: () {},
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _ActionCard(
               icon: Icons.chat_bubble_outline,
-              label: 'Coach',
+              label: 'Coach Chat',
               semanticLabel: 'Open coach chat',
               onTap: () => context.push('/coach-chat'),
             ),
@@ -363,8 +327,8 @@ class QuickActionsRow extends StatelessWidget {
   }
 }
 
-class _QuickAction extends StatelessWidget {
-  const _QuickAction({
+class _ActionCard extends StatelessWidget {
+  const _ActionCard({
     required this.icon,
     required this.label,
     required this.semanticLabel,
@@ -381,22 +345,27 @@ class _QuickAction extends StatelessWidget {
     return Semantics(
       label: semanticLabel,
       button: true,
-      child: SizedBox(
-        height: 44,
-        child: Material(
-          color: DigitalAtelierTokens2.surfaceElevated,
-          borderRadius: BorderRadius.circular(DigitalAtelierTokens2.radiusMd),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(DigitalAtelierTokens2.radiusMd),
-            onTap: onTap,
+      child: Material(
+        color: DigitalAtelierTokens2.surface,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 20, color: DigitalAtelierTokens.accentOrange),
-                const SizedBox(height: 2),
+                Icon(icon, size: 24, color: const Color(0xFF9CA3AF)),
+                const SizedBox(height: 8),
                 Text(
                   label,
-                  style: DigitalAtelierTokens2.bodySmall.copyWith(fontSize: 10),
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF9CA3AF),
+                  ),
                 ),
               ],
             ),
@@ -408,108 +377,28 @@ class _QuickAction extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Weekly Summary
+// Coach Hint — single italic line from last coach message
 // ---------------------------------------------------------------------------
 
-class WeeklySummaryCard extends StatelessWidget {
-  const WeeklySummaryCard({super.key, required this.history});
-
-  final List<WorkoutSession> history;
+class _CoachHint extends ConsumerWidget {
+  const _CoachHint();
 
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final thisWeek = history.where((s) {
-      return s.startedAt.isAfter(weekStart);
-    }).length;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signal = ref.watch(coachSignalProvider);
 
-    // Simple streak count — consecutive days with a completed session.
-    int streak = 0;
-    for (final session in history.reversed) {
-      if (session.endedAt != null && session.loggedSets.isNotEmpty) {
-        streak++;
-      } else {
-        break;
-      }
-    }
+    if (signal.coachNote.isEmpty) return const SizedBox.shrink();
 
-    return _HomeCard(
-      semanticLabel: '$thisWeek workouts this week, $streak day streak',
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _StatItem(
-            value: '$thisWeek',
-            label: 'This Week',
-            semanticLabel: '$thisWeek workouts this week',
-          ),
-          Container(width: 1, height: 32, color: DigitalAtelierTokens2.surfaceBorder),
-          _StatItem(
-            value: '$streak',
-            label: 'Streak',
-            semanticLabel: '$streak day streak',
-          ),
-          Container(width: 1, height: 32, color: DigitalAtelierTokens2.surfaceBorder),
-          const _StatItem(
-            value: '—',
-            label: 'XP',
-            semanticLabel: 'XP progress coming soon',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatItem extends StatelessWidget {
-  const _StatItem({
-    required this.value,
-    required this.label,
-    required this.semanticLabel,
-  });
-
-  final String value;
-  final String label;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
     return Semantics(
-      label: semanticLabel,
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: DigitalAtelierTokens2.dataValue.copyWith(fontSize: 24),
-          ),
-          const SizedBox(height: 2),
-          Text(label, style: DigitalAtelierTokens2.dataLabel),
-        ],
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Shared card wrapper
-// ---------------------------------------------------------------------------
-
-class _HomeCard extends StatelessWidget {
-  const _HomeCard({required this.child, required this.semanticLabel});
-
-  final Widget child;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: semanticLabel,
-      container: true,
-      child: Container(
-        padding: const EdgeInsets.all(DigitalAtelierTokens2.s4),
-        decoration: DigitalAtelierTokens2.elevatedDecoration,
-        child: child,
+      label: 'Coach hint: ${signal.coachNote}',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Text(
+          signal.coachNote,
+          style: _Tokens._coachHint,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transformfit/theme/digital_atelier.dart';
+import 'package:transformfit/widgets/hero_background.dart';
 
 // ---------------------------------------------------------------------------
 // Gamification dashboard — level, XP, streaks, achievements, milestones.
@@ -95,8 +96,17 @@ class _GamificationDashboardScreenState
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
-          child: LayoutBuilder(
+        body: Stack(
+          children: [
+            // Hero gamification background with dark overlay.
+            const HeroBackground(
+              assetPath: 'assets/imagery/hero_gamification.png',
+              overlayOpacity: 0.85,
+              cacheWidth: 800,
+              cacheHeight: 600,
+            ),
+            SafeArea(
+              child: LayoutBuilder(
             builder: (context, constraints) {
               final wide = constraints.maxWidth >= 600;
               return SingleChildScrollView(
@@ -183,7 +193,9 @@ class _GamificationDashboardScreenState
                 ),
               );
             },
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
