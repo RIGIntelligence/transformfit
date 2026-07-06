@@ -174,9 +174,13 @@ void main() {
       ),
     );
     router.go('/profile');
-    await tester.pumpAndSettle();
+    // Shell route has tab animations — use explicit pumps.
+    for (int i = 0; i < 15; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
 
-    expect(find.text('Profile'), findsOneWidget);
+    // Profile text appears in both the bottom nav tab and the screen content.
+    expect(find.text('Profile'), findsAtLeastNWidgets(1));
   });
 
   testWidgets('Authenticated users can access the live workout route', (

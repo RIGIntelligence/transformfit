@@ -34,21 +34,23 @@ void main() {
       expect(theme.textTheme.bodyLarge?.fontFamily, 'Inter');
     });
 
-    test('keeps rounded corners within 0-4px', () {
+    test('uses design system radius tokens for shapes', () {
       final theme = buildDigitalAtelierTheme();
 
+      // Cards use radiusMd (12px) per design system spec.
       final cardShape = theme.cardTheme.shape as RoundedRectangleBorder;
       expect(
         cardShape.borderRadius,
-        BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
+        BorderRadius.circular(12),
       );
 
+      // Buttons use radiusSm (8px).
       final elevatedShape =
           theme.elevatedButtonTheme.style?.shape?.resolve(<WidgetState>{})
               as RoundedRectangleBorder;
       expect(
         elevatedShape.borderRadius,
-        BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
+        BorderRadius.circular(8),
       );
 
       final textButtonShape =
@@ -56,13 +58,14 @@ void main() {
               as RoundedRectangleBorder;
       expect(
         textButtonShape.borderRadius,
-        BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
+        BorderRadius.circular(8),
       );
 
+      // Inputs use radiusSm (8px).
       final inputBorder = theme.inputDecorationTheme.border as OutlineInputBorder;
       expect(
         inputBorder.borderRadius,
-        BorderRadius.circular(DigitalAtelierTokens.cornerRadius),
+        BorderRadius.circular(8),
       );
     });
 

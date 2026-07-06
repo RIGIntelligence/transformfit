@@ -23,8 +23,10 @@ import 'package:transformfit/features/progress/progress_screen.dart';
 import 'package:transformfit/features/proof/proof_card_screen.dart';
 import 'package:transformfit/features/workout/active_workout_screen.dart';
 import 'package:transformfit/features/workout/workout_prefill.dart';
+import 'package:transformfit/navigation/app_shell.dart';
 import 'package:transformfit/navigation/auth_state.dart';
 import 'package:transformfit/screens/auth_screen.dart';
+import 'package:transformfit/screens/home_screen.dart';
 import 'package:transformfit/screens/loading_screen.dart';
 import 'package:transformfit/screens/not_found_screen.dart';
 import 'package:transformfit/screens/profile_screen.dart';
@@ -32,7 +34,6 @@ import 'package:transformfit/features/settings/data_export_screen.dart';
 import 'package:transformfit/features/settings/privacy_policy_screen.dart';
 import 'package:transformfit/features/settings/settings_screen.dart';
 import 'package:transformfit/features/settings/terms_of_service_screen.dart';
-import 'package:transformfit/screens/today_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authGuardStateProvider);
@@ -41,11 +42,78 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable: authState,
     initialLocation: '/',
     routes: [
-      GoRoute(
-        path: '/',
-        name: 'today',
-        builder: (context, state) => const TodayScreen(),
+      // -----------------------------------------------------------------
+      // Shell — 5-tab bottom navigation for authenticated users.
+      // Each branch maintains its own Navigator stack.
+      // -----------------------------------------------------------------
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            AppShell(navigationShell: navigationShell),
+        branches: [
+          // Tab 0 — Today (home)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/',
+                name: 'today',
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          // Tab 1 — Workout
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/workout-tab',
+                name: 'workout-tab',
+                builder: (context, state) {
+                  final extra = state.extra;
+                  return ActiveWorkoutScreen(
+                    initialPrefill:
+                        extra is WorkoutPrefill ? extra : null,
+                  );
+                },
+              ),
+            ],
+          ),
+          // Tab 2 — Coach
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/coach',
+                name: 'coach-command',
+                builder: (context, state) =>
+                    const CoachCommandScreen(),
+              ),
+            ],
+          ),
+          // Tab 3 — Wellness
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/wellness',
+                name: 'wellness',
+                builder: (context, state) =>
+                    const WellnessDashboardScreen(),
+              ),
+            ],
+          ),
+          // Tab 4 — Profile
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                name: 'profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
+
+      // -----------------------------------------------------------------
+      // Top-level routes — pushed ON TOP of the shell (no bottom nav).
+      // -----------------------------------------------------------------
       GoRoute(
         path: '/workout',
         name: 'workout',
@@ -70,11 +138,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/composition',
         name: 'composition',
         builder: (context, state) => const BodyCompositionScreen(),
-      ),
-      GoRoute(
-        path: '/coach',
-        name: 'coach-command',
-        builder: (context, state) => const CoachCommandScreen(),
       ),
       GoRoute(
         path: '/coach-consistency',
@@ -169,11 +232,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LoadingScreen(),
       ),
       GoRoute(
-        path: '/profile',
-        name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
@@ -197,11 +255,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/coach-chat',
         name: 'coach-chat',
         builder: (context, state) => const CoachChatScreen(),
-      ),
-      GoRoute(
-        path: '/wellness',
-        name: 'wellness',
-        builder: (context, state) => const WellnessDashboardScreen(),
       ),
       GoRoute(
         path: '/nutrition',
