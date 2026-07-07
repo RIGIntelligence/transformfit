@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TransformFit — Product Requirements Document</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    background: #0A0A0A;
+    color: #FFFFFF;
+    line-height: 1.6;
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 34px; font-weight: 700; margin: 40px 0 20px; color: #FFFFFF; }
+  h2 { font-size: 28px; font-weight: 600; margin: 40px 0 16px; color: #FFFFFF; border-bottom: 1px solid #1E1E1E; padding-bottom: 8px; }
+  h3 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; color: #FFFFFF; }
+  h4 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; color: #8E8E93; }
+  p { font-size: 17px; margin: 12px 0; color: #FFFFFF; }
+  strong { color: #FFFFFF; }
+  em { color: #8E8E93; font-style: italic; }
+  a { color: #FF6B35; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+    background: #141414;
+    color: #FF6B35;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  pre {
+    background: #141414;
+    border: 1px solid #1E1E1E;
+    border-radius: 12px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  pre code {
+    background: none;
+    color: #FFFFFF;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: #141414;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  th {
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 15px;
+    border-bottom: 1px solid #1E1E1E;
+  }
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #1E1E1E;
+    font-size: 15px;
+    color: #FFFFFF;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #1C1C1C; }
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { font-size: 17px; margin: 4px 0; color: #FFFFFF; }
+  li strong { color: #FF6B35; }
+  hr { border: none; border-top: 1px solid #1E1E1E; margin: 40px 0; }
+  blockquote {
+    border-left: 4px solid #FF6B35;
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: #141414;
+    border-radius: 0 8px 8px 0;
+  }
+  blockquote p { color: #8E8E93; margin: 0; }
+  .toc { background: #141414; padding: 24px; border-radius: 12px; margin: 24px 0; }
+  .toc h3 { margin-top: 0; }
+  .toc ol { margin-left: 20px; }
+  .toc li { font-size: 15px; margin: 4px 0; }
+  .emoji { font-size: 20px; }
+  ::selection { background: #FF6B35; color: #FFFFFF; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0A0A0A; }
+  ::-webkit-scrollbar-thumb { background: #1E1E1E; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2E2E2E; }
+</style>
+</head>
+<body>
+<h1>TransformFit — Product Requirements Document (PRD)</h1>
+
+<p><strong>Version:</strong> 1.0</p>
+<p><strong>Date:</strong> July 6, 2026</p>
+<p><strong>Author:</strong> Mike Rodgers, RIG Intelligence Group</p>
+<p><strong>Status:</strong> Active Development</p>
+
+<hr>
+
+<h2>1. Executive Summary</h2>
+
+<p>TransformFit is an AI-powered fitness and wellness app that combines deterministic exercise science, LLM-backed conversational coaching, mental health integration, and wearable-driven adaptive intelligence in a single premium experience.</p>
+
+<p><strong>The Problem:</strong> No existing app combines all four pillars of health — physical training, nutrition, mental health, and behavioral coaching — in one cohesive experience. Users are forced to use 3-5 separate apps (Strong for logging, MacroFactor for nutrition, Whoop for recovery, Calm for mindfulness, a coach for accountability).</p>
+
+<p><strong>The Solution:</strong> TransformFit is the first app that treats the whole person. It's a coach, a tracker, a therapist, and a training partner — all in one beautifully designed, data-driven package.</p>
+
+<p><strong>The Market:</strong> $3.4B fitness app market growing to $33.6B by 2033. Target: 8,200 installs in first 6 months, $2,400/month revenue at month 6.</p>
+
+<hr>
+
+<h2>2. Design Philosophy</h2>
+
+<h3>Core Principle: "One Metric. One Action. Zero Noise."</h3>
+
+<p>Every screen in TransformFit follows one rule: <strong>show the user ONE thing that matters, give them ONE action to take, and remove everything else.</strong></p>
+
+<p>This is borrowed from:</p>
+<ul>
+<li><strong>Whoop</strong>: Recovery circle IS the brand. One number tells you everything.</li>
+<li><strong>Strong</strong>: The set table IS the workout. Log button IS the action.</li>
+<li><strong>MacroFactor</strong>: The macro ring IS the nutrition. Food log IS the tracking.</li>
+<li><strong>Ladder</strong>: The workout card IS the plan. Start button IS the action.</li>
+</ul>
+
+<h3>Design Pillars</h3>
+
+<table><thead><tr><th>Pillar</th><th>Inspired By</th><th>Manifestation</th></tr></thead><tbody>
+<tr><td>**Adherence-Neutral**</td><td>MacroFactor</td><td>No red bars, no shame colors for missed goals. Neutral/green only.</td></tr>
+<tr><td>**Data-Dense but Scannable**</td><td>Whoop + MacroFactor</td><td>Every screen leads with ONE hero metric. Supporting data is secondary.</td></tr>
+<tr><td>**Friction-Free Logging**</td><td>Strong + MacroFactor</td><td>Set logging takes ≤2 taps. Food logging is copy-forward, not search-forward.</td></tr>
+<tr><td>**Coaching Presence**</td><td>Ladder + MacroFactor</td><td>Coach messages feel like a real person, not a chatbot.</td></tr>
+<tr><td>**Progress is Celebration**</td><td>Apple Fitness+</td><td>Rings, streaks, and milestones use motion + haptics to reward consistency.</td></tr>
+<tr><td>**Dark-First Luxury**</td><td>Whoop + Fitbod</td><td>Dark mode is the DEFAULT and ONLY mode. The dark canvas is the brand.</td></tr>
+</tbody></table>
+
+<h3>Anti-Patterns (Explicitly Rejected)</h3>
+
+<ul>
+<li>❌ Red/yellow "failure" indicators for missed macros or workouts</li>
+<li>❌ Gamification that feels childish (no cartoon mascots, no "LEVEL UP!" modals)</li>
+<li>❌ Cluttered dashboards with 8+ metrics visible at once</li>
+<li>❌ Generic Material Design components without brand personality</li>
+<li>❌ Light mode as default or even as an option</li>
+<li>❌ Text-heavy screens without visual hierarchy</li>
+<li>❌ Cards with borders (use surface color contrast instead)</li>
+<li>❌ Orange used everywhere (accent is for CTAs only)</li>
+</ul>
+
+<hr>
+
+<h2>3. Visual Design System</h2>
+
+<h3>3.1 Color Palette</h3>
+
+<pre><code>Background:     #0A0A0A  (near-black canvas)
+Surface:        #141414  (cards, containers)
+Surface Elevated: #1C1C1C  (modals, sheets, bottom nav)
+Surface Input:  #1C1C1C  (text fields, inputs)
+
+Text Primary:   #FFFFFF  (pure white — headlines, body, data)
+Text Secondary: #8E8E93  (iOS gray — captions, labels)
+Text Tertiary:  #48484A  (muted — timestamps, metadata)
+
+Accent:         #FF6B35  (warm orange — CTAs ONLY, max 2 per screen)
+Success:        #30D158  (iOS green — completed sets, achievements)
+Warning:        #FFD60A  (iOS yellow — caution states)
+Error:          #FF453A  (iOS red — errors only, NOT for missed goals)
+Info:           #0A84FF  (iOS blue — data, links)
+
+Recovery Green: #30D158  (readiness 80-100)
+Recovery Yellow:#FFD60A  (readiness 50-79)
+Recovery Red:   #FF453A  (readiness 0-49)
+</code></pre>
+
+<p><strong>Usage Rules:</strong></p>
+<ul>
+<li>Accent (#FF6B35) appears on a maximum of 2 elements per screen</li>
+<li>All other elements use text colors on surface backgrounds</li>
+<li>Recovery colors are used ONLY for the recovery circle, nowhere else</li>
+<li>No gradients except the recovery circle ring</li>
+</ul>
+
+<h3>3.2 Typography</h3>
+
+<pre><code>Font Family: Inter (all text except coach messages)
+Coach Font:  Playfair Display (coach messages only)
+
+Scale:
+  Hero:     Inter 34px/1.0 Bold    (readiness score, PR numbers)
+  H1:       Inter 28px/1.2 Semibold (screen titles)
+  H2:       Inter 22px/1.3 Semibold (section headers)
+  H3:       Inter 17px/1.3 Medium   (card titles)
+  Body:     Inter 17px/1.5 Regular  (body text)
+  Caption:  Inter 15px/1.4 Regular  (secondary text)
+  Micro:    Inter 13px/1.3 Regular  (labels, badges)
+  Coach:    Playfair 17px/1.4 Medium (coach messages only)
+
+Data Typography (tabular figures enabled):
+  Data XL:  Inter 56px/1.0 Bold    (recovery score in circle)
+  Data LG:  Inter 34px/1.0 Bold    (macro numbers)
+  Data MD:  Inter 24px/1.0 Semibold (metric values)
+  Data SM:  Inter 17px/1.0 Medium   (inline data)
+</code></pre>
+
+<h3>3.3 Spacing</h3>
+
+<pre><code>Grid: 8px base unit
+
+Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64
+
+Named Constants:
+  Screen Margin: 20px (left/right padding on all screens)
+  Card Gap:      12px (gap between cards)
+  Section Gap:   32px (gap between sections)
+  Element Gap:   8px  (gap between elements within a card)
+</code></pre>
+
+<h3>3.4 Components</h3>
+
+<p><strong>Card:</strong></p>
+<ul>
+<li>Background: surface (#141414)</li>
+<li>Border: NONE (use surface color contrast)</li>
+<li>Border radius: 12px</li>
+<li>Padding: 16px</li>
+<li>Shadow: none (depth via color contrast)</li>
+</ul>
+
+<p><strong>Button (Primary):</strong></p>
+<ul>
+<li>Background: accent (#FF6B35)</li>
+<li>Text: #FFFFFF, Inter 17px Semibold</li>
+<li>Height: 50px</li>
+<li>Border radius: 12px</li>
+<li>Full-width on mobile</li>
+<li>Haptic: medium impact on tap</li>
+</ul>
+
+<p><strong>Button (Secondary):</strong></p>
+<ul>
+<li>Background: surface (#141414)</li>
+<li>Text: textSecondary (#8E8E93), Inter 17px Medium</li>
+<li>Height: 50px</li>
+<li>Border radius: 12px</li>
+<li>Border: 1px surfaceBorder (#1E1E1E)</li>
+</ul>
+
+<p><strong>Input:</strong></p>
+<ul>
+<li>Background: surfaceInput (#1C1C1C)</li>
+<li>Border: NONE when unfocused, 1px accent when focused</li>
+<li>Border radius: 10px</li>
+<li>Height: 48px</li>
+<li>Text: textPrimary (#FFFFFF)</li>
+</ul>
+
+<p><strong>Chip:</strong></p>
+<ul>
+<li>Background: surface (#141414)</li>
+<li>Border: 1px surfaceBorder (#1E1E1E)</li>
+<li>Border radius: pill (999px)</li>
+<li>Padding: 8px 16px</li>
+<li>Text: textSecondary (#8E8E93), Inter 15px Medium</li>
+<li>Selected: accent background, white text</li>
+</ul>
+
+<p><strong>Bottom Navigation:</strong></p>
+<ul>
+<li>Height: 56px</li>
+<li>Background: canvasDeep (#050505) with glass blur</li>
+<li>Icons only (no labels)</li>
+<li>Active: accent (#FF6B35) icon + 6px accent dot below</li>
+<li>Inactive: textTertiary (#48484A) icon</li>
+<li>Touch target: 44px minimum</li>
+<li>Tabs: Home, Workout, Coach, Profile</li>
+</ul>
+
+<p><strong>Recovery Circle:</strong></p>
+<ul>
+<li>Diameter: 280px (home), 240px (wellness)</li>
+<li>Stroke width: 8px</li>
+<li>Ring: gradient from red (#FF453A) → yellow (#FFD60A) → green (#30D158)</li>
+<li>Score: Inter 56px Bold, white, centered</li>
+<li>Zone label: Inter 15px, textSecondary, below score</li>
+<li>Animation: fill from 0 to score over 800ms</li>
+</ul>
+
+<p><strong>Macro Ring:</strong></p>
+<ul>
+<li>Diameter: 200px</li>
+<li>3 arcs: Protein (#0A84FF), Carbs (#FFD60A), Fat (#FF453A)</li>
+<li>Center: calorie number, Inter 34px Bold</li>
+<li>Below: "of 2,400 kcal" in textSecondary</li>
+<li>Animation: fill from 0 to current over 600ms</li>
+</ul>
+
+<hr>
+
+<h2>4. Screen-by-Screen Specifications</h2>
+
+<h3>4.1 Landing Screen (First Impression)</h3>
+
+<p><strong>Purpose:</strong> Convert visitor to user in ≤10 seconds.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│                                 │
+│   [Hero Image: hero_workout.png │
+│    full-screen background       │
+│    with 70% dark overlay]       │
+│                                 │
+│   ┌───────────────────────────┐ │
+│   │ "A coach who already      │ │
+│   │  noticed."                │ │
+│   │                           │ │
+│   │  Inter 28px, white        │ │
+│   │                           │ │
+│   │ "Before you log a single  │ │
+│   │  rep, we built your plan."│ │
+│   │                           │ │
+│   │  Inter 17px, #8E8E93      │ │
+│   │                           │ │
+│   │  ┌─────────────────────┐  │ │
+│   │  │     BEGIN           │  │ │
+│   │  │  (accent button)    │  │ │
+│   │  └─────────────────────┘  │ │
+│   │                           │ │
+│   │  Sign in to existing      │ │
+│   │  account                  │ │
+│   │  (ghost button)           │ │
+│   └───────────────────────────┘ │
+│                                 │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Hero image loads instantly (pre-cached in assets)</li>
+<li>Title fades in at 0.3s</li>
+<li>Subtitle fades in at 0.6s</li>
+<li>Button pulses gently (1s cycle) to draw attention</li>
+<li>Tap "Begin" → button contracts (100ms haptic) → slide to intake</li>
+<li>No navigation bar visible</li>
+<li>No status bar (immersive)</li>
+</ul>
+
+<p><strong>Content:</strong></p>
+<ul>
+<li>Headline: "A coach who already noticed."</li>
+<li>Subtitle: "Before you log a single rep, we built your plan."</li>
+<li>CTA: "Begin" (accent button)</li>
+<li>Secondary: "Sign in to existing account" (ghost button)</li>
+</ul>
+
+<h3>4.2 Intake Flow (8 Steps, ~2 Minutes)</h3>
+
+<p><strong>Purpose:</strong> Gather enough data to build a personalized week-one plan.</p>
+
+<p><strong>Steps:</strong></p>
+<p><strong>Goals</strong> — Multi-select: Build Strength, Get Fitter, Lose Fat, Build Muscle, Improve Mobility, Train for Sport</p>
+<p><strong>Schedule</strong> — Select days per week: 2, 3, 4, 5, 6</p>
+<p><strong>Equipment</strong> — Multi-select: Bodyweight, Dumbbells, Barbell, Kettlebells, Resistance Bands, Machines, Cables, Pull-up Bar</p>
+<p><strong>Experience</strong> — Select: Beginner, Intermediate, Advanced</p>
+<p><strong>Injuries</strong> — Optional multi-select: None, Knee, Back, Shoulder, Wrist, Hip, Ankle</p>
+<p><strong>Returning</strong> — Optional: Are you returning from a break? (Yes/No + duration)</p>
+<p><strong>Doctor Clearance</strong> — Optional: Has a doctor cleared you? (Yes/No/NA)</p>
+<p><strong>Consent</strong> — Data usage consent + privacy policy link</p>
+
+<p><strong>Design:</strong></p>
+<ul>
+<li>Progress indicator: "Step 3 of 8" with animated dots</li>
+<li>Each step is a single question with large tappable options</li>
+<li>Back button always visible</li>
+<li>Next button disabled until selection made</li>
+<li>Questions animate in from bottom (300ms)</li>
+<li>No paywall, no signup required until plan reveal</li>
+</ul>
+
+<h3>4.3 Plan Reveal (The "Wow" Moment)</h3>
+
+<p><strong>Purpose:</strong> Show the user their personalized plan and make them feel the app already knows them.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│                                 │
+│  [Coach avatar with persona]    │
+│                                 │
+│  "Based on your goals,          │
+│   equipment, and schedule,      │
+│   here's your first week."      │
+│                                 │
+│  ┌───────────────────────────┐  │
+│  │  Week 1 Plan              │  │
+│  │  ─────────────────        │  │
+│  │  Mon: Push Day (45 min)   │  │
+│  │  Tue: Rest                │  │
+│  │  Wed: Pull Day (45 min)   │  │
+│  │  Thu: Rest                │  │
+│  │  Fri: Legs (50 min)       │  │
+│  │  Sat: Rest                │  │
+│  │  Sun: Rest                │  │
+│  └───────────────────────────┘  │
+│                                 │
+│  ┌─────────────────────────┐    │
+│  │   START MY FIRST WORKOUT│    │
+│  │   (accent button)       │    │
+│  └─────────────────────────┘    │
+│                                 │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Plan appears with staggered animation (each day slides in, 100ms delay)</li>
+<li>Coach message is personalized to their goals</li>
+<li>"Start My First Workout" button is the only CTA</li>
+<li>Tapping it goes directly to the workout (no signup wall)</li>
+</ul>
+
+<h3>4.4 Home Screen (Daily Hub)</h3>
+
+<p><strong>Purpose:</strong> Show ONE number that tells the user how they're doing today.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  [hero_ai_coach.png background  │
+│   with 85% dark overlay]        │
+│                                 │
+│         ┌─────────┐             │
+│        /   78      \            │
+│       /   RECOVERY  \           │
+│       \             /           │
+│        \           /            │
+│         └─────────┘             │
+│     ● Maintaining               │
+│                                 │
+│  ┌──────────┐ ┌──────────┐     │
+│  │ 🏋️ Start │ │ 😊 Log   │     │
+│  │ Workout  │ │ Mood     │     │
+│  └──────────┘ └──────────┘     │
+│  ┌──────────┐                  │
+│  │ 💬 Coach │                  │
+│  │ Chat     │                  │
+│  └──────────┘                  │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │ "You've been consistent │   │
+│  │  this week. Keep it up."│   │
+│  │  — Your Coach           │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  [Home] [Workout] [Coach] [Profile] │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Recovery circle animates from 0 to score (800ms)</li>
+<li>3 action cards below: Start Workout (orange), Log Mood (purple), Coach Chat (blue)</li>
+<li>Coach hint at bottom: one line, personalized</li>
+<li>Pull-to-refresh to update recovery score</li>
+<li>No section headers, no weekly summary (moved to Progress tab)</li>
+</ul>
+
+<h3>4.5 Workout Logger (The Core Experience)</h3>
+
+<p><strong>Purpose:</strong> Log a set in ≤2 taps. Show previous data for reference.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  ← Barbell Back Squat       →   │
+│  Set 2 of 4    ●●○○              │
+│                                 │
+│  SET  PREV   WEIGHT  REPS   ✓   │
+│  1    80kg   80kg    5     ✅   │
+│  2    80kg   82.5kg  5     ☐   │
+│  3    80kg   —       —     ☐   │
+│  4    80kg   —       —     ☐   │
+│                                 │
+│       ┌─────┐                   │
+│       │82.5 │                   │
+│       │ kg  │                   │
+│  [-]  └─────┘  [+]              │
+│       ┌─────┐                   │
+│       │  5  │                   │
+│       │reps │                   │
+│  [-]  └─────┘  [+]              │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │        LOG SET          │   │
+│  │    82.5kg × 5 reps      │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  Sets: 1/4  Vol: 400kg  0:32   │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Exercise name at top with prev/next arrows</li>
+<li>Progress dots: filled = completed, empty = remaining</li>
+<li>Set table: Strong-style with previous data in muted text</li>
+<li>Current set highlighted with accent left border</li>
+<li>+/- buttons: 48px touch targets, haptic light impact</li>
+<li>Number animation on change (200ms spring curve)</li>
+<li>"Log Set" button: full-width, accent, 56px height</li>
+<li>After logging: row slides in from right (300ms), green flash (200ms)</li>
+<li>Rest timer starts automatically (breathing badge in bottom bar)</li>
+<li>Coach message slides up: "Good set. RPE 7. Keep the weight here."</li>
+<li>PR celebration: confetti + haptic heavy impact + "NEW PR!" badge</li>
+<li>Pain safety mode: red border, weight ceiling, RPE capped at 6</li>
+</ul>
+
+<h3>4.6 Coach Chat (The Relationship)</h3>
+
+<p><strong>Purpose:</strong> Feel like texting a real coach, not chatting with a bot.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  Coach                    ⚙️    │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │ Hey. I noticed you've   │   │
+│  │ been pushing hard this  │   │
+│  │ week. How are you       │   │
+│  │ feeling?                │   │
+│  │           2:34 PM       │   │
+│  └─────────────────────────┘   │
+│                                 │
+│         ┌──────────────────┐   │
+│         │ Feeling strong.  │   │
+│         │ Ready to go.     │   │
+│         │ 2:35 PM          │   │
+│         └──────────────────┘   │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │ Good. Your readiness is │   │
+│  │ 78 — you're in the      │   │
+│  │ maintain zone. Today's  │   │
+│  │ workout is set at RPE 7 │   │
+│  │ to match your energy.   │   │
+│  │           2:35 PM       │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  [How am I doing?] [What's next?]│
+│                                 │
+│  ┌──────────────────────┐ [→] │
+│  │ Type a message...    │     │
+│  └──────────────────────┘     │
+│                                 │
+│  [Home] [Workout] [Coach] [Profile] │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Coach messages: left-aligned, surface bg, 16px radius, Playfair font</li>
+<li>User messages: right-aligned, accent bg, 16px radius, Inter font</li>
+<li>Timestamps: 13px, textTertiary, below each message</li>
+<li>Typing indicator: 3 dots with persona color, 800ms</li>
+<li>Quick action chips: horizontal scroll above input</li>
+<li>Input: pill shape, surfaceInput bg, send button with accent</li>
+<li>Messages slide up from bottom (300ms)</li>
+<li>No confidence badges, no source counts (keep it clean)</li>
+</ul>
+
+<p><strong>Coach Personas (6 voices):</strong></p>
+
+<table><thead><tr><th>Persona</th><th>Color</th><th>Voice Style</th><th>Example</th></tr></thead><tbody>
+<tr><td>Motivator</td><td>Orange</td><td>Warm, encouraging</td><td>"You showed up. That's the hardest part."</td></tr>
+<tr><td>Analyst</td><td>Blue</td><td>Data-driven, precise</td><td>"Your volume is 12% above your 4-week average."</td></tr>
+<tr><td>Challenger</td><td>Red</td><td>Direct, high-bar</td><td>"That was RPE 6. You have more in you."</td></tr>
+<tr><td>Zen</td><td>Purple</td><td>Calm, recovery-focused</td><td>"Recovery is training too. Honor the rest day."</td></tr>
+<tr><td>Strength Coach</td><td>—</td><td>Evidence-based</td><td>"Evidence says 2-3 RIR is optimal for hypertrophy."</td></tr>
+<tr><td>Neuroscientist</td><td>—</td><td>Protocol-focused</td><td>"Morning light exposure will improve your sleep tonight."</td></tr>
+</tbody></table>
+
+<h3>4.7 Wellness Dashboard (Mental Health Hub)</h3>
+
+<p><strong>Purpose:</strong> Show ONE number for overall wellness + 3 supporting metrics.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  [hero_mindfulness.png bg       │
+│   with 85% dark overlay]        │
+│                                 │
+│         ┌─────────┐             │
+│        /   72      \            │
+│       /  WELLNESS   \           │
+│       \             /           │
+│        \           /            │
+│         └─────────┘             │
+│     ● Maintaining               │
+│                                 │
+│  ┌──────────┐ ┌──────────┐     │
+│  │ 😊 Mood  │ │ 😰 Stress│     │
+│  │   7/10   │ │   4/10   │     │
+│  │  ↑ +0.5  │ │  ↓ -1.0  │     │
+│  └──────────┘ └──────────┘     │
+│  ┌──────────┐                  │
+│  │ 😴 Sleep │                  │
+│  │   8/10   │                  │
+│  │  → same  │                  │
+│  └──────────┘                  │
+│                                 │
+│  [Home] [Workout] [Coach] [Profile] │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Wellness circle animates from 0 to score (800ms)</li>
+<li>3 metric cards: Mood, Stress, Sleep</li>
+<li>Each card: icon + value + trend arrow</li>
+<li>Tap card → detailed view with history</li>
+<li>Pull-to-refresh</li>
+</ul>
+
+<h3>4.8 Nutrition Dashboard (Macro Tracking)</h3>
+
+<p><strong>Purpose:</strong> Show ONE number (calories) + 3 macros.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  [hero_nutrition.png bg         │
+│   with 85% dark overlay]        │
+│                                 │
+│         ┌─────────┐             │
+│        /  1,847    \            │
+│       /   KCAL      \           │
+│       \   of 2,400  /           │
+│        \           /            │
+│         └─────────┘             │
+│                                 │
+│  ┌──────────┐ ┌──────────┐     │
+│  │ Protein  │ │ Carbs    │     │
+│  │ 142g/180g│ │ 180g/250g│     │
+│  │ ████░░   │ │ ███░░░   │     │
+│  └──────────┘ └──────────┘     │
+│  ┌──────────┐                  │
+│  │ Fat      │                  │
+│  │ 58g/75g  │                  │
+│  │ ████░░   │                  │
+│  └──────────┘                  │
+│                                 │
+│  Today's Food Log               │
+│  ─────────────────              │
+│  Breakfast: Oatmeal    420 kcal │
+│  Lunch: Chicken Bowl   680 kcal │
+│  Snack: Protein Shake  240 kcal │
+│  Dinner: —             —        │
+│                                 │
+│         [+ Add Meal]            │
+│                                 │
+│  [Home] [Workout] [Coach] [Profile] │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Macro ring animates from 0 to current (600ms)</li>
+<li>3 macro cards with progress bars</li>
+<li>Food log below with copy-forward from previous days</li>
+<li>"+ Add Meal" FAB button</li>
+<li>Barcode scanner for quick logging</li>
+</ul>
+
+<h3>4.9 Progress Dashboard (Charts & Data)</h3>
+
+<p><strong>Purpose:</strong> Show progress over time with swipeable charts.</p>
+
+<p><strong>Layout:</strong></p>
+<pre><code>┌─────────────────────────────────┐
+│  Progress                       │
+│  [Strength] [Volume] [Recovery] │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  ╭──────╮               │   │
+│  │ ╱  1RM   ╲              │   │
+│  │╱   Trend  ╲             │   │
+│  │            ╲             │   │
+│  │  Jan  Feb  Mar  Apr     │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  Current: 100kg (+5kg this month)│
+│  PR: 105kg (Mar 15)             │
+│                                 │
+│  ┌─────────────────────────┐   │
+│  │  Workout Heatmap         │   │
+│  │  █████░░████████░░███░░  │   │
+│  │  ██████████████████████  │   │
+│  │  ░░████░░████░░████░░░░  │   │
+│  └─────────────────────────┘   │
+│                                 │
+│  [Home] [Workout] [Coach] [Profile] │
+└─────────────────────────────────┘
+</code></pre>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Swipe between chart views (Strength, Volume, Recovery)</li>
+<li>Charts animate on first appearance</li>
+<li>Tap data points for details</li>
+<li>Pull-to-refresh</li>
+</ul>
+
+<hr>
+
+<h2>5. Interaction Flows</h2>
+
+<h3>5.1 First-Time User (Day Zero)</h3>
+
+<pre><code>0.0s  — App opens, dark canvas fades in
+0.3s  — Hero image slides in from bottom
+0.6s  — Title fades in: "A coach who already noticed"
+0.9s  — Subtitle fades in: "Before you log a single rep, we built your plan"
+1.2s  — Recovery circle animates in (0→score, 800ms)
+1.5s  — "Begin" button pulses gently (1s cycle)
+2.0s  — User taps "Begin"
+2.1s  — Button contracts (100ms), haptic click
+2.2s  — Screen transitions to intake (shared axis, 300ms)
+...   — 8 intake steps (~2 minutes total)
+...   — Plan reveal with staggered animation
+...   — User taps "Start My First Workout"
+...   — Workout logger opens with pre-filled exercises
+</code></pre>
+
+<h3>5.2 Set Logging (Core Loop)</h3>
+
+<pre><code>0.0s  — User taps "+" on weight stepper
+0.05s — Number counter animates (200ms spring curve)
+0.1s  — Haptic light impact
+0.2s  — User taps "+" on reps stepper
+0.25s — Number counter animates (200ms spring curve)
+0.3s  — Haptic light impact
+0.5s  — User taps "Log Set" button
+0.55s — Button contracts (100ms), haptic medium impact
+0.6s  — Set row slides in from right (300ms ease-out)
+0.7s  — Green flash on the row (200ms)
+0.8s  — Rest timer starts automatically (breathing circle appears)
+0.9s  — Coach message slides up: "Good set. RPE 7. Keep the weight here."
+1.2s  — Quick action chips appear: "Increase weight", "Same weight", "Decrease"
+1.5s  — Rest timer pulses (1s breathing cycle)
+</code></pre>
+
+<h3>5.3 PR Celebration</h3>
+
+<pre><code>0.0s  — User logs a new PR (e.g., 100kg squat)
+0.05s — Haptic heavy impact
+0.1s  — Screen flashes white (100ms)
+0.2s  — Confetti particles explode from the log button (1300ms)
+0.3s  — PR badge slides down from top (500ms spring)
+0.5s  — "NEW PR!" text scales up (300ms elastic)
+0.8s  — Previous PR shown as comparison: "95kg → 100kg (+5.3%)"
+1.0s  — Coach message: "That's a 5kg PR. You earned that."
+1.3s  — Share button appears
+1.5s  — Confetti fades out
+2.0s  — Return to normal workout state
+</code></pre>
+
+<h3>5.4 Daily Wellness Check-In</h3>
+
+<pre><code>0.0s  — App opens, recovery circle animates (0→score, 800ms)
+0.5s  — "How are you feeling?" prompt appears
+0.8s  — 5 emoji buttons fade in (staggered 100ms): 😊 😐 😔 😤 😴
+1.0s  — User taps 😊
+1.1s  — Emoji scales up (200ms), haptic click
+1.2s  — "What's your energy like?" slider appears
+1.5s  — User slides to 7/10
+1.6s  — Slider thumb pulses (100ms)
+1.8s  — "Any soreness?" body map appears
+2.0s  — User taps "Lower back"
+2.1s  — Body part highlights (200ms)
+2.3s  — "Got it. Adjusting your workout." appears
+2.5s  — Recovery circle updates (300ms animation)
+2.8s  — "Today's plan" card slides in with adjusted workout
+</code></pre>
+
+<hr>
+
+<h2>6. Feature Specifications</h2>
+
+<h3>6.1 AI Coaching System</h3>
+
+<p><strong>Architecture:</strong> 3-layer system</p>
+<p><strong>Deterministic Engine</strong> — Progression algorithms, readiness calculations, plan generation</p>
+<p><strong>LLM Narration Layer</strong> — Natural language enrichment of deterministic decisions</p>
+<p><strong>Safety Filter</strong> — Gate-safe checks, banned terms, medical disclaimers</p>
+
+<p><strong>Coach Personas:</strong> 6 distinct voices that adapt over 30 days</p>
+<ul>
+<li>Week 1-2: 80% directive, 20% collaborative</li>
+<li>Week 3-4: 50% directive, 50% collaborative</li>
+<li>Month 2+: 20% directive, 80% collaborative</li>
+</ul>
+
+<p><strong>Proactive Coaching:</strong></p>
+<ul>
+<li>After workout: "Good session. Volume is up 8% this week."</li>
+<li>After mood check-in: "I noticed your stress is elevated. Consider a lighter session."</li>
+<li>Streak at risk: "You've trained 5 days straight. Today's a rest day."</li>
+<li>PR achieved: "That's a 5kg PR. You earned that."</li>
+</ul>
+
+<h3>6.2 Readiness System</h3>
+
+<p><strong>Inputs:</strong></p>
+<ul>
+<li>HRV (from wearable or manual)</li>
+<li>Sleep quality (1-10)</li>
+<li>Mood score (1-10)</li>
+<li>Soreness level (1-10)</li>
+<li>Training load (7-day volume)</li>
+</ul>
+
+<p><strong>Output:</strong> Readiness score 0-100 with zone:</p>
+<ul>
+<li>80-100: Push (green) — increase volume/intensity</li>
+<li>50-79: Maintain (yellow) — keep current load</li>
+<li>0-49: Deload (red) — reduce volume by 30-50%</li>
+</ul>
+
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Readiness affects workout recommendations</li>
+<li>Low readiness → lighter alternatives suggested</li>
+<li>High readiness → progression opportunities highlighted</li>
+</ul>
+
+<h3>6.3 Gamification</h3>
+
+<p><strong>XP System:</strong></p>
+<ul>
+<li>Workout completed: 50 XP</li>
+<li>Set logged: 5 XP</li>
+<li>Mood logged: 10 XP</li>
+<li>Nutrition logged: 10 XP</li>
+<li>PR achieved: 25 XP</li>
+<li>Streak day: 15 XP</li>
+</ul>
+
+<p><strong>Achievements:</strong> 50+ across categories</p>
+<ul>
+<li>First workout, 7-day streak, 30-day streak, 100 workouts</li>
+<li>First PR, 10 PRs, bodyweight bench press</li>
+<li>7-day mood streak, wellness score 80+</li>
+</ul>
+
+<p><strong>Streaks:</strong></p>
+<ul>
+<li>Workout streak, mood streak, nutrition streak</li>
+<li>Grace days: 2 per week (configurable)</li>
+<li>Streak only breaks if consecutive misses > grace days</li>
+</ul>
+
+<h3>6.4 Nutrition Tracking</h3>
+
+<p><strong>Macro Tracking:</strong></p>
+<ul>
+<li>Protein, carbs, fat with daily targets</li>
+<li>Calorie target based on TDEE and goals</li>
+<li>Macro ring visualization (donut chart)</li>
+<li>Food log with copy-forward from previous days</li>
+</ul>
+
+<p><strong>Barcode Scanner:</strong></p>
+<ul>
+<li>Scan food barcodes for instant logging</li>
+<li>Integration with food database (100+ common foods)</li>
+<li>Manual entry fallback</li>
+</ul>
+
+<p><strong>Meal Planning:</strong></p>
+<ul>
+<li>5 pre-built plans: High Protein, Balanced, Cut, Bulk, Vegetarian</li>
+<li>Custom meal creation</li>
+<li>Macro breakdown per meal</li>
+</ul>
+
+<h3>6.5 Mental Health Integration</h3>
+
+<p><strong>Daily Check-In:</strong></p>
+<ul>
+<li>Mood: 1-10 with emoji selector</li>
+<li>Energy: 1-10 slider</li>
+<li>Stress: 1-10 slider</li>
+<li>Soreness: body map selection</li>
+<li>Optional journal entry</li>
+</ul>
+
+<p><strong>Mindfulness:</strong></p>
+<ul>
+<li>10 guided meditation sessions (3-15 minutes)</li>
+<li>Breathing exercises with visual guide</li>
+<li>Body scan sessions</li>
+</ul>
+
+<p><strong>Burnout Detection:</strong></p>
+<ul>
+<li>Combines training load + mood + sleep</li>
+<li>Alerts when burnout risk is high</li>
+<li>Recommends deload or rest day</li>
+</ul>
+
+<h3>6.6 Exercise Library</h3>
+
+<p><strong>Content:</strong></p>
+<ul>
+<li>114 exercises with instructions, form cues, common mistakes</li>
+<li>8 exercise images (squat, bench, deadlift, pull-up, plank, kettlebell, overhead press, yoga)</li>
+<li>Search by name, muscle group, equipment</li>
+<li>Filter by difficulty, type</li>
+</ul>
+
+<p><strong>Exercise Cards:</strong></p>
+<ul>
+<li>64x64 image thumbnail</li>
+<li>Exercise name, primary muscles</li>
+<li>Tap for full detail with instructions</li>
+</ul>
+
+<hr>
+
+<h2>7. Technical Architecture</h2>
+
+<h3>7.1 Frontend</h3>
+
+<ul>
+<li><strong>Framework:</strong> Flutter 3.44+</li>
+<li><strong>State Management:</strong> Riverpod</li>
+<li><strong>Navigation:</strong> GoRouter with StatefulShellRoute</li>
+<li><strong>Local Database:</strong> Drift (SQLite)</li>
+<li><strong>Design System:</strong> DigitalAtelier v4</li>
+</ul>
+
+<h3>7.2 Backend</h3>
+
+<ul>
+<li><strong>Database:</strong> Supabase (PostgreSQL)</li>
+<li><strong>Auth:</strong> Supabase Auth</li>
+<li><strong>Edge Functions:</strong> 5 functions (coach-stream, generate-plan, post-session-analysis, auth-before-user-created, whoami)</li>
+<li><strong>Realtime:</strong> Supabase Realtime for live data</li>
+</ul>
+
+<h3>7.3 AI/ML</h3>
+
+<ul>
+<li><strong>LLM:</strong> OpenAI-compatible API (configurable endpoint)</li>
+<li><strong>Fallback:</strong> Deterministic coaching when LLM unavailable</li>
+<li><strong>Safety:</strong> Gate-safe filter on all LLM outputs</li>
+</ul>
+
+<h3>7.4 Integrations</h3>
+
+<ul>
+<li><strong>Wearables:</strong> HealthKit (iOS), Health Connect (Android)</li>
+<li><strong>Analytics:</strong> Custom event system (batch, offline support)</li>
+<li><strong>Crash Reporting:</strong> Sentry stub (ready for real SDK)</li>
+<li><strong>Push Notifications:</strong> Smart scheduler (max 3/day)</li>
+</ul>
+
+<hr>
+
+<h2>8. Success Metrics</h2>
+
+<table><thead><tr><th>Metric</th><th>Target</th><th>Measurement</th></tr></thead><tbody>
+<tr><td>User Acquisition</td><td>8,200 installs in 6 months</td><td>App Store + Firebase</td></tr>
+<tr><td>Day-1 Retention</td><td>42%</td><td>Firebase Analytics</td></tr>
+<tr><td>Day-7 Retention</td><td>22%</td><td>Firebase Analytics</td></tr>
+<tr><td>Day-30 Retention</td><td>11%</td><td>Firebase Analytics</td></tr>
+<tr><td>Free-to-Paid Conversion</td><td>6.8%</td><td>Stripe</td></tr>
+<tr><td>App Store Rating</td><td>4.6/5.0</td><td>App Store</td></tr>
+<tr><td>Monthly Revenue (M6)</td><td>$2,400</td><td>Stripe</td></tr>
+<tr><td>NPS Score</td><td>+38</td><td>In-app survey</td></tr>
+<tr><td>Time to PMF</td><td>3 iterations (9 months)</td><td>Sean Ellis test</td></tr>
+</tbody></table>
+
+<hr>
+
+<h2>9. Competitive Positioning</h2>
+
+<table><thead><tr><th>Feature</th><th>TransformFit</th><th>MacroFactor</th><th>Whoop</th><th>Strong</th><th>Ladder</th></tr></thead><tbody>
+<tr><td>AI Coaching</td><td>✅ 6 personas</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Mental Health</td><td>✅ Full suite</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Nutrition</td><td>✅ Macro tracking</td><td>✅ Best-in-class</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Workout Logging</td><td>✅ Strong-style</td><td>❌</td><td>❌</td><td>✅ Best-in-class</td><td>✅</td></tr>
+<tr><td>Recovery Score</td><td>✅ Whoop-style</td><td>❌</td><td>✅ Best-in-class</td><td>❌</td><td>❌</td></tr>
+<tr><td>Behavioral Repair</td><td>✅ Unique</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Exercise Library</td><td>✅ 114 exercises</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Gamification</td><td>✅ XP + achievements</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+<tr><td>Wearable Integration</td><td>✅ HealthKit/Connect</td><td>❌</td><td>✅ Hardware-locked</td><td>❌</td><td>❌</td></tr>
+</tbody></table>
+
+<p><strong>Unique Position:</strong> Only app combining AI coaching + mental health + nutrition + workout logging + recovery scoring in one cohesive experience.</p>
+
+<hr>
+
+<h2>10. Launch Plan</h2>
+
+<h3>Phase 1: MVP (Current)</h3>
+<ul>
+<li>Core workout logging</li>
+<li>AI coaching (deterministic)</li>
+<li>Basic wellness tracking</li>
+<li>Exercise library</li>
+<li>Web + Android builds</li>
+</ul>
+
+<h3>Phase 2: Polish (Weeks 1-4)</h3>
+<ul>
+<li>Design system v4 implementation</li>
+<li>Hero imagery integration</li>
+<li>Recovery circle as brand element</li>
+<li>Macro ring for nutrition</li>
+<li>Coach chat refinement</li>
+</ul>
+
+<h3>Phase 3: Growth (Weeks 5-8)</h3>
+<ul>
+<li>Social features (share, challenges)</li>
+<li>Camera form check (ML)</li>
+<li>Push notifications</li>
+<li>Crash reporting</li>
+<li>Analytics backend</li>
+</ul>
+
+<h3>Phase 4: Scale (Weeks 9-12)</h3>
+<ul>
+<li>iOS native build</li>
+<li>App Store launch</li>
+<li>Product Hunt launch</li>
+<li>Reddit/HN launch</li>
+<li>Influencer outreach</li>
+</ul>
+
+<hr>
+
+<h2>Appendix A: Higgsfield Imagery</h2>
+
+<p>17 cinematic images generated via Higgsfield AI:</p>
+
+<table><thead><tr><th>Image</th><th>Description</th><th>Usage</th></tr></thead><tbody>
+<tr><td>hero_workout.png</td><td>Dramatic gym, orange/purple lighting</td><td>Landing screen background</td></tr>
+<tr><td>hero_ai_coach.png</td><td>Neural network silhouette</td><td>Home screen background</td></tr>
+<tr><td>hero_mindfulness.png</td><td>Blue/purple ambient, breathing</td><td>Wellness dashboard background</td></tr>
+<tr><td>hero_nutrition.png</td><td>Dark marble meal prep</td><td>Nutrition dashboard background</td></tr>
+<tr><td>hero_gamification.png</td><td>Golden trophies, XP particles</td><td>Gamification background</td></tr>
+<tr><td>hero_sleep.png</td><td>Luxury dark bedroom</td><td>Sleep/recovery background</td></tr>
+<tr><td>hero_barbell.png</td><td>Chalk dust, dramatic light</td><td>App bar texture</td></tr>
+<tr><td>hero_app_mockup.png</td><td>Floating phone, holographic</td><td>Marketing materials</td></tr>
+<tr><td>hero_app_store.png</td><td>3-screen mockup</td><td>App Store listing</td></tr>
+<tr><td>exercise_squat.png</td><td>Dramatic gym, orange rim light</td><td>Exercise library</td></tr>
+<tr><td>exercise_bench_press.png</td><td>Overhead lighting</td><td>Exercise library</td></tr>
+<tr><td>exercise_deadlift.png</td><td>Side lighting, chalk dust</td><td>Exercise library</td></tr>
+<tr><td>exercise_pullup.png</td><td>Purple backlighting</td><td>Exercise library</td></tr>
+<tr><td>exercise_plank.png</td><td>Low-angle, warm orange</td><td>Exercise library</td></tr>
+<tr><td>exercise_kettlebell.png</td><td>Orange backlighting</td><td>Exercise library</td></tr>
+<tr><td>exercise_yoga.png</td><td>Blue/purple ambient</td><td>Exercise library</td></tr>
+<tr><td>exercise_overhead_press.png</td><td>Top-down lighting</td><td>Exercise library</td></tr>
+</tbody></table>
+
+<h2>Appendix B: Design Documents</h2>
+
+<ul>
+<li><code>TRANSFORMFIT_DESIGN_SYSTEM_SPEC.md</code> — 1,942 lines, full design system</li>
+<li><code>DESIGN_SYSTEM_V4.md</code> — 1,359 lines, binding v4 spec</li>
+<li><code>UI_REDESIGN_SPEC.md</code> — 50KB, screen-by-screen redesign</li>
+<li><code>COMPETITIVE_DESIGN_COMPARISON.md</code> — Side-by-side with competitors</li>
+<li><code>COACHING_INTERACTION_DESIGN.md</code> — 1,115 lines, second-by-second flows</li>
+<li><code>COMPETITIVE_ANALYSIS_100.md</code> — 100-feature gap analysis</li>
+<li><code>USER_PANEL_REPORT.md</code> — 100 scenarios tested</li>
+<li><code>UX_UI_AUDIT_REPORT.md</code> — 20 priority fixes</li>
+<li><code>MIROFISH_PREDICTION_REPORT.md</code> — Market success predictions</li>
+<li><code>TRANSFORMFIT-1000X-UPGRADE-PLAN.md</code> — Master architecture plan</li>
+</ul>
+
+<h2>Appendix C: Mathematical Design Formulas</h2>
+
+<ul>
+<li><strong>Golden Ratio (φ = 1.618):</strong> Typography scale, card aspect ratios, layout proportions</li>
+<li><strong>Fibonacci Sequence:</strong> Spacing (3,5,8,13,21,34,55), font sizes, border radius, animation durations</li>
+<li><strong>Modular Scale (1.25 ratio):</strong> Typography hierarchy</li>
+<li><strong>8-Point Grid:</strong> All spacing multiples of 8</li>
+<li><strong>Rule of Thirds:</strong> Hero 2/3, supporting 1/3</li>
+<li><strong>Bee Foraging:</strong> Visual attention allocation (60/25/15)</li>
+</ul>
+
+<h2>Appendix D: Deviation Engine Applications</h2>
+
+<p>40 RIG Deviation Engines applied to design:</p>
+<ul>
+<li><strong>Physics (31-40):</strong> Quantum tunneling, Pauli exclusion, Casimir pressure, fine-tuning, Hawking radiation, speed of light, absolute zero, phase transition, Bell entanglement, vacuum fluctuation</li>
+<li><strong>Cognitive (01-20):</strong> Gravity escape, reality anchor, Feynman X-ray</li>
+<li><strong>Nature (21-30):</strong> Ant colony, bee foraging, slime mold</li>
+</ul>
+
+<hr>
+
+<p><em>This PRD is the single source of truth for TransformFit. Every design decision, feature, and interaction should be traceable back to this document.</em></p>
+
+
+</body>
+</html>
