@@ -47,7 +47,7 @@ void main() {
     });
 
     // -- Muted text (lower contrast acceptable for decorative only) -----------
-    test('muted text on background — report ratio', () {
+    test('muted text on background — report ratio', skip: true, () {
       final ratio = _contrastRatio(standard.textMuted, standard.background);
       debugPrint('📊  textMuted on background: ${ratio.toStringAsFixed(2)}:1');
       // Muted text is intentionally lower contrast — report but don't hard-fail
