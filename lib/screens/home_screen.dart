@@ -9,7 +9,7 @@ import 'package:transformfit/widgets/hero_background.dart';
 
 /// Home screen — v4 Design System.
 ///
-/// Recovery circle (280px) + 3 action cards + pull-to-refresh.
+/// Recovery circle (280px) + 3 action cards + coach hint + pull-to-refresh.
 /// No section headers, no weekly summary, no shimmer loading.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -61,10 +61,33 @@ class HomeScreen extends ConsumerWidget {
           // 3 Action Cards — 12px gap
           _ActionCards(),
 
+          const SizedBox(height: 32),
+
+          // Coach hint — personalized one-liner
+          _CoachHint(hint: _resolveCoachHint(session)),
+
           const SizedBox(height: 48),
         ],
       ),
     );
+  }
+
+  /// Resolve a personalized coach hint from the session state.
+  String _resolveCoachHint(SessionState session) {
+    final readiness = session.readinessEntry;
+    if (readiness == null) {
+      return 'Tap the ring above to check your readiness for today.';
+    }
+    switch (readiness.zone) {
+      case 'peak':
+        return 'Your body is primed — today is a great day to push intensity.';
+      case 'moderate':
+        return 'Steady day ahead. Focus on form and consistency.';
+      case 'deload':
+        return 'Recovery is the workout today. Light movement, deep breathing.';
+      default:
+        return 'Let\'s see what your body has in store today.';
+    }
   }
 }
 
@@ -274,6 +297,50 @@ class _ActionCard extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Coach Hint — personalized one-liner at bottom
+// ---------------------------------------------------------------------------
+
+class _CoachHint extends StatelessWidget {
+  const _CoachHint({required this.hint});
+
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Coach hint: $hint',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.auto_awesome,
+              size: 16,
+              color: Color(0xFFFF6B35),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                hint,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF8E8E93),
+                  height: 1.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );
